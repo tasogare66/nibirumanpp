@@ -145,7 +145,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\App.cpp" />
+    <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ModeGame.cpp" />
+    <ClCompile Include="src\ModeMng.cpp" />
+    <ClCompile Include="src\ObjLst.cpp" />
+    <ClCompile Include="src\Resource.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\App.h" />
+    <ClInclude Include="src\Entity.h" />
+    <ClInclude Include="src\Mode.h" />
+    <ClInclude Include="src\ModeGame.h" />
+    <ClInclude Include="src\ModeMng.h" />
+    <ClInclude Include="src\ObjLst.h" />
+    <ClInclude Include="src\Resource.h" />
+    <ClInclude Include="src\Singleton.h" />
+    <ClInclude Include="src\Vec2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
