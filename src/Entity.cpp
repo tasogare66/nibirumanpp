@@ -1,4 +1,5 @@
-#include <SFML\Graphics.hpp>
+#include "stdafx.h"
+
 #include "Resource.h"
 #include "ObjLst.h"
 #include "Entity.h"

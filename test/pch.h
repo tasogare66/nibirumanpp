@@ -8,3 +8,5 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "gtest/gtest.h"
+
+#include "../src/fw_assert.h"

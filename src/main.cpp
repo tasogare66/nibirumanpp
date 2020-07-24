@@ -1,5 +1,7 @@
-#include <SFML\Graphics.hpp>
+#include "stdafx.h"
+
 #include "App.h"
+
 int main() {
   sf::RenderWindow window(sf::VideoMode(1280, 720), "nibiruman2080");
   auto app(std::make_unique<App>());

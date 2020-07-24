@@ -19,6 +19,10 @@ public:
     return Vec2(this->x * s, this->y * s);
   }
   Vec2 operator/(T s) {
+    if (s == 0) {
+      FW_ASSERT(0);
+      return *this;
+    }
     return Vec2(this->x / s, this->y / s);
   }
 
@@ -38,6 +42,10 @@ public:
     return *this;
   }
   Vec2& operator/=(T s) {
+    if (s == 0) {
+      FW_ASSERT(0);
+      return *this;
+    }
     this->x /= s;
     this->y /= s;
     return *this;
@@ -58,7 +66,10 @@ public:
 
   Vec2& normalize() {
     const auto len = this->magnitude();
-    if (len == 0) return *this;
+    if (len == 0) {
+      FW_ASSERT(0);
+      return *this;
+    }
     *this *= static_cast<T>(1.0 / len);
     return *this;
   }

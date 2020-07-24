@@ -36,6 +36,7 @@
     <ClCompile Include="src\Resource.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ModeGame.h">
@@ -65,5 +66,9 @@
     <ClInclude Include="src\Resource.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="src\fw_assert.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
 </Project>
