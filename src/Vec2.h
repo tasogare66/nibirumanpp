@@ -1,110 +1,94 @@
 #pragma once
+#include <SFML\Graphics.hpp>
 #include <cmath>
 
 template <class T>
-class Vec2 {
+class Vec2 : public sf::Vector2<T> {
 public:
-  T x, y;
+  Vec2() : Vector2<T>() {}
+  Vec2(T x, T y) : Vector2<T>(x,y) {}
+  Vec2(const Vec2& v) : Vector2<T>(v) {}
 
-  Vec2() :x(0), y(0) {}
-  Vec2(T x, T y) : x(x), y(y) {}
-  Vec2(const Vec2& v) : x(v.x), y(v.y) {}
+  Vec2 operator+(T s) {
+    return Vec2(this->x + s, this->y + s);
+  }
+  Vec2 operator-(T s) {
+    return Vec2(this->x - s, this->y - s);
+  }
+  Vec2 operator*(T s) {
+    return Vec2(this->x * s, this->y * s);
+  }
+  Vec2 operator/(T s) {
+    return Vec2(this->x / s, this->y / s);
+  }
 
-  Vec2& operator=(const Vec2& v) {
-    x = v.x;
-    y = v.y;
+  Vec2& operator+=(T s) {
+    this->x += s;
+    this->y += s;
+    return *this;
+  }
+  Vec2& operator-=(T s) {
+    this->x -= s;
+    this->y -= s;
+    return *this;
+  }
+  Vec2& operator*=(T s) {
+    this->x *= s;
+    this->y *= s;
+    return *this;
+  }
+  Vec2& operator/=(T s) {
+    this->x /= s;
+    this->y /= s;
     return *this;
   }
 
-  Vec2 operator+(Vec2& v) {
-    return Vec2(x + v.x, y + v.y);
-  }
-  Vec2 operator-(Vec2& v) {
-    return Vec2(x - v.x, y - v.y);
+  void set(T ix, T iy) {
+    this->x = ix;
+    this->y = iy;
   }
 
-  Vec2& operator+=(Vec2& v) {
-    x += v.x;
-    y += v.y;
-    return *this;
-  }
-  Vec2& operator-=(Vec2& v) {
-    x -= v.x;
-    y -= v.y;
-    return *this;
+  float sqr_magnitude() const {
+    return this->x * this->x + this->y * this->y;
   }
 
-  vec2 operator+(double s) {
-    return vec2(x + s, y + s);
-  }
-  vec2 operator-(double s) {
-    return vec2(x - s, y - s);
-  }
-  vec2 operator*(double s) {
-    return vec2(x * s, y * s);
-  }
-  vec2 operator/(double s) {
-    return vec2(x / s, y / s);
+  float magnitude() const {
+    return std::sqrt(this->sqr_magnitude());
   }
 
-  vec2& operator+=(double s) {
-    x += s;
-    y += s;
-    return *this;
-  }
-  vec2& operator-=(double s) {
-    x -= s;
-    y -= s;
-    return *this;
-  }
-  vec2& operator*=(double s) {
-    x *= s;
-    y *= s;
-    return *this;
-  }
-  vec2& operator/=(double s) {
-    x /= s;
-    y /= s;
+  Vec2& normalize() {
+    const auto len = this->magnitude();
+    if (len == 0) return *this;
+    *this *= static_cast<T>(1.0 / len);
     return *this;
   }
 
-  void set(T x, T y) {
-    this->x = x;
-    this->y = y;
-  }
-
-  void rotate(double deg) {
-    double theta = deg / 180.0 * M_PI;
-    double c = cos(theta);
-    double s = sin(theta);
-    double tx = x * c - y * s;
-    double ty = x * s + y * c;
-    x = tx;
-    y = ty;
-  }
-
-  vec2& normalize() {
-    if (length() == 0) return *this;
-    *this *= (1.0 / length());
+  Vec2& set_rotate(float rad) {
+    auto c = std::cos(rad);
+    auto s = std::sin(rad);
+    auto tx = this->x;
+    auto ty = this->y;
+    this->x = tx * c - ty * s;
+    this->y = ty * c + tx * s;
     return *this;
   }
 
-  float dist(vec2 v) const {
-    vec2 d(v.x - x, v.y - y);
-    return d.length();
-  }
-  float length() const {
-    return std::sqrt(x * x + y * y);
+  Vec2 rotate(float rad) const {
+    auto v = *this;
+    return v.set_rotate(rad);
   }
 
-  static float dot(vec2 v1, vec2 v2) {
+  static float dot(const Vec2& v1, const Vec2& v2) {
     return v1.x * v2.x + v1.y * v2.y;
   }
-  static float cross(vec2 v1, vec2 v2) {
+  static float cross(const Vec2& v1, const Vec2& v2) {
     return (v1.x * v2.y) - (v1.y * v2.x);
   }
-
+  static float angle(const Vec2& a, const Vec2& b) {
+    auto am = a.magnitude();
+    auto bm = b.magnitude();
+    return std::acos(std::clamp(Vec2::dot(a, b) / (am * bm), -1.f, 1.f));
+  }
 };
 
 using Vec2f = Vec2<float>;
-using Vec2d = Vec2<double>;
