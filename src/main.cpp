@@ -2,23 +2,24 @@
 
 #include "App.h"
 
+
+#include "imgui.h"
+#include "imgui-SFML.h"
+
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/System/Clock.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Graphics/CircleShape.hpp>
+
+
 int main() {
   sf::RenderWindow window(sf::VideoMode(1280, 720), "nibiruman2080");
+  window.setFramerateLimit(60);
+  ImGui::SFML::Init(window);
+
   auto app(std::make_unique<App>());
 
-  sf::Texture texture;
-  if (texture.create(10, 10)) {
-    //error
-  }
-  sf::Uint8 pixels[10 * 10 * 4];// = new sf::Uint8[10 * 10 * 4];
-  std::memset(pixels, 255,sizeof(pixels));
-  texture.update(pixels);
-
-  sf::Sprite sprite;
-  sprite.setTexture(texture);
-  sprite.setPosition(100,100);
-
-
+  sf::Clock deltaClock;
   while (window.isOpen()) {
     sf::Event event;
     while (window.pollEvent(event)) {
@@ -26,13 +27,24 @@ int main() {
         window.close();
       }
     }
-    window.clear(sf::Color::Black);
+    //update app
     app->update();
-    app->draw(window);
+    //imgui
+    ImGui::SFML::Update(window, deltaClock.restart());
+    ImGui::ShowDemoWindow();
+    ImGui::Begin("Hello, world!");
+    ImGui::Button("Look at this pretty button");
+    ImGui::End();
 
-    window.draw(sprite);
-
+    window.clear(sf::Color::Black);
+    {
+      app->draw(window);
+      ImGui::SFML::Render(window);
+    }
     window.display();
   }
+
+  ImGui::SFML::Shutdown();
+
   return 0;
 }
