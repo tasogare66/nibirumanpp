@@ -7,10 +7,10 @@ public:
   ObjLst() = default;
   ~ObjLst() = default;
   void add(Entity* o);
-  void update();
+  void update(float dt);
   void draw(sf::RenderWindow& window);
 private:
-  void upd_move();
+  void upd_move(float dt);
   std::vector<Entity*> m_pxs;
   std::vector<Entity*> m_bullets;
   std::vector<Entity*> m_ene_bullets;

@@ -3,7 +3,7 @@ class App {
 public:
   App();
   ~App() = default;
-  void update();
+  void update(float dt);
   void draw(sf::RenderWindow&);
 private:
 };

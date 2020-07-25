@@ -8,9 +8,9 @@ void ObjLst::add(Entity* o)
   m_objs.push_back(o);
 }
 
-void ObjLst::update()
+void ObjLst::update(float dt)
 {
-  this->upd_move();
+  this->upd_move(dt);
 }
 
 void ObjLst::draw(sf::RenderWindow& window)
@@ -20,9 +20,9 @@ void ObjLst::draw(sf::RenderWindow& window)
   }
 }
 
-void ObjLst::upd_move()
+void ObjLst::upd_move(float dt)
 {
   for (auto o:m_objs) {
-    o->update();
+    o->update(dt);
   }
 }

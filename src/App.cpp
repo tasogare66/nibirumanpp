@@ -9,9 +9,9 @@ App::App()
   new Entity();
 }
 
-void App::update()
+void App::update(float dt)
 {
-  ObjLst::inst().update();
+  ObjLst::inst().update(dt);
 }
 
 void App::draw(sf::RenderWindow& window)
