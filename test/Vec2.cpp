@@ -7,7 +7,7 @@ TEST(Vec2Test, Vec2fCalc) {
   EXPECT_EQ(a.x, 1);
   EXPECT_EQ(a.y, 2);
   Vec2f b(3, 4);
-  auto c = a + b;
+  Vec2f c = a + b;
   EXPECT_EQ(c.x, 4);
   EXPECT_EQ(c.y, 6);
   c += a;

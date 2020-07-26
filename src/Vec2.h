@@ -2,54 +2,13 @@
 #include <SFML\Graphics.hpp>
 #include <cmath>
 
-template <class T>
+template <typename T>
 class Vec2 : public sf::Vector2<T> {
 public:
-  Vec2() : Vector2<T>() {}
-  Vec2(T x, T y) : Vector2<T>(x,y) {}
-  Vec2(const Vec2& v) : Vector2<T>(v) {}
-
-  Vec2 operator+(T s) {
-    return Vec2(this->x + s, this->y + s);
-  }
-  Vec2 operator-(T s) {
-    return Vec2(this->x - s, this->y - s);
-  }
-  Vec2 operator*(T s) {
-    return Vec2(this->x * s, this->y * s);
-  }
-  Vec2 operator/(T s) {
-    if (s == 0) {
-      FW_ASSERT(0);
-      return *this;
-    }
-    return Vec2(this->x / s, this->y / s);
-  }
-
-  Vec2& operator+=(T s) {
-    this->x += s;
-    this->y += s;
-    return *this;
-  }
-  Vec2& operator-=(T s) {
-    this->x -= s;
-    this->y -= s;
-    return *this;
-  }
-  Vec2& operator*=(T s) {
-    this->x *= s;
-    this->y *= s;
-    return *this;
-  }
-  Vec2& operator/=(T s) {
-    if (s == 0) {
-      FW_ASSERT(0);
-      return *this;
-    }
-    this->x /= s;
-    this->y /= s;
-    return *this;
-  }
+  Vec2() : sf::Vector2<T>() {}
+  Vec2(T ix, T iy) : sf::Vector2<T>(ix,iy) {}
+  template <typename U>
+  inline Vec2(const Vec2<U>& v) : sf::Vector2<T>(v.x, v.y) {}
 
   void set(T ix, T iy) {
     this->x = ix;
@@ -101,5 +60,129 @@ public:
     return std::acos(std::clamp(Vec2::dot(a, b) / (am * bm), -1.f, 1.f));
   }
 };
+
+template <typename T>
+Vec2<T> operator -(const Vec2<T>& right);
+
+template <typename T>
+Vec2<T>& operator +=(Vec2<T>& left, const Vec2<T>& right);
+
+template <typename T>
+Vec2<T>& operator -=(Vec2<T>& left, const Vec2<T>& right);
+
+template <typename T>
+Vec2<T> operator +(const Vec2<T>& left, const Vec2<T>& right);
+
+template <typename T>
+Vec2<T> operator -(const Vec2<T>& left, const Vec2<T>& right);
+
+template <typename T>
+Vec2<T> operator *(const Vec2<T>& left, T right);
+
+template <typename T>
+Vec2<T> operator *(T left, const Vec2<T>& right);
+
+template <typename T>
+Vec2<T>& operator *=(Vec2<T>& left, T right);
+
+template <typename T>
+Vec2<T> operator /(const Vec2<T>& left, T right);
+
+template <typename T>
+Vec2<T>& operator /=(Vec2<T>& left, T right);
+
+template <typename T>
+bool operator ==(const Vec2<T>& left, const Vec2<T>& right);
+
+template <typename T>
+bool operator !=(const Vec2<T>& left, const Vec2<T>& right);
+
+template <typename T>
+inline Vec2<T> operator -(const Vec2<T>& right)
+{
+  return Vec2<T>(-right.x, -right.y);
+}
+
+template <typename T>
+inline Vec2<T>& operator +=(Vec2<T>& left, const Vec2<T>& right)
+{
+  left.x += right.x;
+  left.y += right.y;
+  return left;
+}
+
+template <typename T>
+inline Vec2<T>& operator -=(Vec2<T>& left, const Vec2<T>& right)
+{
+  left.x -= right.x;
+  left.y -= right.y;
+  return left;
+}
+
+template <typename T>
+inline Vec2<T> operator +(const Vec2<T>& left, const Vec2<T>& right)
+{
+  return Vec2<T>(left.x + right.x, left.y + right.y);
+}
+
+template <typename T>
+inline Vec2<T> operator -(const Vec2<T>& left, const Vec2<T>& right)
+{
+  return Vec2<T>(left.x - right.x, left.y - right.y);
+}
+
+template <typename T>
+inline Vec2<T> operator *(const Vec2<T>& left, T right)
+{
+  return Vec2<T>(left.x * right, left.y * right);
+}
+
+template <typename T>
+inline Vec2<T> operator *(T left, const Vec2<T>& right)
+{
+  return Vec2<T>(right.x * left, right.y * left);
+}
+
+template <typename T>
+inline Vec2<T>& operator *=(Vec2<T>& left, T right)
+{
+  left.x *= right;
+  left.y *= right;
+  return left;
+}
+
+template <typename T>
+inline Vec2<T> operator /(const Vec2<T>& left, T right)
+{
+  if (right == 0) {
+    FW_ASSERT(0);
+    right = 1;
+  }
+  return Vec2<T>(left.x / right, left.y / right);
+}
+
+template <typename T>
+inline Vec2<T>& operator /=(Vec2<T>& left, T right)
+{
+  if (right == 0) {
+    FW_ASSERT(0);
+    right = 1;
+  }
+  left.x /= right;
+  left.y /= right;
+  return left;
+}
+
+template <typename T>
+inline bool operator ==(const Vec2<T>& left, const Vec2<T>& right)
+{
+  return (left.x == right.x) && (left.y == right.y);
+}
+
+template <typename T>
+inline bool operator !=(const Vec2<T>& left, const Vec2<T>& right)
+{
+  return (left.x != right.x) || (left.y != right.y);
+}
 
 using Vec2f = Vec2<float>;
