@@ -194,6 +194,7 @@
     <ClCompile Include="src\ModeGame.cpp" />
     <ClCompile Include="src\ModeMng.cpp" />
     <ClCompile Include="src\ObjLst.cpp" />
+    <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Resource.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -214,6 +215,7 @@
     <ClInclude Include="src\ModeGame.h" />
     <ClInclude Include="src\ModeMng.h" />
     <ClInclude Include="src\ObjLst.h" />
+    <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Resource.h" />
     <ClInclude Include="src\Singleton.h" />
     <ClInclude Include="src\Vec2.h" />

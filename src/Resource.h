@@ -1,5 +1,4 @@
 #pragma once
-#include <SFML\Graphics.hpp>
 #include "Singleton.h"
 
 class Resource : public Singleton<Resource> {

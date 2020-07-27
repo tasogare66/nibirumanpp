@@ -1,13 +1,19 @@
 #pragma once
+#include "Singleton.h"
+
 class Mode;
-class ModeMng {
+class ModeMng : public Singleton<ModeMng> {
 public:
   ModeMng();
   virtual ~ModeMng();
-  void update();
+  bool update(float dt);
   void update_post();
-  void draw0();
-  void draw1();
+  void draw0(sf::RenderWindow& window);
+  void draw1(sf::RenderWindow& window);
 private:
-  Mode* m_work=nullptr;
+  void init();
+  void dest();
+  bool ctrl(float dt);
+  Mode* m_cur_work = nullptr;
+  Mode* m_req_work = nullptr;
 };
