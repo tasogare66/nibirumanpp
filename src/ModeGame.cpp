@@ -13,6 +13,7 @@ ModeGame::~ModeGame()
 
 void ModeGame::init()
 {
+  new Player();
 }
 
 void ModeGame::dest()

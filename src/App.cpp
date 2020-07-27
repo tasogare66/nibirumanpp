@@ -2,12 +2,11 @@
 
 #include "ObjLst.h"
 #include "ModeMng.h"
-#include "Entity.h"
 #include "App.h"
 
 App::App()
 {
-  new Entity();
+  ModeMng::inst().request(ModeType::GAME);
 }
 
 void App::update(float dt)
