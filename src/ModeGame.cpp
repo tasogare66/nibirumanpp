@@ -22,7 +22,7 @@ void ModeGame::dest()
 
 bool ModeGame::ctrl(float dt)
 {
-  return false;
+  return true;
 }
 
 void ModeGame::ctrl_post()

@@ -12,6 +12,7 @@ public:
 private:
   void upd_move(float dt);
   void upd_verlet(float dt);
+  friend class Entity;
   std::vector<Entity*> m_pxs;
   std::vector<Entity*> m_bullets;
   std::vector<Entity*> m_ene_bullets;

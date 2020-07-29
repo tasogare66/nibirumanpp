@@ -14,6 +14,34 @@ Entity::~Entity()
 {
 }
 
+void Entity::attr_verlet()
+{
+  FW_ASSERT(not m_flag.check(EntityFlag::AttrVerlet));
+  ObjLst::inst().m_verlets.push_back(this);
+  m_flag.on(EntityFlag::AttrVerlet);
+}
+
+void Entity::attr_px()
+{
+  this->attr_verlet();
+  ObjLst::inst().m_pxs.push_back(this);
+}
+
+void Entity::attr_bullet()
+{
+  ObjLst::inst().m_bullets.push_back(this);
+}
+
+void Entity::attr_ene_bullet()
+{
+  ObjLst::inst().m_ene_bullets.push_back(this);
+}
+
+void Entity::attr_ene_dot()
+{
+  ObjLst::inst().m_ene_dot.push_back(this);
+}
+
 void Entity::update(float dt)
 {
 }
@@ -21,7 +49,7 @@ void Entity::update(float dt)
 void Entity::draw(sf::RenderWindow& window)
 {
   m_spr.setScale(20,20);
-  m_spr.setPosition(150,100);
+  m_spr.setPosition(m_pos);
   window.draw(m_spr);
 }
 

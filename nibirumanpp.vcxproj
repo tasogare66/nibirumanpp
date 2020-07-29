@@ -190,6 +190,7 @@
     </ClCompile>
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ModeGame.cpp" />
     <ClCompile Include="src\ModeMng.cpp" />
@@ -211,6 +212,8 @@
     <ClInclude Include="src\App.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\fw_assert.h" />
+    <ClInclude Include="src\FwFlag.h" />
+    <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\Mode.h" />
     <ClInclude Include="src\ModeGame.h" />
     <ClInclude Include="src\ModeMng.h" />

@@ -1,14 +1,20 @@
 #pragma once
 #include "Vec2.h"
+#include "FwFlag.h"
 
-enum EntityFlag : uint32_t {
-  EntityFlag_del = 1 << 0,
+enum class EntityFlag : uint32_t {
+  del = 1 << 0,
+  AttrVerlet = 1 << 1,
 };
 
 class Entity {
 public:
   Entity();
   virtual ~Entity();
+  void attr_px();
+  void attr_bullet();
+  void attr_ene_bullet();
+  void attr_ene_dot();
   virtual void update(float dt);
   virtual void draw(sf::RenderWindow& window);
 
@@ -29,6 +35,7 @@ public:
   void do_verlet(float dt, float inv_prev_dt, float decel);
 
 protected:
+  void attr_verlet();
   Vec2f calc_velocity() const {
     return m_pos - m_old_pos;
   }
@@ -48,7 +55,7 @@ protected:
   Vec2f m_aabb_size;
   Vec2f m_half_extents;
   //sha = nil,
-  EntityFlag m_flag = static_cast<EntityFlag>(0);
+  FwFlag<EntityFlag> m_flag;
   uint32_t m_no;
   int32_t m_health = 1;
   //exp_resi = 1,

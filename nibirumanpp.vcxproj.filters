@@ -64,6 +64,9 @@
     <ClCompile Include="src\Player.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="src\Input.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ModeGame.h">
@@ -110,6 +113,12 @@
       <Filter>external\imgui-sfml</Filter>
     </ClInclude>
     <ClInclude Include="src\Player.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FwFlag.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>

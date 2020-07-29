@@ -2,6 +2,7 @@
 
 #include "ObjLst.h"
 #include "ModeMng.h"
+#include "Input.h"
 #include "App.h"
 
 App::App()
@@ -11,6 +12,8 @@ App::App()
 
 void App::update(float dt)
 {
+  // update input
+  dt = Input::inst().update(dt);
   // update mode
   auto& modem = ModeMng::inst();
   if (modem.update(dt)) {
