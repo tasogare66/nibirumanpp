@@ -1,6 +1,7 @@
 #include "stdafx.h"
-#include "Player.h"
 
+#include "Player.h"
+#include "Reticle.h"
 #include "ModeGame.h"
 
 ModeGame::ModeGame()
@@ -13,6 +14,7 @@ ModeGame::~ModeGame()
 
 void ModeGame::init()
 {
+  auto* recicle = new Reticle();
   new Player();
 }
 

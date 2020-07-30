@@ -15,8 +15,9 @@ class Input : public Singleton<Input> {
 public:
   Input() = default;
   ~Input() = default;
-  float update(float dt);
+  float update(float dt, sf::RenderWindow& window);
   bool on(InputButton b) const { return (m_mask & b) != 0; }
+  const Vec2f& mouse() const { return m_mpos; }
 private:
   //current
   uint32_t m_mask = 0;

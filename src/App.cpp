@@ -10,10 +10,10 @@ App::App()
   ModeMng::inst().request(ModeType::GAME);
 }
 
-void App::update(float dt)
+void App::update(float dt, sf::RenderWindow& window)
 {
   // update input
-  dt = Input::inst().update(dt);
+  dt = Input::inst().update(dt, window);
   // update mode
   auto& modem = ModeMng::inst();
   if (modem.update(dt)) {

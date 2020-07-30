@@ -25,7 +25,7 @@ int main() {
     }
     auto dt = deltaClock.restart();
     //update app
-    app->update(dt.asSeconds());
+    app->update(dt.asSeconds(), window);
     //imgui
     ImGui::SFML::Update(window, dt);
     ImGui::ShowDemoWindow();
