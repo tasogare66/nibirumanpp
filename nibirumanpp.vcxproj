@@ -212,7 +212,9 @@
     <ClInclude Include="external\imgui\imconfig.h" />
     <ClInclude Include="external\imgui\imgui.h" />
     <ClInclude Include="src\App.h" />
+    <ClInclude Include="src\ConstParam.h" />
     <ClInclude Include="src\Entity.h" />
+    <ClInclude Include="src\FwUtil.h" />
     <ClInclude Include="src\fw_assert.h" />
     <ClInclude Include="src\FwFlag.h" />
     <ClInclude Include="src\Input.h" />

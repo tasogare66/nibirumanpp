@@ -5,3 +5,4 @@
 #include <SFML/Graphics/CircleShape.hpp>
 
 #include "fw_assert.h"
+#include "FwUtil.h"

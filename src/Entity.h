@@ -7,6 +7,11 @@ enum class EntityFlag : uint32_t {
   AttrVerlet = 1 << 1,
 };
 
+struct EntityArgs {
+  Vec2f m_pos;
+  Vec2f m_dir{1.f,0.f};
+};
+
 class Entity {
 public:
   Entity();
@@ -42,6 +47,7 @@ protected:
   void  set_velocity(const Vec2f& ivel) {
     m_vel = ivel;
   }
+  void del() { m_flag.on(EntityFlag::del); }
 
   Vec2f m_pos;
   Vec2f m_old_pos;

@@ -10,6 +10,8 @@ public:
   void update(float dt);
   void draw(sf::RenderWindow& window);
 private:
+  void upd_add();
+  void upd_del();
   void upd_move(float dt);
   void upd_verlet(float dt);
   friend class Entity;

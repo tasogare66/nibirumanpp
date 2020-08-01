@@ -144,9 +144,6 @@ void Entity::do_verlet(float dt, float inv_prev_dt, float decel)
 //local s = self : is_blink() and 267 or self.spr
 //spr(s, c.x, c.y, 0)
 //end
-//Entity.del = function(self)
-//self.flag = self.flag | Flag_del
-//end
 //Entity.check_flag = function(self, f)
 //return (self.flag & f ~= 0)
 //end
