@@ -2,24 +2,37 @@
 #include "Vec2.h"
 #include "FwFlag.h"
 
+enum class EntityType : uint32_t {
+  None=0,
+  Player,
+  PlBullet,
+};
+struct EntityArgs {
+  EntityType m_type = EntityType::None;
+  Vec2f m_pos;
+  Vec2f m_dir{ 1.f,0.f };
+  EntityArgs() = default;
+  EntityArgs(EntityType type, const Vec2f& pos, const Vec2f& dir = { 1.f, 0.f })
+    : m_type(type)
+    , m_pos(pos)
+    , m_dir(dir)
+  {}
+};
+
 enum class EntityFlag : uint32_t {
   del = 1 << 0,
   AttrVerlet = 1 << 1,
 };
 
-struct EntityArgs {
-  Vec2f m_pos;
-  Vec2f m_dir{1.f,0.f};
-};
-
 class Entity {
 public:
-  Entity();
+  explicit Entity(const EntityArgs& args);
   virtual ~Entity();
   void attr_px();
   void attr_bullet();
   void attr_ene_bullet();
   void attr_ene_dot();
+  virtual void init() {}
   virtual void update(float dt);
   virtual void draw(sf::RenderWindow& window);
 
@@ -49,6 +62,7 @@ protected:
   }
   void del() { m_flag.on(EntityFlag::del); }
 
+  EntityType m_type=EntityType::None;
   Vec2f m_pos;
   Vec2f m_old_pos;
   Vec2f m_vel;

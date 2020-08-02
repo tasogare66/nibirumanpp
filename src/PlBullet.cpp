@@ -2,7 +2,8 @@
 
 #include "PlBullet.h"
 
-PlBullet::PlBullet()
+PlBullet::PlBullet(const EntityArgs& args)
+  : Entity(args)
 {
 }
 

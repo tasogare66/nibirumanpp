@@ -3,7 +3,7 @@
 
 class Reticle : public Entity {
 public:
-  Reticle();
+  explicit Reticle(const EntityArgs& args);
   virtual ~Reticle() = default;
   void update(float dt) override;
 private:

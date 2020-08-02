@@ -4,6 +4,15 @@
 #include "imgui-SFML.h"
 #include "App.h"
 
+#if DEBUG&0 //count number of memory allocations
+uint64_t numOfHeapAllocations = 0;
+void* operator new(size_t size)
+{
+  numOfHeapAllocations++;
+  return malloc(size);
+}
+#endif
+
 int main() {
   sf::RenderWindow window(sf::VideoMode(1280, 720), "nibiruman2080");
   window.setFramerateLimit(60);

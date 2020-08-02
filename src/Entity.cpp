@@ -4,10 +4,12 @@
 #include "ObjLst.h"
 #include "Entity.h"
 
-Entity::Entity()
+Entity::Entity(const EntityArgs& args)
+  : m_type(args.m_type)
+  , m_pos(args.m_pos)
 {
   m_spr.setTexture(Resource::inst().get_pix_tex());
-  ObjLst::inst().add(this);
+  ObjLst::inst().request(this);
 }
 
 Entity::~Entity()

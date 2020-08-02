@@ -6,7 +6,7 @@ class ObjLst : public Singleton<ObjLst> {
 public:
   ObjLst() = default;
   ~ObjLst() = default;
-  void add(Entity* o);
+  void request(Entity* o);
   void update(float dt);
   void draw(sf::RenderWindow& window);
 private:
@@ -21,5 +21,6 @@ private:
   std::vector<Entity*> m_ene_dot;
   std::vector<Entity*> m_verlets;
   std::vector<Entity*> m_objs;
+  std::vector<Entity*> m_request;
   float m_prev_dt = 1.0f / 60.0f;
 };

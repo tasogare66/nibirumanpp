@@ -5,8 +5,12 @@
 #include "PlBullet.h"
 #include "Player.h"
 
-Player::Player()
-  : Entity()
+Player::Player(const EntityArgs& args)
+  : Entity(args)
+{
+}
+
+void Player::init()
 {
   this->attr_px();
 }

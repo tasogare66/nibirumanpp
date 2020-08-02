@@ -3,7 +3,8 @@
 #include "Input.h"
 #include "Reticle.h"
 
-Reticle::Reticle()
+Reticle::Reticle(const EntityArgs& args)
+  : Entity(args)
 {
 }
 

@@ -3,8 +3,9 @@
 
 class Player : public Entity {
 public:
-  Player();
+  explicit Player(const EntityArgs& args);
   virtual ~Player() = default;
+  void init() override;
   void update(float dt) override;
 private:
   bool is_dashing() const { return false; }

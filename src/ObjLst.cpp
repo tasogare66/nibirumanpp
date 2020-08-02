@@ -3,9 +3,9 @@
 #include "Entity.h"
 #include "ObjLst.h"
 
-void ObjLst::add(Entity* o)
+void ObjLst::request(Entity* o)
 {
-  m_objs.push_back(o);
+  m_request.push_back(o);
 }
 
 void ObjLst::update(float dt)
@@ -29,6 +29,11 @@ void ObjLst::upd_verlet(float dt)
 
 void ObjLst::upd_add()
 {
+  for (auto o:m_request) {
+    o->init();
+  }
+  std::copy(m_request.begin(), m_request.end(), std::back_inserter(m_objs));
+  m_request.clear();
 }
 
 void ObjLst::upd_del()

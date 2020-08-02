@@ -3,7 +3,7 @@
 
 class PlBullet : public Entity {
 public:
-  PlBullet();
+  explicit PlBullet(const EntityArgs& args);
   virtual ~PlBullet() = default;
   void update(float dt) override;
 private:
