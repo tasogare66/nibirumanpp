@@ -35,8 +35,7 @@ void Player::update(float dt)
 	  //local v = self.reticle.pos - self.pos
 	  const auto d = v.magnitude();
 	  if (d > const_param::EPSILON) {
-		//new PlBullet();
-		//  ObjLstA : add(self.pos.x, self.pos.y, PlBullet, { dir = v:Div(d) })
+		auto* pt = new PlBullet(m_pos, v/d);
 		if (m_armslv >= 1) {
 		  //	local ang = math.rad(20)
 		  //	local c, s = cos(ang), sin(ang)

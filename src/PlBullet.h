@@ -3,7 +3,7 @@
 
 class PlBullet : public Entity {
 public:
-  explicit PlBullet(const EntityArgs& args);
+  explicit PlBullet(const Vec2f pos, const Vec2f dir);
   virtual ~PlBullet() = default;
   void update(float dt) override;
 private:

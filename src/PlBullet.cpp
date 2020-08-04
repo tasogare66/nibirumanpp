@@ -2,8 +2,9 @@
 
 #include "PlBullet.h"
 
-PlBullet::PlBullet(const EntityArgs& args)
-  : Entity(args)
+PlBullet::PlBullet(const Vec2f pos, const Vec2f dir)
+  : Entity({EntityType::PlBullet, pos})
+  , m_dir(dir)
 {
 }
 

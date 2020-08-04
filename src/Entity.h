@@ -52,6 +52,8 @@ public:
   void pre_pro();
   void do_verlet(float dt, float inv_prev_dt, float decel);
 
+  const FwFlag<EntityFlag>& get_flag() const { return m_flag; }
+
 protected:
   void attr_verlet();
   Vec2f calc_velocity() const {

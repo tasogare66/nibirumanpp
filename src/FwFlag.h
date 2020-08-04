@@ -10,7 +10,7 @@ public:
   void off(T m) {
     m_mask &= ~static_cast<decltype(m_mask)>(m);
   }
-  bool check(T m) {
+  bool check(T m) const {
     return ((m_mask & static_cast<decltype(m_mask)>(m)) != 0);
   }
 protected:
