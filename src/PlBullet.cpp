@@ -4,8 +4,14 @@
 
 PlBullet::PlBullet(const Vec2f pos, const Vec2f dir)
   : Entity({EntityType::PlBullet, pos})
-  , m_dir(dir)
+  , m_dir(dir*150.f)
 {
+}
+
+void PlBullet::init()
+{
+  this->attr_verlet();
+  this->attr_bullet();
 }
 
 void PlBullet::update(float dt)

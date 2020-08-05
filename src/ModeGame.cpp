@@ -14,8 +14,8 @@ ModeGame::~ModeGame()
 
 void ModeGame::init()
 {
-  auto* recicle = new Reticle({ EntityType::None,Vec2f() });
-  new Player({ EntityType::Player,Vec2f() });
+  auto* reticle = new Reticle({ EntityType::None,Vec2f() });
+  new Player({ EntityType::Player,Vec2f() }, reticle);
 }
 
 void ModeGame::dest()

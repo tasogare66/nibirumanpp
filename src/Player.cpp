@@ -5,8 +5,9 @@
 #include "PlBullet.h"
 #include "Player.h"
 
-Player::Player(const EntityArgs& args)
+Player::Player(const EntityArgs& args, const Entity* reticle)
   : Entity(args)
+  , m_reticle(reticle)
 {
 }
 
@@ -31,11 +32,10 @@ void Player::update(float dt)
   if (m_shot_repeat > 0) --m_shot_repeat;
   if (inputm.on(InputButton_Shot) && not this->is_dashing()) {
 	if (m_shot_repeat <= 0) {
-	  Vec2f v(1.0f, 0.0f);
-	  //local v = self.reticle.pos - self.pos
+	  auto v = m_reticle->get_pos() - m_pos;
 	  const auto d = v.magnitude();
 	  if (d > const_param::EPSILON) {
-		auto* pt = new PlBullet(m_pos, v/d);
+  		new PlBullet(m_pos, v/d);
 		if (m_armslv >= 1) {
 		  //	local ang = math.rad(20)
 		  //	local c, s = cos(ang), sin(ang)

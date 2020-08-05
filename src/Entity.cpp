@@ -7,6 +7,7 @@
 Entity::Entity(const EntityArgs& args)
   : m_type(args.m_type)
   , m_pos(args.m_pos)
+  , m_old_pos(args.m_pos)
 {
   m_spr.setTexture(Resource::inst().get_pix_tex());
   ObjLst::inst().request(this);

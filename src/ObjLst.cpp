@@ -1,4 +1,5 @@
 #include "stdafx.h"
+
 #include <functional>
 
 #include "Entity.h"
@@ -21,7 +22,7 @@ void ObjLst::update(float dt)
 void ObjLst::upd_verlet(float dt)
 {
   auto prev_inv_dt = 1.0f / m_prev_dt;
-  float damping = 0.4f; //�Ȃ�:1
+  float damping = 0.4f; //なし:1
   float decel = std::pow(std::abs(damping), dt);
   for (auto o: m_verlets) {
     o->do_verlet(dt, prev_inv_dt, decel);

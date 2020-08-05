@@ -39,6 +39,7 @@ public:
   void set_radius(float ir);
   void set_mass(float imass);
   void set_position(const Vec2f& ipos);
+  Vec2f get_pos() const { return m_pos; }
   Vec2f get_estimate_pos() const { return m_pos + m_mov; }
   void updateEstimateAABB();
   void add_vel_force(const Vec2f& v) {
