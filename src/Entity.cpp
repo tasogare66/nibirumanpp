@@ -51,8 +51,10 @@ void Entity::update(float dt)
 
 void Entity::draw(sf::RenderWindow& window)
 {
-  m_spr.setScale(20,20);
+  m_spr.setOrigin(0.5f, 0.5f);
+  m_spr.setScale(8, 8);
   m_spr.setPosition(m_pos);
+
   window.draw(m_spr);
 }
 
