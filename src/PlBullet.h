@@ -7,6 +7,7 @@ public:
   virtual ~PlBullet() = default;
   void init() override;
   void update(float dt) override;
+  bool hit_wall(const Vec2f& dir) override;
 private:
   float m_elp = 0.0f;
   Vec2f m_dir;

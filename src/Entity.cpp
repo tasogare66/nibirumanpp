@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "Resource.h"
+#include "ConstParam.h"
 #include "ObjLst.h"
 #include "Entity.h"
 
@@ -8,6 +9,12 @@ Entity::Entity(const EntityArgs& args)
   : m_type(args.m_type)
   , m_pos(args.m_pos)
   , m_old_pos(args.m_pos)
+  , m_radius(args.m_radius)
+  , m_mass(args.m_mass)
+  , m_inv_mass(1.0f/args.m_mass)
+  , m_aabb0(args.aabb0())
+  , m_aabb_size(args.m_radius * 2.f, args.m_radius * 2.f)
+  , m_half_extents(args.m_radius, args.m_radius)
 {
   m_spr.setTexture(Resource::inst().get_pix_tex());
   ObjLst::inst().request(this);
@@ -96,11 +103,10 @@ void Entity::lim_vel_force(float l) {
 
 void Entity::repulse(const Vec2f& inml, float dist)
 {
-  //local bounce = 1.0 + BOUNCE
-  //self.mov = self.mov + (inml * (-dist) * bounce)-- * (1.0 + bounce[i])); --bounce:1
-  //local dot_vel_n = Vec2.Dot(self.vel, inml)
-  //self.mov_old = self.mov_old + inml * dot_vel_n * bounce-- + dot_vel_n * inml-- * bounce
-  //end
+  constexpr float bounce = 1.0f + const_param::BOUNCE;
+  m_mov += (inml * (-dist) * bounce); // * (1.0 + bounce[i])); --bounce:1
+  auto dot_vel_n = Vec2f::dot(m_vel, inml);
+  m_mov_old += (inml * dot_vel_n * bounce); // + dot_vel_n * inml-- * bounce
 }
 
 void Entity::pre_pro()

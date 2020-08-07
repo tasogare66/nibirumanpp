@@ -1,7 +1,6 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 
-#include <functional>
-
+#include "ConstParam.h"
 #include "Entity.h"
 #include "ObjLst.h"
 
@@ -14,9 +13,33 @@ void ObjLst::update(float dt)
 {
   this->upd_move(dt);
   this->upd_del();
+  this->upd_colliders(m_pxs);
+  this->upd_colliders(m_bullets, [](Entity* o, const Vec2f& dir) { return o->hit_wall(dir); });
+  this->upd_colliders(m_ene_bullets, [](Entity* o, const Vec2f& dir) { return o->hit_wall(dir); });
   this->upd_verlet(dt);
   this->upd_add();
   m_prev_dt = dt;
+}
+
+void ObjLst::upd_colliders(std::vector<Entity*>& lst, std::function<bool(Entity*,Vec2f)> func)
+{
+  //inner circel
+  constexpr auto lvradius = const_param::LvRadius;
+  constexpr auto he = const_param::LvRadDr2 - 8.f;
+  for (auto& obj : lst) {
+    auto diff = -obj->get_estimate_pos();
+    if (std::abs(diff.x) >= he || std::abs(diff.y) >= he) {
+      auto len = diff.magnitude();
+      auto d = len - lvradius + obj->get_radius();
+      if (d > const_param::EPSILON) {
+        auto dir = diff / len;
+        if (func && func(obj, dir)) {
+        } else {
+          obj->repulse(dir, -d);
+        }
+      }
+    }
+  }
 }
 
 void ObjLst::upd_verlet(float dt)

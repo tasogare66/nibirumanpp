@@ -1,4 +1,6 @@
 #pragma once
+#include <functional>
+#include "Vec2.h"
 #include "Singleton.h"
 class Entity;
 
@@ -13,6 +15,7 @@ private:
   void upd_add();
   void upd_del();
   void upd_move(float dt);
+  void upd_colliders(std::vector<Entity*>&, std::function<bool(Entity*,Vec2f)> func=nullptr);
   void upd_verlet(float dt);
   friend class Entity;
   std::vector<Entity*> m_pxs;

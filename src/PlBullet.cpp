@@ -23,3 +23,9 @@ void PlBullet::update(float dt)
   }
   m_mov = m_dir * dt;
 }
+
+bool PlBullet::hit_wall(const Vec2f&)
+{
+  this->del();
+  return true;
+}

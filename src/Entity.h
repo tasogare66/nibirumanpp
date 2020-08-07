@@ -11,12 +11,15 @@ struct EntityArgs {
   EntityType m_type = EntityType::None;
   Vec2f m_pos;
   Vec2f m_dir{ 1.f,0.f };
+  float m_radius = 3; //default
+  float m_mass = 1; //default
   EntityArgs() = default;
   EntityArgs(EntityType type, const Vec2f& pos, const Vec2f& dir = { 1.f, 0.f })
     : m_type(type)
     , m_pos(pos)
     , m_dir(dir)
   {}
+  Vec2f aabb0() const { return m_pos - Vec2f(m_radius,m_radius); }
 };
 
 enum class EntityFlag : uint32_t {
@@ -35,6 +38,7 @@ public:
   virtual void init() {}
   virtual void update(float dt);
   virtual void draw(sf::RenderWindow& window);
+  virtual bool hit_wall(const Vec2f&) { return false; } //trueÇÃèÍçárepulseÇ»Çµ
 
   void set_radius(float ir);
   void set_mass(float imass);
@@ -52,6 +56,8 @@ public:
   void repulse(const Vec2f& inml, float dist);
   void pre_pro();
   void do_verlet(float dt, float inv_prev_dt, float decel);
+
+  float get_radius() const { return m_radius; }
 
   const FwFlag<EntityFlag>& get_flag() const { return m_flag; }
 
