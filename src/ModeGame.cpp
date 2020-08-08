@@ -3,6 +3,8 @@
 #include "ConstParam.h"
 #include "Player.h"
 #include "Reticle.h"
+#include "Camera.h"
+#include "GameSeq.h"
 #include "ModeGame.h"
 
 ModeGame::ModeGame()
@@ -20,8 +22,11 @@ ModeGame::~ModeGame()
 
 void ModeGame::init()
 {
+  GameSeq::inst().reset();
+  //add player
   auto* reticle = new Reticle({ EntityType::None,Vec2f() });
-  new Player({ EntityType::Player,Vec2f() }, reticle);
+  auto p = new Player({ EntityType::Player,Vec2f() }, reticle);
+  GameSeq::inst().add_player(p);
 }
 
 void ModeGame::dest()
@@ -35,6 +40,7 @@ bool ModeGame::ctrl(float dt)
 
 void ModeGame::ctrl_post()
 {
+  Camera::inst().upd(GameSeq::inst().get_player_entities());
 }
 
 void ModeGame::draw0(sf::RenderWindow& window)
