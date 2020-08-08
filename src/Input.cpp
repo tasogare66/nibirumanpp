@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "Camera.h"
 #include "Input.h"
 
 float Input::update(float dt, sf::RenderWindow& window)
@@ -23,10 +24,12 @@ float Input::update(float dt, sf::RenderWindow& window)
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::X) || sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
     m |= InputButton_Dash;
   }
-  sf::Vector2f mxy(sf::Mouse::getPosition(window));
+  //mouse position
+  auto imousePos = sf::Mouse::getPosition(window); //window position
+  auto mxy = window.mapPixelToCoords(imousePos, Camera::inst().get_view()); //window position to global position
 
   m_mask = m;
-  m_mpos.set(mxy.x, mxy.y);
+  m_mpos = mxy;
   m_dt = dt;
 
   return dt;

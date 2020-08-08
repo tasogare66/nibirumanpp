@@ -9,6 +9,8 @@ public:
   Vec2(T ix, T iy) : sf::Vector2<T>(ix,iy) {}
   template <typename U>
   inline Vec2(const Vec2<U>& v) : sf::Vector2<T>(v.x, v.y) {}
+  template <typename U>
+  inline Vec2(const sf::Vector2<U>& v) : sf::Vector2<T>(v) {}
 
   void set(T ix, T iy) {
     this->x = ix;

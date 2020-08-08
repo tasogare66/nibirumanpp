@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "ConstParam.h"
 #include "Player.h"
 #include "Camera.h"
 
@@ -11,6 +12,13 @@ void Camera::upd(const std::vector<Player*>& pls)
   m_center = m_inr_center + this->upd_shake();
   m_top_left = m_center - Vec2f(120.f, 64.f);
   m_trs = -m_top_left;
+}
+
+const sf::View& Camera::update_view()
+{
+  m_view.reset({ 0.f, 0.f, const_param::SCR_WIDTH, const_param::SCR_HEIGHT });
+  m_view.setCenter(m_center);
+  return m_view;
 }
 
 Vec2f Camera::upd_shake()
