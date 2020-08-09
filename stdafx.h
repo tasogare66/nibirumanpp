@@ -5,4 +5,6 @@
 #include <SFML/Graphics/CircleShape.hpp>
 
 #include "fw_assert.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include "FwUtil.h"

@@ -6,6 +6,7 @@ enum class EntityType : uint32_t {
   None=0,
   Player,
   PlBullet,
+  Enemy,
 };
 struct EntityArgs {
   EntityType m_type = EntityType::None;
