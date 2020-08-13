@@ -27,6 +27,7 @@ struct EntityArgs {
 enum class EntityFlag : uint32_t {
   del = 1 << 0,
   AttrVerlet = 1 << 1,
+  Ally = 1 << 2,
 };
 
 class Entity {
@@ -41,6 +42,8 @@ public:
   virtual void update(float dt);
   virtual void draw(sf::RenderWindow& window);
   virtual bool hit_wall(const Vec2f&) { return false; } //true‚Ìê‡repulse‚È‚µ
+  virtual void dead() {}
+  virtual void set_blink() {}
 
   void set_radius(float ir);
   void set_mass(float imass);
@@ -60,10 +63,16 @@ public:
   void do_verlet(float dt, float inv_prev_dt, float decel);
 
   float get_radius() const { return m_radius; }
+  const Vec2f& get_aabb0() const { return m_aabb0; }
 
   const FwFlag<EntityFlag>& get_flag() const { return m_flag; }
 
+  void sub_health_dmg(int32_t dmg);
+  void sub_health(const Entity* t);
+
 protected:
+  friend class ObjLst;
+
   void set_sha(Shash* set_lst);
   void attr_verlet();
   Vec2f calc_velocity() const {

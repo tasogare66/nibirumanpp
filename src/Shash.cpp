@@ -107,44 +107,46 @@ void Shash::clear() {
   m_entities.clear();
 }
 
-#if 0
-local function overlaps(e1, e2)
-return e1[3] > e2[1] and e1[1] < e2[3] and e1[4] > e2[2] and e1[2] < e2[4]
-  end
+static bool overlaps(const ShaEntity& e1, const ShaEntity& e2) {
+  //return e1[3] > e2[1] and e1[1] < e2[3] and e1[4] > e2[2] and e1[2] < e2[4]
+  return e1.m_right > e2.m_left && e1.m_left < e2.m_right&& e1.m_bottom > e2.m_top && e1.m_top < e2.m_bottom;
+}
 
-  local function each_overlapping_in_cell(self, idx, e, set, fn, ...)
-  local t = self.cells[idx]
-  if not t then
-	return
-	end
-	for i, v in ipairs(t) do
-	  if e ~= v and overlaps(e, v) and not set[v] then
-		fn(v[5], ...)
-		set[v] = true
-		end
-		end
-		end
+void Shash::each_overlapping_in_cell(int64_t idx, ShaEntity& e, std::set<const ShaEntity*>& sets, HitCallbackFunc& hcb)
+{
+  const auto it = m_cells.find(idx);
+  if (it == m_cells.end()) return;
+  for (auto& p : it->second) {
+    auto v = p.first;
+    if (&e != v && overlaps(e, *v) && sets.count(v) <= 0) {
+      hcb(v->m_e);
+      sets.insert(v);
+    }
+  }
+}
 
-		local function each_overlapping_entity(self, e, fn, ...)
-		--Init set for keeping track of which entities have already been handled
-		local set = remove(self.tablepool) or {}
---Do overlap checks
-each_overlapping_cell(self, e, each_overlapping_in_cell, e, set, fn, ...)
---Clear setand return to pool
-for v in pairs(set) do
-set[v] = nil
-end
-insert(self.tablepool, set)
-end
+void Shash::each_overlapping_entity(ShaEntity& e, HitCallbackFunc& hcb)
+{
+  //Init set for keeping track of which entities have already been handled
+  auto& sets = m_tablepool;
+  sets.clear();
+  //Do overlap checks
+  this->each_overlapping_cell(e, [&](int64_t idx) { this->each_overlapping_in_cell(idx, e, sets, hcb); });
+  //Clear setand return to pool
+  //for v in pairs(set) do
+  //  set[v] = nil
+  //end
+  //insert(self.tablepool, set)
+}
 
-function shash : each(x, y, w, h, fn, ...)
-local e = self.entities[x]
-if e then
--- Got object, use its entity
-each_overlapping_entity(self, e, y, w, h, fn, ...)
-else
---Got bounding box, make temporary entity
-each_overlapping_entity(self, { x, y, x + w, y + h }, fn, ...)
-end
-end
-#endif
+void Shash::each(float x, float y, float w, float h, HitCallbackFunc hcb)
+{
+  //local e = self.entities[x]
+  //  if e then
+  //    -- Got object, use its entity
+  //    each_overlapping_entity(self, e, y, w, h, fn, ...)
+  //  else
+  // Got bounding box, make temporary entity
+  auto tmp_e = ShaEntity(x, y, x + w, y + h);
+  this->each_overlapping_entity(tmp_e, hcb);
+}

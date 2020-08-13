@@ -36,13 +36,13 @@ void Entity::attr_verlet()
   FW_ASSERT(not m_flag.check(EntityFlag::AttrVerlet));
   ObjLst::inst().m_verlets.push_back(this);
   m_flag.on(EntityFlag::AttrVerlet);
-  this->set_sha(ObjLst::inst().m_px_sha.get());
 }
 
 void Entity::attr_px()
 {
   this->attr_verlet();
   ObjLst::inst().m_pxs.push_back(this);
+  this->set_sha(ObjLst::inst().m_px_sha.get());
 }
 
 void Entity::attr_bullet()
@@ -178,16 +178,18 @@ void Entity::do_verlet(float dt, float inv_prev_dt, float decel)
 //Entity.off_hitmask = function(self, m)
 //self.hit_mask = self.hit_mask & (~m)
 
-//end//Entity.sub_health_dmg = function(self, dmg)
-//if self:check_flag(Flag_del) then return end
-//self.health = self.health - dmg
-//if self.health <= 0 then
-//self : del()
-//if self.dead then self : dead() end
-//else
-//self : set_blink()
-//end
-//end
-//Entity.sub_health = function(self, t)
-//self : sub_health_dmg(t.health)
-//end
+void Entity::sub_health_dmg(int32_t dmg)
+{
+  if (m_flag.check(EntityFlag::del) || dmg <= 0) return;
+  m_health -= dmg;
+  if (m_health <= 0) {
+    this->del();
+    this->dead();
+  } else {
+    this->set_blink();
+  }
+}
+
+void Entity::sub_health(const Entity* t) {
+  this->sub_health_dmg(t->m_health);
+}

@@ -9,6 +9,7 @@ Player::Player(const EntityArgs& args, const Entity* reticle)
   : Entity(args)
   , m_reticle(reticle)
 {
+  m_flag.on(EntityFlag::Ally);
 }
 
 void Player::init()

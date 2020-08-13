@@ -31,6 +31,7 @@ void ObjLst::update(float dt)
 {
   this->upd_move(dt);
   this->upd_del();
+  this->upd_reciprocal();
   this->upd_colliders(m_pxs);
   this->upd_colliders(m_bullets, [](Entity* o, const Vec2f& dir) { return o->hit_wall(dir); });
   this->upd_colliders(m_ene_bullets, [](Entity* o, const Vec2f& dir) { return o->hit_wall(dir); });
@@ -98,10 +99,10 @@ void ObjLst::upd_del()
     }
     lst.erase(result, lst.end());
   };
-  del_obj_from_list(m_pxs, nullptr);// , function(o) self.PX_SHA:remove(o) end)
+  del_obj_from_list(m_pxs, [this](Entity* o) { m_px_sha->remove(o); });
   del_obj_from_list(m_bullets);
-  del_obj_from_list(m_ene_bullets);// , function(o) self.ENBLT_SHA:remove(o) end)
-  del_obj_from_list(m_ene_dot);// , function(o) self.ENDOT_SHA:remove(o) end)
+  del_obj_from_list(m_ene_bullets, [this](Entity* o) { m_enblt_sha->remove(o); });
+  del_obj_from_list(m_ene_dot, [this](Entity* o) { m_endot_sha->remove(o); });
   del_obj_from_list(m_verlets);
   del_obj_from_list(m_objs, [](Entity* o) { delete o; });
 }
@@ -113,6 +114,44 @@ void ObjLst::upd_move(float dt)
   }
   for (auto o : m_objs) {
     o->update(dt);
+  }
+}
+
+bool ObjLst::intersect_circle_vs_circle(const Entity* p1, const Entity* p2)
+{
+  auto diff = p2->get_pos() - p1->get_pos();
+  float d = diff.magnitude();
+  float target = p2->get_radius() + p1->get_radius();
+  return (d > 0.0 && d < target);
+}
+
+void ObjLst::blt_vs_ene(Entity* o, Entity* b)
+{
+  constexpr auto flg = fw::underlying_cast(EntityFlag::Ally) | fw::underlying_cast(EntityFlag::del);
+  if (o->m_flag.check(static_cast<EntityFlag>(flg))) return; //player, delは除く
+  if (intersect_circle_vs_circle(o, b)) {
+    o->sub_health(b);
+    b->del();
+  }
+}
+
+void ObjLst::upd_reciprocal()
+{
+  // bullet vs enemy
+  for (auto* b : m_bullets) {
+    auto& aabb0 = b->get_aabb0();
+    float r2 = b->get_radius() * 2.f;
+    m_px_sha->each(aabb0.x, aabb0.y, r2, r2,
+      [&b](Entity* o) { blt_vs_ene(o, b); }
+    );
+  }
+  // bullet vs ene_bullet
+  for (auto* b : m_bullets) {
+    auto& aabb0 = b->get_aabb0();
+    float r2 = b->get_radius() * 2.f;
+    m_enblt_sha->each(aabb0.x, aabb0.y, r2, r2,
+      [&b](Entity* o) { blt_vs_ene(o, b); }
+    );
   }
 }
 

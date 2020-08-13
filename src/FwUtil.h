@@ -18,4 +18,17 @@ namespace fw {
   T lerp(T a, T b, float t) {
     return a * (1 - t) + b * t;
   }
+
+  namespace detail{
+    template <typename E>
+    using UnderlyingType = typename std::underlying_type<E>::type;
+
+    template <typename E>
+    using EnumTypesOnly = typename std::enable_if<std::is_enum<E>::value, E>::type;
+  }
+
+  template <typename E, typename = detail::EnumTypesOnly<E>>
+  constexpr detail::UnderlyingType<E> underlying_cast(E e) {
+    return static_cast<detail::UnderlyingType<E>>(e);
+  }
 }

@@ -16,6 +16,9 @@ private:
   void upd_add();
   void upd_del();
   void upd_move(float dt);
+  void upd_reciprocal();
+  static bool intersect_circle_vs_circle(const Entity* p1, const Entity* p2);
+  static void blt_vs_ene(Entity* o, Entity* b);
   void upd_colliders(std::vector<Entity*>&, std::function<bool(Entity*,Vec2f)> func=nullptr);
   void upd_verlet(float dt);
   friend class Entity;
