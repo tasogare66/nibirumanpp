@@ -2,7 +2,25 @@
 
 #include "ConstParam.h"
 #include "Entity.h"
+#include "Shash.h"
 #include "ObjLst.h"
+
+ObjLst::ObjLst()
+{
+  m_px_sha = std::make_unique<Shash>(10);
+  m_enblt_sha = std::make_unique<Shash>(10);
+  m_endot_sha = std::make_unique<Shash>(10);
+}
+
+ObjLst::~ObjLst()
+{
+  for (auto o : m_request) {
+    delete o;
+  }
+  for (auto o : m_objs) {
+    delete o;
+  }
+}
 
 void ObjLst::request(Entity* o)
 {

@@ -3,6 +3,7 @@
 #include "Resource.h"
 #include "ConstParam.h"
 #include "ObjLst.h"
+#include "Shash.h"
 #include "Entity.h"
 
 Entity::Entity(const EntityArgs& args)
@@ -24,11 +25,18 @@ Entity::~Entity()
 {
 }
 
+void Entity::set_sha(Shash* set_lst) {
+  FW_ASSERT(!m_sha);
+  m_sha = set_lst;
+  m_sha->add(this, m_aabb0.x, m_aabb0.y, m_aabb_size.x, m_aabb_size.y);
+}
+
 void Entity::attr_verlet()
 {
   FW_ASSERT(not m_flag.check(EntityFlag::AttrVerlet));
   ObjLst::inst().m_verlets.push_back(this);
   m_flag.on(EntityFlag::AttrVerlet);
+  this->set_sha(ObjLst::inst().m_px_sha.get());
 }
 
 void Entity::attr_px()
@@ -83,9 +91,9 @@ void Entity::set_position(const Vec2f& ipos) {
   m_pos = ipos;
   //updateAABB
   m_aabb0 = m_pos - m_half_extents;
-  //if self.sha then
-  //  self.sha:update(self, self.aabb0.x, self.aabb0.y, self.aabb_size.x, self.aabb_size.y)
-  //end
+  if (m_sha) {
+    m_sha->update(this, m_aabb0.x, m_aabb0.y, m_aabb_size.x, m_aabb_size.y);
+  }
 }
 
 void Entity::updateEstimateAABB() {

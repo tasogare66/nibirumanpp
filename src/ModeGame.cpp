@@ -5,6 +5,7 @@
 #include "Reticle.h"
 #include "EneGrunt.h" //test  
 #include "Camera.h"
+#include "ObjLst.h"
 #include "GameSeq.h"
 #include "ModeGame.h"
 
@@ -21,8 +22,14 @@ ModeGame::~ModeGame()
 {
 }
 
+void ModeGame::base_clr()
+{
+  ObjLst::reset();
+}
+
 void ModeGame::init()
 {
+  this->base_clr();
   GameSeq::inst().reset();
   //add player
   auto* reticle = new Reticle({ EntityType::None,Vec2f() });
@@ -34,6 +41,7 @@ void ModeGame::init()
 
 void ModeGame::dest()
 {
+  this->base_clr();
 }
 
 bool ModeGame::ctrl(float dt)

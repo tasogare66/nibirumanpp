@@ -124,6 +124,7 @@
     <ClCompile Include="src\PlBullet.cpp" />
     <ClCompile Include="src\Resource.cpp" />
     <ClCompile Include="src\Reticle.cpp" />
+    <ClCompile Include="src\Shash.cpp" />
     <ClCompile Include="src\test.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -154,6 +155,7 @@
     <ClInclude Include="src\PlBullet.h" />
     <ClInclude Include="src\Resource.h" />
     <ClInclude Include="src\Reticle.h" />
+    <ClInclude Include="src\Shash.h" />
     <ClInclude Include="src\Singleton.h" />
     <ClInclude Include="src\Vec2.h" />
     <ClInclude Include="stdafx.h" />

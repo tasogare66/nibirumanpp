@@ -10,5 +10,6 @@ public:
   void draw0(sf::RenderWindow& window) override;
   void draw1(sf::RenderWindow& window) override;
 private:
+  void base_clr();
   sf::CircleShape m_stg_circle;
 };

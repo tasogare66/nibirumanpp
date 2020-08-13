@@ -88,6 +88,9 @@
     <ClCompile Include="src\EneGrunt.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="src\Shash.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ModeGame.h">
@@ -164,6 +167,9 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\EneGrunt.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Shash.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>

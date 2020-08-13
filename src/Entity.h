@@ -1,6 +1,7 @@
 #pragma once
 #include "Vec2.h"
 #include "FwFlag.h"
+class Shash;
 
 enum class EntityType : uint32_t {
   None=0,
@@ -63,6 +64,7 @@ public:
   const FwFlag<EntityFlag>& get_flag() const { return m_flag; }
 
 protected:
+  void set_sha(Shash* set_lst);
   void attr_verlet();
   Vec2f calc_velocity() const {
     return m_pos - m_old_pos;
@@ -84,7 +86,7 @@ protected:
   Vec2f m_aabb0;
   Vec2f m_aabb_size;
   Vec2f m_half_extents;
-  //sha = nil,
+  Shash* m_sha = nullptr;
   FwFlag<EntityFlag> m_flag;
   uint32_t m_no;
   int32_t m_health = 1;

@@ -1,0 +1,39 @@
+#pragma once
+#include <unordered_map>
+#include <functional>
+#include "Vec2.h"
+class Entity;
+
+struct ShaEntity {
+  ShaEntity(float l,float t, float r, float b, Entity* e)
+    : m_left(l), m_top(t)
+    , m_right(r), m_bottom(b)
+    , m_e(e)
+  {}
+  float m_left, m_top;
+  float m_right, m_bottom;
+  Entity* m_e;
+};
+
+class Shash {
+public:
+  using CallbackFunc = std::function<void(int64_t)>;
+  Shash(uint32_t cellsize);
+  ~Shash() = default;
+  void add(Entity* obj, float x, float y, float w, float h);
+  void remove(Entity* obj);
+  void update(Entity* obj, float x, float y, float w=0.0f, float h=0.0f);
+  void clear();
+private:
+  static int64_t coord_to_key(int64_t x, int64_t y) {
+    return x + y * static_cast<int64_t>(1e+7);
+  }
+  Vec2<int32_t> cell_position(float x, float y);
+  void each_overlapping_cell(ShaEntity& e, CallbackFunc fn);
+  void add_entity_to_cell(int64_t idx, ShaEntity* e);
+  void remove_entity_from_cell(int64_t idx, ShaEntity* e);
+
+  uint32_t m_cellsize;
+  std::unordered_map<Entity*, ShaEntity> m_entities;
+  std::unordered_map<int64_t, std::unordered_map<ShaEntity*,int>> m_cells;
+};

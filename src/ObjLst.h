@@ -3,11 +3,12 @@
 #include "Vec2.h"
 #include "Singleton.h"
 class Entity;
+class Shash;
 
 class ObjLst : public Singleton<ObjLst> {
 public:
-  ObjLst() = default;
-  ~ObjLst() = default;
+  ObjLst();
+  ~ObjLst();
   void request(Entity* o);
   void update(float dt);
   void draw(sf::RenderWindow& window);
@@ -25,5 +26,8 @@ private:
   std::vector<Entity*> m_verlets;
   std::vector<Entity*> m_objs;
   std::vector<Entity*> m_request;
+  std::unique_ptr<Shash> m_px_sha;
+  std::unique_ptr<Shash> m_enblt_sha;
+  std::unique_ptr<Shash> m_endot_sha;
   float m_prev_dt = 1.0f / 60.0f;
 };
