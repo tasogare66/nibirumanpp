@@ -28,6 +28,11 @@ enum class EntityFlag : uint32_t {
   del = 1 << 0,
   AttrVerlet = 1 << 1,
   Ally = 1 << 2,
+  Invincible = 1 << 3,
+};
+enum class HitMask : uint32_t {
+  Enemy = 1 << 0,
+  Player = 1 << 1,
 };
 
 class Entity {
@@ -97,10 +102,10 @@ protected:
   Vec2f m_half_extents;
   Shash* m_sha = nullptr;
   FwFlag<EntityFlag> m_flag;
-  uint32_t m_no;
+  uint32_t m_no = 0;
   int32_t m_health = 1;
   //exp_resi = 1,
-  //hit_mask = 0, --HitMask
-  //colli_attr = 0, --hitŽž’Ê’m‚·‚éattribute
+  FwFlag<HitMask> m_hit_mask; //HitMask
+  FwFlag<HitMask> m_colli_attr; //hitŽž’Ê’m‚·‚éattribute
   sf::Sprite m_spr;
 };

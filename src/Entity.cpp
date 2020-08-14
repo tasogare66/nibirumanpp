@@ -18,7 +18,7 @@ Entity::Entity(const EntityArgs& args)
   , m_half_extents(args.m_radius, args.m_radius)
 {
   m_spr.setTexture(Resource::inst().get_pix_tex());
-  ObjLst::inst().request(this);
+  m_no = ObjLst::inst().request(this);
 }
 
 Entity::~Entity()

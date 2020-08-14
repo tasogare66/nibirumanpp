@@ -27,6 +27,7 @@ public:
   void update(Entity* obj, float x, float y, float w=0.0f, float h=0.0f);
   void clear();
   void each(float x, float y, float w, float h, HitCallbackFunc hcb);
+  void each(Entity* obj, HitCallbackFunc hcb);
 
 private:
   using CallbackFunc = std::function<void(int64_t)>;

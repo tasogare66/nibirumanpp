@@ -7,6 +7,9 @@ public:
   void on(T m) {
     m_mask |= static_cast<decltype(m_mask)>(m);
   }
+  void on(FwFlag<T> m) {
+    m_mask |= m.m_mask;
+  }
   void off(T m) {
     m_mask &= ~static_cast<decltype(m_mask)>(m);
   }

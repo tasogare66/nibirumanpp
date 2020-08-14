@@ -22,9 +22,10 @@ ObjLst::~ObjLst()
   }
 }
 
-void ObjLst::request(Entity* o)
+uint32_t ObjLst::request(Entity* o)
 {
   m_request.push_back(o);
+  return ++m_cumulative_no;
 }
 
 void ObjLst::update(float dt)
@@ -125,6 +126,31 @@ bool ObjLst::intersect_circle_vs_circle(const Entity* p1, const Entity* p2)
   return (d > 0.0 && d < target);
 }
 
+void ObjLst::reciprocal_each(Entity* p1, Entity* p2)
+{
+  auto diff = p2->m_pos - p1->m_pos;
+  float sqr_d = diff.sqr_magnitude();
+  float d = std::sqrt(sqr_d);
+  float target = p2->m_radius + p1->m_radius;
+  if (d > 0.0f && d < target) { // d==0: same particle
+    auto factor = (d - target) / d * 0.5f;
+    constexpr float ebounce = const_param::BOUNCE;
+    p1->m_mov += diff * factor;
+    p2->m_mov -= diff * factor;
+    // preserve impulse
+    float inv_sqr_d = 1.0f / sqr_d;
+    auto f1 = ebounce * Vec2f::dot(p1->m_vel, diff) * inv_sqr_d; //mass:1
+    auto f2 = ebounce * Vec2f::dot(p2->m_vel, diff) * inv_sqr_d;
+    auto f1f2 = f1 - f2;
+    // p1
+    p1->m_mov_old += diff * f1f2 * p1->m_inv_mass;
+    p1->m_hit_mask.on(p2->m_colli_attr);
+    // p2
+    p2->m_mov_old -= diff * f1f2 * p2->m_inv_mass;
+    p2->m_hit_mask.on(p1->m_colli_attr);
+  }
+}
+
 void ObjLst::blt_vs_ene(Entity* o, Entity* b)
 {
   constexpr auto flg = fw::underlying_cast(EntityFlag::Ally) | fw::underlying_cast(EntityFlag::del);
@@ -152,6 +178,15 @@ void ObjLst::upd_reciprocal()
     m_enblt_sha->each(aabb0.x, aabb0.y, r2, r2,
       [&b](Entity* o) { blt_vs_ene(o, b); }
     );
+  }
+  // obj同士
+  for (auto* obj : m_pxs) {
+    if (obj->m_flag.check(EntityFlag::Invincible)) continue;
+    m_px_sha->each(obj, [&](Entity* o) {
+      if (obj->m_no > o->m_no && (not o->m_flag.check(EntityFlag::Invincible))) {
+        reciprocal_each(obj, o);
+      }
+    });
   }
 }
 

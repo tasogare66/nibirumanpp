@@ -141,12 +141,18 @@ void Shash::each_overlapping_entity(ShaEntity& e, HitCallbackFunc& hcb)
 
 void Shash::each(float x, float y, float w, float h, HitCallbackFunc hcb)
 {
-  //local e = self.entities[x]
-  //  if e then
-  //    -- Got object, use its entity
-  //    each_overlapping_entity(self, e, y, w, h, fn, ...)
-  //  else
   // Got bounding box, make temporary entity
   auto tmp_e = ShaEntity(x, y, x + w, y + h);
   this->each_overlapping_entity(tmp_e, hcb);
+}
+
+void Shash::each(Entity* obj, HitCallbackFunc hcb)
+{
+  // Got object, use its entity
+  auto it = m_entities.find(obj);
+  if (it == m_entities.end()) {
+    FW_ASSERT(0);
+    return;
+  }
+  this->each_overlapping_entity(it->second, hcb);
 }

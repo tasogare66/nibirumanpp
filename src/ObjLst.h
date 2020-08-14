@@ -9,7 +9,7 @@ class ObjLst : public Singleton<ObjLst> {
 public:
   ObjLst();
   ~ObjLst();
-  void request(Entity* o);
+  uint32_t request(Entity* o);
   void update(float dt);
   void draw(sf::RenderWindow& window);
 private:
@@ -18,6 +18,7 @@ private:
   void upd_move(float dt);
   void upd_reciprocal();
   static bool intersect_circle_vs_circle(const Entity* p1, const Entity* p2);
+  static void reciprocal_each(Entity* p1, Entity* p2);
   static void blt_vs_ene(Entity* o, Entity* b);
   void upd_colliders(std::vector<Entity*>&, std::function<bool(Entity*,Vec2f)> func=nullptr);
   void upd_verlet(float dt);
@@ -33,4 +34,5 @@ private:
   std::unique_ptr<Shash> m_enblt_sha;
   std::unique_ptr<Shash> m_endot_sha;
   float m_prev_dt = 1.0f / 60.0f;
+  uint32_t m_cumulative_no = 0;
 };
