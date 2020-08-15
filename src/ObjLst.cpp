@@ -3,6 +3,8 @@
 #include "ConstParam.h"
 #include "Entity.h"
 #include "Shash.h"
+#include "GameSeq.h"
+#include "Player.h"
 #include "ObjLst.h"
 
 ObjLst::ObjLst()
@@ -123,7 +125,7 @@ bool ObjLst::intersect_circle_vs_circle(const Entity* p1, const Entity* p2)
   auto diff = p2->get_pos() - p1->get_pos();
   float d = diff.magnitude();
   float target = p2->get_radius() + p1->get_radius();
-  return (d > 0.0 && d < target);
+  return (d < target);
 }
 
 void ObjLst::reciprocal_each(Entity* p1, Entity* p2)
@@ -178,6 +180,23 @@ void ObjLst::upd_reciprocal()
     m_enblt_sha->each(aabb0.x, aabb0.y, r2, r2,
       [&b](Entity* o) { blt_vs_ene(o, b); }
     );
+  }
+
+  auto& pls = GameSeq::inst().get_player_entities();
+  // player vs enedot
+  for (const auto& pl : pls) {
+    auto capr = pl->get_capradius();
+    auto pl_pos = pl->get_pos();
+    m_endot_sha->each(pl_pos.x - capr, pl_pos.y - capr, capr * 2.0f, capr * 2.0f,
+      [&](Entity* o) {
+      if (o->m_flag.check(EntityFlag::del)) return; //delは除く
+      auto diff = o->m_pos - pl->m_pos;
+      auto d = diff.magnitude();
+      auto target = capr + o->m_radius;
+      if (d < target) {
+        o->hitcb(pl, Vec2f(), d - pl->m_radius);
+      }
+    });
   }
   // obj同士
   for (auto* obj : m_pxs) {

@@ -94,6 +94,9 @@
     <ClCompile Include="src\EneDot.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="src\Spawner.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ModeGame.h">
@@ -176,6 +179,9 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\EneDot.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Spawner.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>

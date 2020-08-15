@@ -1,4 +1,5 @@
 #include "Mode.h"
+#include "Spawner.h"
 class ModeGame : public Mode {
 public:
   ModeGame();
@@ -11,5 +12,6 @@ public:
   void draw1(sf::RenderWindow& window) override;
 private:
   void base_clr();
+  Spawner m_spawner;
   sf::CircleShape m_stg_circle;
 };

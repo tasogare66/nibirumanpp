@@ -31,6 +31,7 @@ void ModeGame::init()
 {
   this->base_clr();
   GameSeq::inst().reset();
+  m_spawner.init();
   //add player
   auto* reticle = new Reticle({ EntityType::None,Vec2f() });
   auto p = new Player({ EntityType::Player,Vec2f() }, reticle);
@@ -46,6 +47,7 @@ void ModeGame::dest()
 
 bool ModeGame::ctrl(float dt)
 {
+  m_spawner.exec(dt);
   return true;
 }
 
