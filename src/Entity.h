@@ -21,6 +21,10 @@ struct EntityArgs {
     , m_pos(pos)
     , m_dir(dir)
   {}
+  EntityArgs(const Vec2f& pos, const Vec2f& dir = { 1.f, 0.f })
+    : m_pos(pos)
+    , m_dir(dir)
+  {}
   Vec2f aabb0() const { return m_pos - Vec2f(m_radius,m_radius); }
 };
 
@@ -29,6 +33,7 @@ enum class EntityFlag : uint32_t {
   AttrVerlet = 1 << 1,
   Ally = 1 << 2,
   Invincible = 1 << 3,
+  HaveDot = 1 << 4,
 };
 enum class HitMask : uint32_t {
   Enemy = 1 << 0,
@@ -47,6 +52,7 @@ public:
   virtual void update(float dt);
   virtual void draw(sf::RenderWindow& window);
   virtual bool hit_wall(const Vec2f&) { return false; } //true‚Ìê‡repulse‚È‚µ
+  virtual void hitcb(const Entity*, const Vec2f&, float) {}
   virtual void dead() {}
   virtual void set_blink() {}
 

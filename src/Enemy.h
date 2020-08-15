@@ -6,6 +6,7 @@ public:
   Enemy(const EntityArgs& args);
   virtual ~Enemy() = default;
   virtual void update(float dt) override;
+  virtual void dead() override;
 protected:
   virtual void appear() {}
   virtual void upd_ene(float dt) = 0;

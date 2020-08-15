@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "EneDot.h"
 #include "Enemy.h"
 
 Enemy::Enemy(const EntityArgs& args)
@@ -19,4 +20,13 @@ void Enemy::update(float dt)
     this->upd_ene(dt);
   }
   m_elapsed += dt;
+}
+
+void Enemy::dead()
+{
+  //GAME:add_score(self.score)
+  if (m_flag.check(EntityFlag::HaveDot)) {
+    new EneDot(m_pos);
+    //psfx(2, 'D-4', 20, 1)
+  }
 }

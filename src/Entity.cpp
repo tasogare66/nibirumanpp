@@ -58,6 +58,7 @@ void Entity::attr_ene_bullet()
 void Entity::attr_ene_dot()
 {
   ObjLst::inst().m_ene_dot.push_back(this);
+  this->set_sha(ObjLst::inst().m_endot_sha.get());
 }
 
 void Entity::update(float dt)

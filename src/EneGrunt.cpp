@@ -6,6 +6,7 @@
 EneGrunt::EneGrunt(const EntityArgs& args)
   : Enemy(args)
 {
+  m_flag.on(EntityFlag::HaveDot);
 }
 
 void EneGrunt::appear()
