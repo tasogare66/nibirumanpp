@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <LUA>external\lua\lua-5.4.0</LUA>
+    <LUALIB>lua5.4.0</LUALIB>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup>
+    <Link>
+      <AdditionalDependencies>$(LUALIB).lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(LUA)\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="LUA">
+      <Value>$(LUA)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LUALIB">
+      <Value>$(LUALIB)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>
