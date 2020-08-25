@@ -1,10 +1,40 @@
 #include "stdafx.h"
 
-#if DEBUG&0
-//test
 #include <iostream>
 #include <iomanip>
 #include <string>
+//#include <strstream>
+
+extern uint64_t GetNumOfHeapAllocations();
+#if DEBUG&0
+class CExternalBuffer : public std::streambuf
+{
+public:
+  CExternalBuffer() = delete;
+  CExternalBuffer(char* buffer, size_t bufferLength) {
+    char* bufferEnd = buffer + bufferLength;
+    setp(buffer, bufferEnd);
+    setg(buffer, buffer, bufferEnd);
+  }
+};
+class StreamTest {
+public:
+  StreamTest() {
+    printf("%lld\n", GetNumOfHeapAllocations());
+    char buffer[1000];
+    CExternalBuffer streamBuffer(buffer, 1000);
+    std::ostream stream(&streamBuffer);
+    stream << "TEST_dATA" << std::ends;
+    printf("%s\n",buffer);
+    printf("%lld\n", GetNumOfHeapAllocations());
+  }
+private:
+};
+static StreamTest m_stream_test_inst;
+#endif
+
+#if DEBUG&0
+//test
 using namespace std;
 class MovTest {
 public:

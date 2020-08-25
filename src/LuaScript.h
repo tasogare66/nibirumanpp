@@ -12,5 +12,5 @@ namespace scr
   };
 
   // ìGê∂ê¨óp
-  ILuaScript* create_lua_spawner();
+  ILuaScript* create_lua_enemy_spawner();
 }

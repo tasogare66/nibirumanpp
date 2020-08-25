@@ -1,10 +1,14 @@
 #pragma once
-
+#include<memory>
+namespace scr {
+  class ILuaScript;
+}
 class Spawner {
 public:
-  Spawner() = default;
-  ~Spawner() = default;
+  Spawner();
+  ~Spawner();
   void init();
   void exec(float dt);
 private:
+  std::unique_ptr<scr::ILuaScript> m_script;
 };

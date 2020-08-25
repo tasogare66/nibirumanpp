@@ -6,10 +6,12 @@
 
 #if DEBUG&0 //count number of memory allocations
 uint64_t numOfHeapAllocations = 0;
-void* operator new(size_t size)
-{
+void* operator new(size_t size) {
   numOfHeapAllocations++;
   return malloc(size);
+}
+uint64_t GetNumOfHeapAllocations() {
+  return numOfHeapAllocations;
 }
 #endif
 

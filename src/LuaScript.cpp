@@ -35,9 +35,10 @@ namespace scr
     virtual ~LuaScriptBase() = default;
 
     // lua読み込んでセットアップ
-    void load_and_setup(const std::string& in_scr_name)
+    void load_and_setup(const std::string_view& in_scr_name)
     {
-      std::string fname = m_script_dir + in_scr_name;
+      std::string fname(m_script_dir);
+      fname += in_scr_name;
       //luaL_openlibs(m_ctx.state());
       m_ctx.importLibs();
       try {
@@ -156,15 +157,21 @@ namespace scr
     const char* m_co_str; // コルーチン実行関数
   };
 
+  class ScrSpawner {
+  public:
+  };
+
   class LuaEnemySpawner : public LuaScriptBase {
   public:
     LuaEnemySpawner()
       : LuaScriptBase("spawn_exec")
     {
+      this->load_and_setup("level0.lua");
     }
     virtual ~LuaEnemySpawner() = default;
   private:
     virtual void bind() override {
+ 
     }
     virtual void update(float dt) override {
     }
@@ -174,5 +181,4 @@ namespace scr
   {
     return new LuaEnemySpawner();
   }
-
 }

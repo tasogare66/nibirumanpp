@@ -2,8 +2,8 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <LUA>external\lua\lua-5.4.0</LUA>
-    <LUALIB>lua5.4.0</LUALIB>
+    <LUA>external\lua\lua-5.3.5</LUA>
+    <LUALIB>lua5.3.5</LUALIB>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>
