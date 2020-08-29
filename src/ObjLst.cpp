@@ -115,8 +115,10 @@ void ObjLst::upd_move(float dt)
   for (auto o : m_verlets) {
     o->pre_pro();
   }
+  m_spawn_num = 0;
   for (auto o : m_objs) {
     o->update(dt);
+    if (o->m_flag.check(EntityFlag::Spawned)) ++m_spawn_num;
   }
 }
 

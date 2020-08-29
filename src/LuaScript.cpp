@@ -10,6 +10,9 @@
 
 #pragma warning( pop )
 
+#include "ObjLst.h"
+#include "EneGrunt.h"
+
 #include "LuaScript.h"
 
 namespace LuaIntf
@@ -76,6 +79,7 @@ namespace scr
       if (m_end_flag == false && m_error_flag == false)
       {
         // 個別の更新処理
+        m_dt = dt;
         this->update(dt);
 
         try {
@@ -114,12 +118,13 @@ namespace scr
         this->set_log(log.c_str());
       }).endModule();
 
-      //LuaBinding(m_ctx.state()).beginModule("game")
+      LuaBinding(m_ctx.state()).beginModule("GAME")
       //  .addFunction("random_range", [this](float min, float max) {
       //  return fw::random::random_range(min, max, m_random_type);
       //}).addFunction("random_int", [this](int min, int max) {
       //  return fw::random::random_int(min, max, m_random_type);
-      //}).endModule();
+        .addProperty("dt", [this]() { return m_dt; })
+        .endModule();
     }
 
     void set_log(const char* log)
@@ -148,6 +153,7 @@ namespace scr
 
   private:
     const char* m_script_dir = "rom/";
+    float m_dt = 0.0f;
     //const fw::random::Type m_random_type = fw::random::Type::GAME;
 
     LuaIntf::LuaState m_thread = nullptr;
@@ -157,8 +163,43 @@ namespace scr
     const char* m_co_str; // コルーチン実行関数
   };
 
+  enum class EnemyType {
+    GRUNT,
+  };
+
   class ScrSpawner {
   public:
+    ScrSpawner() = default;
+    ~ScrSpawner() = default;
+    uint32_t get_spawn_num() const { //生存している敵の数
+      return ObjLst::inst().get_spawn_num();
+    }
+    uint32_t get_spawn_ttl() const { //生成した敵の総数
+      return ObjLst::inst().get_spawn_ttl();
+    }
+    void spawn(EnemyType type, LuaRef tbl) {
+      auto bbb = tbl.has("dirx");
+      auto ccc = tbl["dirx"];
+      auto ddd = ccc.value<float>();
+      //for (auto& e : tbl) {
+      //  std::string key = e.key<std::string>();
+      //  LuaRef value = e.value<LuaRef>();
+      //}
+      EntityArgs entity_args;
+      Enemy* ent = nullptr;
+      switch (type) {
+      case EnemyType::GRUNT:
+        ent = new EneGrunt(entity_args);
+        break;
+      default:
+        FW_ASSERT(0);
+        break;
+      }
+      if (ent) {
+        ent->attr_spawned();
+      }
+    }
+  private:
   };
 
   class LuaEnemySpawner : public LuaScriptBase {
@@ -171,7 +212,16 @@ namespace scr
     virtual ~LuaEnemySpawner() = default;
   private:
     virtual void bind() override {
- 
+
+      LuaBinding(m_ctx.state()).beginModule("EnemyType")
+        .addConstant("GRUNT", EnemyType::GRUNT)
+        .endModule();
+      LuaIntf::LuaBinding(m_ctx.state()).beginClass<ScrSpawner>("ScrSpawner")
+        .addConstructor(LUA_ARGS())
+        .addFunction("spawn", &ScrSpawner::spawn, LUA_ARGS(EnemyType, LuaRef))
+        .addProperty("num", &ScrSpawner::get_spawn_num)
+        .addProperty("ttl", &ScrSpawner::get_spawn_ttl)
+        .endClass();
     }
     virtual void update(float dt) override {
     }

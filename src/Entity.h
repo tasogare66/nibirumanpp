@@ -34,6 +34,7 @@ enum class EntityFlag : uint32_t {
   Ally = 1 << 2,
   Invincible = 1 << 3,
   HaveDot = 1 << 4,
+  Spawned = 1 << 5,
 };
 enum class HitMask : uint32_t {
   Enemy = 1 << 0,
@@ -48,6 +49,7 @@ public:
   void attr_bullet();
   void attr_ene_bullet();
   void attr_ene_dot();
+  void attr_spawned();
   virtual void init() {}
   virtual void update(float dt);
   virtual void draw(sf::RenderWindow& window);

@@ -12,6 +12,8 @@ public:
   uint32_t request(Entity* o);
   void update(float dt);
   void draw(sf::RenderWindow& window);
+  uint32_t get_spawn_num() const { return m_spawn_num; }
+  uint32_t get_spawn_ttl() const { return m_spawn_ttl; }
 private:
   void upd_add();
   void upd_del();
@@ -35,4 +37,6 @@ private:
   std::unique_ptr<Shash> m_endot_sha;
   float m_prev_dt = 1.0f / 60.0f;
   uint32_t m_cumulative_no = 0;
+  uint32_t m_spawn_ttl = 0;
+  uint32_t m_spawn_num = 0;
 };
