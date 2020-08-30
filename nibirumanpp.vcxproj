@@ -126,6 +126,7 @@
     <ClCompile Include="src\ObjLst.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\PlBullet.cpp" />
+    <ClCompile Include="src\Random.cpp" />
     <ClCompile Include="src\Resource.cpp" />
     <ClCompile Include="src\Reticle.cpp" />
     <ClCompile Include="src\Shash.cpp" />
@@ -160,12 +161,14 @@
     <ClInclude Include="src\ObjLst.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\PlBullet.h" />
+    <ClInclude Include="src\Random.h" />
     <ClInclude Include="src\Resource.h" />
     <ClInclude Include="src\Reticle.h" />
     <ClInclude Include="src\Shash.h" />
     <ClInclude Include="src\Singleton.h" />
     <ClInclude Include="src\Spawner.h" />
     <ClInclude Include="src\Vec2.h" />
+    <ClInclude Include="src\Xoshiro.hpp" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
