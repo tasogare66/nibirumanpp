@@ -6,6 +6,7 @@ namespace rng{
     EFFECT,
     MAX
   };
+  float randf(Type t = Type::COMMON);
   float randf(float range, Type t = Type::COMMON);
   float range(float min, float max, Type t = Type::COMMON);
   int32_t rand_int(int32_t max, Type t = Type::COMMON);

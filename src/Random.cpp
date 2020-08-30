@@ -55,6 +55,7 @@ namespace rng {
     std::array<Xoshiro::Xoshiro256StarStar, static_cast<size_t>(Type::MAX)> m_rngs;
   } g_random;
 
+  float randf(Type t) { return g_random.rand(t); }
   float randf(float range, Type t) { return g_random.randf(range, t); }
   float range(float min, float max, Type t) { return g_random.rangef(min, max, t); }
   int32_t rand_int(int32_t max, Type t) { return g_random.rand_int(max, t); }

@@ -10,7 +10,9 @@
 
 #pragma warning( pop )
 
+#include "Random.h"
 #include "ObjLst.h"
+#include "ConstParam.h"
 #include "EneGrunt.h"
 
 #include "LuaScript.h"
@@ -119,11 +121,10 @@ namespace scr
       }).endModule();
 
       LuaBinding(m_ctx.state()).beginModule("GAME")
-      //  .addFunction("random_range", [this](float min, float max) {
-      //  return fw::random::random_range(min, max, m_random_type);
-      //}).addFunction("random_int", [this](int min, int max) {
-      //  return fw::random::random_int(min, max, m_random_type);
+        .addFunction("randomf", []() { return rng::randf(m_rng_type); })
+        .addFunction("randomi", [](int max) { return rng::rand_int(max, m_rng_type); })
         .addProperty("dt", [this]() { return m_dt; })
+        .addProperty("LvRadius", []() { return const_param::LvRadius; })
         .endModule();
     }
 
@@ -154,7 +155,7 @@ namespace scr
   private:
     const char* m_script_dir = "rom/";
     float m_dt = 0.0f;
-    //const fw::random::Type m_random_type = fw::random::Type::GAME;
+    static constexpr auto m_rng_type = rng::Type::GAME;
 
     LuaIntf::LuaState m_thread = nullptr;
     bool m_end_flag = true;
@@ -178,14 +179,11 @@ namespace scr
       return ObjLst::inst().get_spawn_ttl();
     }
     void spawn(EnemyType type, LuaRef tbl) {
-      auto bbb = tbl.has("dirx");
-      auto ccc = tbl["dirx"];
-      auto ddd = ccc.value<float>();
-      //for (auto& e : tbl) {
-      //  std::string key = e.key<std::string>();
-      //  LuaRef value = e.value<LuaRef>();
-      //}
       EntityArgs entity_args;
+      entity_args.m_pos.x = tbl["px"].value<float>();
+      entity_args.m_pos.y = tbl["py"].value<float>();
+      entity_args.m_dir.x = tbl["dirx"].value<float>();
+      entity_args.m_dir.y = tbl["diry"].value<float>();
       Enemy* ent = nullptr;
       switch (type) {
       case EnemyType::GRUNT:
