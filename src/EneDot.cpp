@@ -3,7 +3,7 @@
 #include "EneDot.h"
 
 EneDot::EneDot(const EntityArgs& args)
-  : Entity(args)
+  : Entity(EntityType::Dot, args)
 {
 }
 

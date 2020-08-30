@@ -6,8 +6,8 @@
 #include "Shash.h"
 #include "Entity.h"
 
-Entity::Entity(const EntityArgs& args)
-  : m_type(args.m_type)
+Entity::Entity(EntityType type, const EntityArgs& args)
+  : m_type(type)
   , m_pos(args.m_pos)
   , m_old_pos(args.m_pos)
   , m_radius(args.m_radius)

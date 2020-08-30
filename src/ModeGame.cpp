@@ -3,7 +3,6 @@
 #include "ConstParam.h"
 #include "Player.h"
 #include "Reticle.h"
-#include "EneGrunt.h" //test  
 #include "Camera.h"
 #include "ObjLst.h"
 #include "GameSeq.h"
@@ -33,11 +32,9 @@ void ModeGame::init()
   GameSeq::inst().reset();
   m_spawner.init();
   //add player
-  auto* reticle = new Reticle({ EntityType::None,Vec2f() });
-  auto p = new Player({ EntityType::Player,Vec2f() }, reticle);
+  auto* reticle = new Reticle(EntityArgs{ Vec2f() });
+  auto p = new Player({ Vec2f() }, reticle);
   GameSeq::inst().add_player(p);
-
-  new EneGrunt({EntityType::Enemy, Vec2f(50.f,50.f) });
 }
 
 void ModeGame::dest()

@@ -4,7 +4,7 @@
 #include "Reticle.h"
 
 Reticle::Reticle(const EntityArgs& args)
-  : Entity(args)
+  : Entity(EntityType::None, args)
 {
 }
 

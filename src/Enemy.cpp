@@ -4,7 +4,7 @@
 #include "Enemy.h"
 
 Enemy::Enemy(const EntityArgs& args)
-  : Entity(args)
+  : Entity(EntityType::Enemy, args)
 {
 }
 

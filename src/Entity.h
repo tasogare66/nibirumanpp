@@ -8,19 +8,15 @@ enum class EntityType : uint32_t {
   Player,
   PlBullet,
   Enemy,
+  Dot,
+  Human,
 };
 struct EntityArgs {
-  EntityType m_type = EntityType::None;
   Vec2f m_pos;
   Vec2f m_dir{ 1.f,0.f };
   float m_radius = 3; //default
   float m_mass = 1; //default
   EntityArgs() = default;
-  EntityArgs(EntityType type, const Vec2f& pos, const Vec2f& dir = { 1.f, 0.f })
-    : m_type(type)
-    , m_pos(pos)
-    , m_dir(dir)
-  {}
   EntityArgs(const Vec2f& pos, const Vec2f& dir = { 1.f, 0.f })
     : m_pos(pos)
     , m_dir(dir)
@@ -43,7 +39,7 @@ enum class HitMask : uint32_t {
 
 class Entity {
 public:
-  explicit Entity(const EntityArgs& args);
+  explicit Entity(EntityType type, const EntityArgs& args);
   virtual ~Entity();
   void attr_px();
   void attr_bullet();

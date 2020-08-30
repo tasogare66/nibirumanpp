@@ -3,7 +3,7 @@
 #include "PlBullet.h"
 
 PlBullet::PlBullet(const Vec2f pos, const Vec2f dir)
-  : Entity({EntityType::PlBullet, pos})
+  : Entity(EntityType::PlBullet, { pos })
   , m_dir(dir*150.f)
 {
 }
