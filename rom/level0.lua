@@ -1,6 +1,6 @@
 -- -*- coding: utf-8 -*-
 package.path = './rom/?.lua;' .. package.path
-local vecmat = require "vecmat"
+local matrix = require "vecmat"
 
 local insert=table.insert
 local remove=table.remove
@@ -23,7 +23,7 @@ function wait_for_second(sec,func)
   end
 end
 
-function req_spawn(t,px,py,dir)
+function ene_spawn(t,px,py,dir)
   local dirx,diry = 0,1
   if(dir)then dirx,diry=dir.x,dir.y end
   SCRSPW:spawn(t, {px=px, py=py, dirx=dirx, diry=diry})
@@ -33,7 +33,7 @@ end
 Spawner.test_co = function(self,args)
   while true do
     if SCRSPW.num<10 then
-      req_spawn(args.t, randf_range(-170,170), randf_range(-170,170))
+      ene_spawn(args.t, randf_range(-170,170), randf_range(-170,170))
     end
     wait_for_second(0.5)
   end
@@ -57,9 +57,21 @@ Spawner.random_co = function(self,args)
   ed_r = math.min(ed_r, r_max)
   local end_wait=args.end_wait or 0
   random_circle(args.num,st_r,ed_r,function(x,y)
-    req_spawn(args.t,x,y)
+    ene_spawn(args.t,x,y)
   end)
   wait_for_second(end_wait)
+end
+
+Spawner.spiral_co = function(self,args)
+  local radius = 160
+  for i=0, 110 do
+    radius = radius - 1.5
+    local m = matrix_roty(15*i)
+    local v = matrix { {-radius},{2},{1}, }
+    local pos = m*v
+    ene_spawn(args.t,pos[1][1],pos[2][1])
+    wait_for_second(0.06)
+  end
 end
 
 ------------------------------------------
@@ -67,8 +79,9 @@ function Spawner:registration()
 end
 
 function Spawner:init()
-  self:runco(Spawner.test_co, {t=EnemyType.GRUNT})
+  --self:runco(Spawner.test_co, {t=EnemyType.GRUNT})
   --self:runco(Spawner.random_co, {t=EnemyType.GRUNT, str=60, edr=160, num=75, end_wait=4 })
+  self:runco(Spawner.spiral_co, { t=EnemyType.GRUNT })
 end
 function Spawner:exec(dt)
   self:registration()
