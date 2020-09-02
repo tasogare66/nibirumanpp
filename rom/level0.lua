@@ -74,6 +74,50 @@ Spawner.spiral_co = function(self,args)
   end
 end
 
+Spawner.circle_co = function(self,args)
+  --radius:160まで
+  local end_wait=args.end_wait or 0
+  local radius = args.radius--60  
+  local num = args.num
+  local deg_step=360/num
+  local dm=args.dirt or 1
+  for i=0,num-1 do
+    local rad=math.rad(deg_step*i)
+    local c=cos(rad)
+    local s=sin(rad)
+    local m=dm==0 and i%2*2-1 or dm
+    ene_spawn(args.t,c*radius,s*radius,Vec2.new(c*m,s*m))
+  end
+  wait_for_second(end_wait)
+end
+
+Spawner.line_co = function(self,args)
+  -- rot:rotation_y
+  -- step_wait:1体あたりの待ち,default:0
+  -- end_wait:全登録あとの待ち
+  -- stid:開始のid, 0,1,-8
+  local m = matrix_roty(args.rot)
+  local stid=args.stid or 1
+  local end_wait=args.end_wait or 0
+  local step_wait=args.step_wait or 0
+  for i=stid, 8 do
+    local v = matrix{{i*20},{0},{1}}
+    local pos = m*v
+    ene_spawn(args.t,pos[1][1],pos[2][1]) --dirなし
+    wait_for_second(step_wait)
+  end
+  wait_for_second(end_wait)
+end
+Spawner.cross_co = function(self,args)
+  local rot = args.rot or randi_range(0,1)*45
+  local lst={
+    { Spawner.line_co, { t=args.t, rot=rot, step_wait=0, stid=-8 }, 0},
+    { Spawner.line_co, { t=args.t, rot=rot+90, step_wait=0 }, 0},
+    { Spawner.line_co, { t=args.t, rot=rot-90, step_wait=0 }, 5},
+  }
+  self:runlst(lst)
+end
+
 ------------------------------------------
 function Spawner:registration()
 end
@@ -81,7 +125,9 @@ end
 function Spawner:init()
   --self:runco(Spawner.test_co, {t=EnemyType.GRUNT})
   --self:runco(Spawner.random_co, {t=EnemyType.GRUNT, str=60, edr=160, num=75, end_wait=4 })
-  self:runco(Spawner.spiral_co, { t=EnemyType.GRUNT })
+  --self:runco(Spawner.spiral_co, { t=EnemyType.GRUNT })
+  --self:runco(Spawner.circle_co, { t=EnemyType.GRUNT, radius=120,end_wait=4,num=40 })
+  self:runco(Spawner.cross_co, { t=EnemyType.GRUNT })
 end
 function Spawner:exec(dt)
   self:registration()
@@ -111,6 +157,13 @@ function Spawner:create_co(func,args)
 end
 function Spawner:runco(func,args)
   insert(self.lst,#self.lst+1,Spawner:create_co(func,args))
+end
+function Spawner:runlst(lst)
+  for i=1,#lst do
+    local c=lst[i]
+    self:runco(c[1],c[2])
+    wait_for_second(c[3] or 0)
+  end
 end
 function Spawner:num()
   return #self.lst

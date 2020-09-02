@@ -44,10 +44,12 @@ int main() {
     app->update(dtsec, window);
     //imgui
     ImGui::SFML::Update(window, dt);
+#if DEBUG
     ImGui::ShowDemoWindow();
     ImGui::Begin("Hello, world!");
     ImGui::Button("Look at this pretty button");
     ImGui::End();
+#endif
 
     window.clear(sf::Color(0x44, 0x24, 0x34));
     {
