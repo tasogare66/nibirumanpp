@@ -7,7 +7,6 @@
 
 #include "DwGui.h"
 
-#if DEBUG
 namespace dwgui {
   //scriptの再読み込み
   void setup_spawner_script() {
@@ -26,6 +25,11 @@ void DwGui::show_window()
 
 void DwGui::show_window_internal()
 {
+  ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+  if (ImGui::Button("Screenshot")) {
+    m_screenshot_req = true;
+  }
+
   // 生成スクリプトを無効に
 //  ImGui::Checkbox("DisableScript", PlayImpl::singleton().m_enemy_spawner->pt_disable_script()); // スクリプトをOFF
   // restart
@@ -47,4 +51,3 @@ void DwGui::show_window_internal()
   }
 //  PlayImpl::singleton().spawner_log_disp();
 }
-#endif

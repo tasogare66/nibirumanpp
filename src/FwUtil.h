@@ -31,4 +31,8 @@ namespace fw {
   constexpr detail::UnderlyingType<E> underlying_cast(E e) {
     return static_cast<detail::UnderlyingType<E>>(e);
   }
+
+  namespace util{
+    std::string get_datetime_string();
+  }
 }

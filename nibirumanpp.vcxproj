@@ -118,6 +118,7 @@
     <ClCompile Include="src\EneGrunt.cpp" />
     <ClCompile Include="src\Enemy.cpp" />
     <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\FwUtil.cpp" />
     <ClCompile Include="src\GameSeq.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\LuaScript.cpp" />

@@ -3,9 +3,7 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 #include "App.h"
-#if DEBUG
 #include "DwGui.h"
-#endif
 
 #if DEBUG&0 //count number of memory allocations
 uint64_t numOfHeapAllocations = 0;
@@ -18,12 +16,26 @@ uint64_t GetNumOfHeapAllocations() {
 }
 #endif
 
+void take_screenshot(const sf::RenderWindow& window)
+{
+  std::string filename = "ram/" + fw::util::get_datetime_string() + ".png";
+  sf::Texture texture;
+  texture.create(window.getSize().x, window.getSize().y);
+  texture.update(window);
+  if (texture.copyToImage().saveToFile(filename)) {
+    //std::cout << "screenshot saved to " << filename << std::endl;
+  } else {
+    FW_ASSERT(0);
+  }
+}
+
 int main() {
   sf::RenderWindow window(sf::VideoMode(1280, 720), "nibiruman2080");
   window.setFramerateLimit(60);
   ImGui::SFML::Init(window);
   ImGui::GetIO().IniFilename = "ram/imgui.ini";
   ImGui::GetIO().LogFilename = "ram/imgui_log.txt";
+  int screeshot_state = 0;
 
   auto app(std::make_unique<App>());
 
@@ -57,6 +69,11 @@ int main() {
       app->draw(window);
       ImGui::SFML::Render(window);
     }
+    //capture
+    if (DwGui::inst().check_screenshot_req()) {
+      take_screenshot(window);
+    }
+
     window.display();
   }
 
