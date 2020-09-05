@@ -123,11 +123,11 @@ function Spawner:registration()
 end
 
 function Spawner:init()
-  --self:runco(Spawner.test_co, {t=EnemyType.GRUNT})
+  self:runco(Spawner.test_co, {t=EnemyType.SNAKE})
   --self:runco(Spawner.random_co, {t=EnemyType.GRUNT, str=60, edr=160, num=75, end_wait=4 })
   --self:runco(Spawner.spiral_co, { t=EnemyType.GRUNT })
   --self:runco(Spawner.circle_co, { t=EnemyType.GRUNT, radius=120,end_wait=4,num=40 })
-  self:runco(Spawner.cross_co, { t=EnemyType.GRUNT })
+  --self:runco(Spawner.cross_co, { t=EnemyType.GRUNT })
 end
 function Spawner:exec(dt)
   self:registration()

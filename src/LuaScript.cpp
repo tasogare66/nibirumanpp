@@ -165,6 +165,7 @@ namespace scr
   };
 
   enum class EnemyType {
+    SNAKE,
     GRUNT,
   };
 
@@ -186,6 +187,9 @@ namespace scr
       entity_args.m_dir.y = tbl["diry"].value<float>();
       Enemy* ent = nullptr;
       switch (type) {
+      case EnemyType::SNAKE:
+        ent = new EneSnake(entity_args);
+        break;
       case EnemyType::GRUNT:
         ent = new EneGrunt(entity_args);
         break;
@@ -212,6 +216,7 @@ namespace scr
     virtual void bind() override {
 
       LuaBinding(m_ctx.state()).beginModule("EnemyType")
+        .addConstant("SNAKE", EnemyType::SNAKE)
         .addConstant("GRUNT", EnemyType::GRUNT)
         .endModule();
       LuaIntf::LuaBinding(m_ctx.state()).beginClass<ScrSpawner>("ScrSpawner")
