@@ -113,6 +113,7 @@
     </ClCompile>
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\DwGui.cpp" />
     <ClCompile Include="src\EneDot.cpp" />
     <ClCompile Include="src\EneGrunt.cpp" />
     <ClCompile Include="src\Enemy.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="src\App.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\ConstParam.h" />
+    <ClInclude Include="src\DwGui.h" />
     <ClInclude Include="src\EneDot.h" />
     <ClInclude Include="src\EneGrunt.h" />
     <ClInclude Include="src\Enemy.h" />
@@ -158,6 +160,7 @@
     <ClInclude Include="src\Mode.h" />
     <ClInclude Include="src\ModeGame.h" />
     <ClInclude Include="src\ModeMng.h" />
+    <ClInclude Include="src\ModeType.h" />
     <ClInclude Include="src\ObjLst.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\PlBullet.h" />

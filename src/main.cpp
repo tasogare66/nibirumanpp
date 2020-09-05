@@ -3,6 +3,9 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 #include "App.h"
+#if DEBUG
+#include "DwGui.h"
+#endif
 
 #if DEBUG&0 //count number of memory allocations
 uint64_t numOfHeapAllocations = 0;
@@ -46,9 +49,7 @@ int main() {
     ImGui::SFML::Update(window, dt);
 #if DEBUG
     ImGui::ShowDemoWindow();
-    ImGui::Begin("Hello, world!");
-    ImGui::Button("Look at this pretty button");
-    ImGui::End();
+    DwGui::inst().show_window();
 #endif
 
     window.clear(sf::Color(0x44, 0x24, 0x34));

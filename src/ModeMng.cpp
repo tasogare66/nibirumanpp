@@ -16,7 +16,7 @@ void ModeMng::request(ModeType req)
 {
   switch (req) {
   case ModeType::GAME:
-    m_req_work = std::make_unique<ModeGame>();
+    m_req_work = std::make_unique<ModeGame>(req);
     break;
   case ModeType::TITLE:
   default:
@@ -56,6 +56,24 @@ void ModeMng::draw1(sf::RenderWindow& window)
     m_cur_work->draw1(window);
   }
 }
+
+ModeType ModeMng::get_current_mode_type() const
+{
+  if (m_cur_work) {
+    return m_cur_work->get_mode_type();
+  }
+  return ModeType::NONE;
+}
+
+template<typename T>
+T* ModeMng::get_current_mode()
+{
+  if (m_cur_work && m_cur_work->get_mode_type() == ModeToType<T>::type) {
+    return static_cast<T*>(m_cur_work.get());
+  }
+  return nullptr;
+}
+template ModeGame* ModeMng::get_current_mode<ModeGame>(); //instance‰»
 
 void ModeMng::init()
 {

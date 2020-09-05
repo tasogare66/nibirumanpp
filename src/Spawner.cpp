@@ -16,6 +16,11 @@ void Spawner::init()
   m_script->reset_thread();
 }
 
+void Spawner::reinit()
+{
+  this->init();
+}
+
 void Spawner::exec(float dt)
 {
   if (m_script) {

@@ -1,11 +1,6 @@
 #pragma once
 #include "Singleton.h"
-
-enum class ModeType : uint8_t {
-  TITLE,
-  GAME,
-};
-
+#include "ModeType.h"
 class Mode;
 class ModeMng : public Singleton<ModeMng> {
 public:
@@ -18,6 +13,10 @@ public:
   void update_post();
   void draw0(sf::RenderWindow& window);
   void draw1(sf::RenderWindow& window);
+
+  ModeType get_current_mode_type() const;
+  template<typename T>
+  T* get_current_mode();
 private:
   void init();
   void dest();

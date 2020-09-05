@@ -8,7 +8,8 @@
 #include "GameSeq.h"
 #include "ModeGame.h"
 
-ModeGame::ModeGame()
+ModeGame::ModeGame(ModeType in_mode_type)
+  : Mode(in_mode_type)
 {
   constexpr auto lvrad = const_param::LvRadius;
   m_stg_circle.setRadius(lvrad);
