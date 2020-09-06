@@ -5,6 +5,7 @@
 EneDot::EneDot(const EntityArgs& args)
   : Entity(EntityType::Dot, args)
 {
+  this->spr8x8(m_ene_spr);
 }
 
 void EneDot::init()
@@ -25,7 +26,7 @@ void EneDot::update(float dt)
     this->del();
     return;
   }
-  //self.spr = self.ene_spr + (self.timer / 0.333) % 2
+  this->spr8x8(m_ene_spr + static_cast<uint32_t>(m_timer / 0.333f) % 2);
   m_timer -= dt;
 }
 

@@ -11,4 +11,5 @@ private:
   float m_timer = 6.0f;
   float m_captime = 0.0f;
   const Entity* m_capture_pl = nullptr;
+  uint32_t m_ene_spr = 482;
 };

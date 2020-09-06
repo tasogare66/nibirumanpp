@@ -17,7 +17,8 @@ Entity::Entity(EntityType type, const EntityArgs& args)
   , m_aabb_size(args.m_radius * 2.f, args.m_radius * 2.f)
   , m_half_extents(args.m_radius, args.m_radius)
 {
-  m_spr.setTexture(Resource::inst().get_pix_tex());
+  m_spr.setTexture(Resource::inst().get_spr_tex());
+  this->spr8x8(1);
   m_no = ObjLst::inst().request(this);
 }
 
@@ -74,7 +75,6 @@ void Entity::update(float dt)
 
 void Entity::draw(sf::RenderWindow& window)
 {
-  m_spr.setOrigin(0.5f, 0.5f);
   m_spr.setPosition(m_pos);
 
   window.draw(m_spr);
@@ -203,5 +203,7 @@ void Entity::sub_health(const Entity* t) {
 
 void Entity::spr8x8(uint32_t id)
 {
-  m_spr.setTextureRect(Resource::get_spr_rect(id));
+  auto rect = Resource::get_spr_rect(id);
+  m_spr.setTextureRect(rect);
+  m_spr.setOrigin(static_cast<float>(rect.width)/2.0f, static_cast<float>(rect.height) / 2.0f);
 }

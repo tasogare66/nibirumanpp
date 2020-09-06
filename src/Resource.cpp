@@ -20,7 +20,12 @@ Resource::~Resource()
 
 void Resource::setup_at_boot()
 {
-  if (!m_spr_tex.loadFromFile("rom/sprites.gif")) {
+  sf::Image img;
+  if (img.loadFromFile("rom/sprites.gif")) {
+    auto msk_col = img.getPixel(0,0);
+    img.createMaskFromColor(msk_col);
+    if (!m_spr_tex.loadFromImage(img)) FW_ASSERT(0);
+  } else {
     FW_ASSERT(0);
   }
 }

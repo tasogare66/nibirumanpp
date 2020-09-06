@@ -11,7 +11,6 @@ Enemy::Enemy(const EntityArgs& args, uint32_t spr_ene)
   : Entity(EntityType::Enemy, args)
   , m_spr_ene(spr_ene)
 {
-  m_spr.setTexture(Resource::inst().get_spr_tex());
 }
 
 void Enemy::update(float dt)
