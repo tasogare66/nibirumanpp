@@ -75,7 +75,6 @@ void Entity::update(float dt)
 void Entity::draw(sf::RenderWindow& window)
 {
   m_spr.setOrigin(0.5f, 0.5f);
-  m_spr.setScale(8, 8);
   m_spr.setPosition(m_pos);
 
   window.draw(m_spr);
@@ -200,4 +199,9 @@ void Entity::sub_health_dmg(int32_t dmg)
 
 void Entity::sub_health(const Entity* t) {
   this->sub_health_dmg(t->m_health);
+}
+
+void Entity::spr8x8(uint32_t id)
+{
+  m_spr.setTextureRect(Resource::get_spr_rect(id));
 }

@@ -4,7 +4,7 @@
 class Player;
 class Enemy :public Entity {
 public:
-  Enemy(const EntityArgs& args);
+  Enemy(const EntityArgs& args, uint32_t spr_ene=0);
   virtual ~Enemy() = default;
   virtual void update(float dt) override;
   virtual void dead() override;
@@ -13,6 +13,7 @@ protected:
   virtual void upd_ene(float dt) = 0;
   bool m_appear_flag = true;
   float m_elapsed = 0.0f;
+  uint32_t m_spr_ene = 0;
 };
 
 class EneSnake : public Enemy {

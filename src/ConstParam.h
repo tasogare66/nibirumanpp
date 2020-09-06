@@ -1,6 +1,7 @@
 #pragma once
 namespace const_param {
   inline constexpr float EPSILON = 1e-08f;
+  inline constexpr float FRAME2SEC = 1.f / 60.f;
   inline const char* const GAME_VER = "v.0.9.0";
   inline constexpr float SCR_WIDTH = 240.f;
   inline constexpr float SCR_HEIGHT = 136.f;

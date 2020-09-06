@@ -4,10 +4,12 @@
 #include "ModeMng.h"
 #include "Input.h"
 #include "Camera.h"
+#include "Resource.h"
 #include "App.h"
 
 App::App()
 {
+  Resource::inst().setup_at_boot();
   ModeMng::inst().request(ModeType::GAME);
 }
 

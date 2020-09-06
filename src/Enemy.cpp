@@ -3,17 +3,21 @@
 #include "EneDot.h"
 #include "GameSeq.h"
 #include "Player.h"
+#include "Resource.h"
+#include "ConstParam.h"
 #include "Enemy.h"
 
-Enemy::Enemy(const EntityArgs& args)
+Enemy::Enemy(const EntityArgs& args, uint32_t spr_ene)
   : Entity(EntityType::Enemy, args)
+  , m_spr_ene(spr_ene)
 {
+  m_spr.setTexture(Resource::inst().get_spr_tex());
 }
 
 void Enemy::update(float dt)
 {
   if (m_appear_flag) {
-    //self.spr = 464 + (self.elapsed / 0.166) % 4
+    this->spr8x8(464 + static_cast<uint32_t>(m_elapsed / 0.166f) % 4);
     if (m_elapsed >= 2.f) {
       this->appear();
       m_appear_flag = false;
@@ -35,9 +39,10 @@ void Enemy::dead()
 
 //enemy snake
 EneSnake::EneSnake(const EntityArgs& args)
-  : Enemy(args)
+  : Enemy(args, 274)
 {
   m_flag.on(EntityFlag::HaveDot);
+  this->spr8x8(274);
 }
 
 void EneSnake::appear()
@@ -53,8 +58,8 @@ void EneSnake::upd_ene(float dt)
     dir.normalize();
     auto len = 9.f * dt * GameSeq::inst().getDifV(1.f, 3.f);
     m_mov += (dir * len);
-      //local s = (self.elapsed//(FRAME2SEC*4))%4
-      //  local animdir = dir.x > 0 and 0 or 1
-      //  self.spr = self.spr_ene + s + animdir * 4
+    auto s = static_cast<uint32_t>(m_elapsed/(const_param::FRAME2SEC*4))%4;
+    uint32_t animdir = dir.x > 0 ? 0 : 1;
+    this->spr8x8(m_spr_ene + s + animdir * 4);
   }
 }
