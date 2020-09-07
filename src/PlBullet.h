@@ -11,4 +11,5 @@ public:
 private:
   float m_elp = 0.0f;
   Vec2f m_dir;
+  float m_ang = 0.0f;
 };

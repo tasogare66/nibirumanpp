@@ -6,6 +6,7 @@
 Reticle::Reticle(const EntityArgs& args)
   : Entity(EntityType::None, args)
 {
+  this->spr8x8(480);
 }
 
 void Reticle::update(float dt)

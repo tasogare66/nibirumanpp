@@ -19,6 +19,17 @@ void Player::init()
 
 void Player::update(float dt)
 {
+  //upd anim
+  m_animcnt = static_cast<uint32_t>(m_elp/(const_param::FRAME2SEC*10))%4;
+  m_elp += dt;
+  if (not m_active) return;
+  auto chara_dir = m_reticle->get_pos() - this->get_pos();
+  m_animdir = (chara_dir.x > 0) ? 0 : 1;
+  m_animdir |= ((chara_dir.y < 0) ? 2 : 0);
+  //if self:check_dead() then return end
+  //self : check_invincible(dt)
+  //self : upd_armslv(dt)
+
   Vec2f v;
   const auto& inputm = Input::inst();
   if (inputm.on(InputButton_Up)) v.y -= 1.0f;
@@ -49,4 +60,16 @@ void Player::update(float dt)
 	  }
 	}
   }
+}
+
+void Player::draw(sf::RenderWindow& window)
+{
+  auto sprid = 400 + m_animdir * 16 + m_animcnt;
+	//if self:check_flag(Flag_Invincible) and self.active then
+	//  local r = self.invincible_time // (FRAME2SEC*6)
+	//  if r % 2 == 0 then self.spr = 267 end
+	//	end
+
+  this->spr8x8(sprid);
+  Entity::draw(window);
 }

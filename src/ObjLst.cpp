@@ -213,7 +213,11 @@ void ObjLst::upd_reciprocal()
 
 void ObjLst::draw(sf::RenderWindow& window)
 {
-  for (auto o : m_objs) {
-    o->draw(window);
+  //reverse order
+  if (m_objs.empty()) return;
+  const auto num = m_objs.size();
+  auto o = &m_objs[num - 1];
+  for (auto i = 0; i < num; ++i,--o) {
+    (*o)->draw(window);
   }
 }

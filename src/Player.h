@@ -5,9 +5,9 @@ class Player : public Entity {
 public:
   explicit Player(const EntityArgs& args, const Entity* reticle);
   virtual ~Player() = default;
-  void init() override;
-  void update(float dt) override;
-
+  void init() override final;
+  void update(float dt) override final;
+  void draw(sf::RenderWindow& window) override final;
   float get_capradius() const { return m_capradius; }
 
 private:
@@ -17,4 +17,8 @@ private:
   float m_capradius = 20.0f;
   int32_t m_armslv = 0;
   const Entity* m_reticle = nullptr;
+  float m_elp = 0.0f;
+  uint32_t m_animcnt = 0;
+  uint32_t m_animdir = 0;
+  bool m_active = true;
 };

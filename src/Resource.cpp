@@ -25,6 +25,7 @@ void Resource::setup_at_boot()
     auto msk_col = img.getPixel(0,0);
     img.createMaskFromColor(msk_col);
     if (!m_spr_tex.loadFromImage(img)) FW_ASSERT(0);
+    m_spr_tex.setSmooth(false);
   } else {
     FW_ASSERT(0);
   }
