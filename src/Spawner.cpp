@@ -1,6 +1,9 @@
 #include "stdafx.h"
 
 #include "LuaScript.h"
+#include "DwGui.h"
+#include "Vec2.h"
+#include "Entity.h"
 
 #include "Spawner.h"
 
@@ -23,6 +26,14 @@ void Spawner::reinit()
 
 void Spawner::exec(float dt)
 {
+#if DEBUG
+  auto enemy_type = DwGui::inst().check_spawn_req();
+  if (enemy_type >= 0) {
+    EntityArgs args;
+    scr::spawn_base(static_cast<EnemyType>(enemy_type), args);
+  }
+  if (DwGui::inst().get_disable_spawn_scritp()) return;
+#endif
   if (m_script) {
     m_script->exec(dt);
   }

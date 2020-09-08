@@ -4,6 +4,7 @@
 #include "ModeMng.h"
 #include "ModeGame.h"
 #include "Spawner.h"
+#include "EnemyType.h"
 
 #include "DwGui.h"
 
@@ -31,7 +32,20 @@ void DwGui::show_window_internal()
   }
 
   // 生成スクリプトを無効に
-//  ImGui::Checkbox("DisableScript", PlayImpl::singleton().m_enemy_spawner->pt_disable_script()); // スクリプトをOFF
+  ImGui::Checkbox("DisableSpawn", &m_disable_spawn_script); // スクリプトをOFF
+  {
+    const char* items[] = {
+#undef ENEMY_TYPE_DECL
+#define ENEMY_TYPE_DECL(_id,_cls)	#_id,
+
+#include "EnemyType.h"
+
+#undef ENEMY_TYPE_DECL
+    };
+    ImGui::Combo("", &m_spawn_item_current, items, IM_ARRAYSIZE(items));
+    ImGui::SameLine();
+    m_spawn_item_req = ImGui::Button("Spawn");
+  }
   // restart
   if (ImGui::Button("Restart")) {
     // 敵の全削除

@@ -1,4 +1,6 @@
 #pragma once
+enum class EnemyType;
+struct EntityArgs;
 
 namespace scr
 {
@@ -10,6 +12,8 @@ namespace scr
     virtual bool reset_thread(const char* in_co_func = nullptr) = 0;
     virtual void exec(float) = 0;
   };
+
+  void spawn_base(EnemyType type, const EntityArgs& entity_args);
 
   // ìGê∂ê¨óp
   ILuaScript* create_lua_enemy_spawner();

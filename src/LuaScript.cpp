@@ -165,19 +165,9 @@ namespace scr
     const char* m_co_str; // ƒRƒ‹[ƒ`ƒ“ÀsŠÖ”
   };
 
-  class ScrSpawner {
-  public:
-    ScrSpawner() = default;
-    ~ScrSpawner() = default;
-    uint32_t get_spawn_num() const { //¶‘¶‚µ‚Ä‚¢‚é“G‚Ì”
-      return ObjLst::inst().get_spawn_num();
-    }
-    uint32_t get_spawn_ttl() const { //¶¬‚µ‚½“G‚Ì‘”
-      return ObjLst::inst().get_spawn_ttl();
-    }
-    void spawn_base(EnemyType type, const EntityArgs& entity_args) {
-      Enemy* ent = nullptr;
-      switch (type) {
+  void spawn_base(EnemyType type, const EntityArgs& entity_args) {
+    Enemy* ent = nullptr;
+    switch (type) {
 #undef ENEMY_TYPE_DECL
 #define ENEMY_TYPE_DECL(_id,_cls)	case EnemyType::_id: ent = new _cls(entity_args); break;
 
@@ -190,13 +180,24 @@ namespace scr
       //case EnemyType::GRUNT:
       //  ent = new EneGrunt(entity_args);
       //  break;
-      default:
-        FW_ASSERT(0);
-        break;
-      }
-      if (ent) {
-        ent->attr_spawned();
-      }
+    default:
+      FW_ASSERT(0);
+      break;
+    }
+    if (ent) {
+      ent->attr_spawned();
+    }
+  }
+
+  class ScrSpawner {
+  public:
+    ScrSpawner() = default;
+    ~ScrSpawner() = default;
+    uint32_t get_spawn_num() const { //¶‘¶‚µ‚Ä‚¢‚é“G‚Ì”
+      return ObjLst::inst().get_spawn_num();
+    }
+    uint32_t get_spawn_ttl() const { //¶¬‚µ‚½“G‚Ì‘”
+      return ObjLst::inst().get_spawn_ttl();
     }
     void spawn(EnemyType type, LuaRef tbl) {
       EntityArgs entity_args;
@@ -204,7 +205,7 @@ namespace scr
       entity_args.m_pos.y = tbl["py"].value<float>();
       entity_args.m_dir.x = tbl["dirx"].value<float>();
       entity_args.m_dir.y = tbl["diry"].value<float>();
-      this->spawn_base(type, entity_args);
+      spawn_base(type, entity_args);
     }
   private:
   };
