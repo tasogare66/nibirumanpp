@@ -13,7 +13,8 @@
 #include "Random.h"
 #include "ObjLst.h"
 #include "ConstParam.h"
-#include "EneGrunt.h"
+#include "EnemyType.h"
+#include "Enemy.h"
 
 #include "LuaScript.h"
 
@@ -164,11 +165,6 @@ namespace scr
     const char* m_co_str; // コルーチン実行関数
   };
 
-  enum class EnemyType {
-    SNAKE,
-    GRUNT,
-  };
-
   class ScrSpawner {
   public:
     ScrSpawner() = default;
@@ -179,20 +175,21 @@ namespace scr
     uint32_t get_spawn_ttl() const { //生成した敵の総数
       return ObjLst::inst().get_spawn_ttl();
     }
-    void spawn(EnemyType type, LuaRef tbl) {
-      EntityArgs entity_args;
-      entity_args.m_pos.x = tbl["px"].value<float>();
-      entity_args.m_pos.y = tbl["py"].value<float>();
-      entity_args.m_dir.x = tbl["dirx"].value<float>();
-      entity_args.m_dir.y = tbl["diry"].value<float>();
+    void spawn_base(EnemyType type, const EntityArgs& entity_args) {
       Enemy* ent = nullptr;
       switch (type) {
-      case EnemyType::SNAKE:
-        ent = new EneSnake(entity_args);
-        break;
-      case EnemyType::GRUNT:
-        ent = new EneGrunt(entity_args);
-        break;
+#undef ENEMY_TYPE_DECL
+#define ENEMY_TYPE_DECL(_id,_cls)	case EnemyType::_id: ent = new _cls(entity_args); break;
+
+#include "EnemyType.h"
+
+#undef ENEMY_TYPE_DECL
+      //case EnemyType::SNAKE:
+      //  ent = new EneSnake(entity_args);
+      //  break;
+      //case EnemyType::GRUNT:
+      //  ent = new EneGrunt(entity_args);
+      //  break;
       default:
         FW_ASSERT(0);
         break;
@@ -200,6 +197,14 @@ namespace scr
       if (ent) {
         ent->attr_spawned();
       }
+    }
+    void spawn(EnemyType type, LuaRef tbl) {
+      EntityArgs entity_args;
+      entity_args.m_pos.x = tbl["px"].value<float>();
+      entity_args.m_pos.y = tbl["py"].value<float>();
+      entity_args.m_dir.x = tbl["dirx"].value<float>();
+      entity_args.m_dir.y = tbl["diry"].value<float>();
+      this->spawn_base(type, entity_args);
     }
   private:
   };

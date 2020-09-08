@@ -115,7 +115,6 @@
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\DwGui.cpp" />
     <ClCompile Include="src\EneDot.cpp" />
-    <ClCompile Include="src\EneGrunt.cpp" />
     <ClCompile Include="src\Enemy.cpp" />
     <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\FwUtil.cpp" />
@@ -149,8 +148,8 @@
     <ClInclude Include="src\ConstParam.h" />
     <ClInclude Include="src\DwGui.h" />
     <ClInclude Include="src\EneDot.h" />
-    <ClInclude Include="src\EneGrunt.h" />
     <ClInclude Include="src\Enemy.h" />
+    <ClInclude Include="src\EnemyType.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\FwUtil.h" />
     <ClInclude Include="src\fw_assert.h" />
