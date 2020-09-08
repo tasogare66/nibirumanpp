@@ -13,7 +13,7 @@ protected:
   virtual void upd_ene(float dt) = 0;
   bool m_appear_flag = true;
   float m_elapsed = 0.0f;
-  uint32_t m_spr_ene = 0;
+  uint32_t m_spr_ene = Entity::m_dummy_spr_id;
 };
 
 class EneSnake : public Enemy {

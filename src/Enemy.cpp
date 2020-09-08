@@ -11,6 +11,7 @@ Enemy::Enemy(const EntityArgs& args, uint32_t spr_ene)
   : Entity(EntityType::Enemy, args)
   , m_spr_ene(spr_ene)
 {
+  this->spr8x8(464); //appear
 }
 
 void Enemy::update(float dt)
@@ -41,11 +42,11 @@ EneSnake::EneSnake(const EntityArgs& args)
   : Enemy(args, 274)
 {
   m_flag.on(EntityFlag::HaveDot);
-  this->spr8x8(274);
 }
 void EneSnake::appear()
 {
   this->attr_px();
+  this->spr8x8(m_spr_ene);
 }
 void EneSnake::upd_ene(float dt)
 {
@@ -63,13 +64,14 @@ void EneSnake::upd_ene(float dt)
 
 //enemy grunt
 EneGrunt::EneGrunt(const EntityArgs& args)
-  : Enemy(args)
+  : Enemy(args,288)
 {
   m_flag.on(EntityFlag::HaveDot);
 }
 void EneGrunt::appear()
 {
   this->attr_px();
+  this->spr8x8(m_spr_ene);
 }
 void EneGrunt::upd_ene(float dt)
 {
@@ -77,7 +79,7 @@ void EneGrunt::upd_ene(float dt)
   auto len = 0.24f * GameSeq::inst().getDifV(1.f, 2.5f);
   m_mov.x += std::cos(m_rad) * len;
   m_mov.y += std::sin(m_rad) * len;
-  //local s = (self.elapsed//(FRAME2SEC*12))%4
-  //  local animdir = self.mov.x > 0 and 0 or 1
-  //  self.spr = self.spr_ene + s + animdir * 4
+  auto s = static_cast<uint32_t>(m_elapsed / (const_param::FRAME2SEC * 12)) % 4;
+  uint32_t animdir = m_mov.x > 0 ? 0 : 1;
+  this->spr8x8(m_spr_ene + s + animdir * 4);
 }

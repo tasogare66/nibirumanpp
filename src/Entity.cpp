@@ -18,7 +18,7 @@ Entity::Entity(EntityType type, const EntityArgs& args)
   , m_half_extents(args.m_radius, args.m_radius)
 {
   m_spr.setTexture(Resource::inst().get_spr_tex());
-  this->spr8x8(1);
+  this->spr8x8(m_dummy_spr_id);
   m_no = ObjLst::inst().request(this);
 }
 
@@ -77,6 +77,7 @@ void Entity::draw(sf::RenderWindow& window)
 {
   m_spr.setPosition(m_pos);
 
+  FW_ASSERT(m_spr_id != m_dummy_spr_id);
   window.draw(m_spr);
 }
 
@@ -205,5 +206,6 @@ void Entity::spr8x8(uint32_t id)
 {
   auto rect = Resource::get_spr_rect(id);
   m_spr.setTextureRect(rect);
+  m_spr_id = id;
   m_spr.setOrigin(static_cast<float>(rect.width)/2.0f, static_cast<float>(rect.height) / 2.0f);
 }

@@ -113,4 +113,6 @@ protected:
   FwFlag<HitMask> m_hit_mask; //HitMask
   FwFlag<HitMask> m_colli_attr; //hitŽž’Ê’m‚·‚éattribute
   sf::Sprite m_spr;
+  static constexpr uint32_t m_dummy_spr_id = 1;
+  uint32_t m_spr_id = m_dummy_spr_id;
 };
