@@ -5,6 +5,8 @@
 #include "Player.h"
 #include "Resource.h"
 #include "ConstParam.h"
+#include "Random.h"
+
 #include "Enemy.h"
 
 Enemy::Enemy(const EntityArgs& args, uint32_t spr_ene)
@@ -82,4 +84,44 @@ void EneGrunt::upd_ene(float dt)
   auto s = static_cast<uint32_t>(m_elapsed / (const_param::FRAME2SEC * 12)) % 4;
   uint32_t animdir = m_mov.x > 0 ? 0 : 1;
   this->spr8x8(m_spr_ene + s + animdir * 4);
+}
+
+//enemh hulk
+EneHulk::EneHulk(const EntityArgs& args)
+  : Enemy(args,304)
+{
+  m_health = 30;
+  this->setmvtm();
+  m_animdir = rng::rand_int(1, rng::Type::GAME);
+}
+
+void EneHulk::appear()
+{
+  this->attr_px();
+  this->spr8x8(m_spr_ene);
+}
+
+void EneHulk::upd_ene(float dt)
+{
+  //self:upd_blink(dt)
+  auto s = static_cast<uint32_t>(m_elapsed / (const_param::FRAME2SEC * 8)) % 2;
+  this->spr8x8(m_spr_ene + m_animdir * 2 + s);
+
+  const auto* tgt = GameSeq::inst().get_player_for_enemy();
+  Vec2f dir;
+  if (tgt) dir = tgt->get_pos() - m_pos;
+  const float len = dir.magnitude();
+  if (m_mvtm < 0.0f && len > const_param::EPSILON) {
+    m_animdir = dir.x > 0 ? 0 : 1;
+    dir /= len;
+    this->add_vel_force(dir * 0.8f);
+    this->setmvtm();
+  }
+  else {
+    m_mvtm -= dt;
+  }
+}
+void EneHulk::setmvtm()
+{
+  m_mvtm = rng::range(2.5f, GameSeq::inst().getDifV(6.f, 2.7f), rng::Type::GAME);
 }

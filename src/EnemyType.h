@@ -16,5 +16,6 @@ enum class EnemyType {
 
 ENEMY_TYPE_DECL(SNAKE, EneSnake)
 ENEMY_TYPE_DECL(GRUNT, EneGrunt)
+ENEMY_TYPE_DECL(HULK, EneHulk)
 
 #endif // ENEMY_TYPE_DECL

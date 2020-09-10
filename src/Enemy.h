@@ -35,3 +35,15 @@ private:
   void upd_ene(float dt) override final;
   float m_rad = 0.f;
 };
+
+class EneHulk : public Enemy {
+public:
+  EneHulk(const EntityArgs& args);
+  ~EneHulk() = default;
+private:
+  void appear() override final;
+  void upd_ene(float dt) override final;
+  void setmvtm();
+  float m_mvtm = 0.0f;
+  uint32_t m_animdir = 0;
+};
