@@ -13,7 +13,6 @@ PlBullet::PlBullet(const Vec2f pos, const Vec2f dir)
 
 void PlBullet::init()
 {
-  this->attr_verlet();
   this->attr_bullet();
 }
 

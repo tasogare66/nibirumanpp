@@ -48,12 +48,15 @@ void Entity::attr_px()
 
 void Entity::attr_bullet()
 {
+  this->attr_verlet();
   ObjLst::inst().m_bullets.push_back(this);
 }
 
 void Entity::attr_ene_bullet()
 {
+  this->attr_verlet();
   ObjLst::inst().m_ene_bullets.push_back(this);
+  this->set_sha(ObjLst::inst().m_enblt_sha.get());
 }
 
 void Entity::attr_ene_dot()

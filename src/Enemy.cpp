@@ -86,10 +86,11 @@ void EneGrunt::upd_ene(float dt)
   this->spr8x8(m_spr_ene + s + animdir * 4);
 }
 
-//enemh hulk
+//enemy hulk
 EneHulk::EneHulk(const EntityArgs& args)
   : Enemy(args,304)
 {
+  m_flag.on(EntityFlag::HaveDot);
   m_health = 30;
   this->setmvtm();
   m_animdir = rng::rand_int(1, rng::Type::GAME);
@@ -124,4 +125,59 @@ void EneHulk::upd_ene(float dt)
 void EneHulk::setmvtm()
 {
   m_mvtm = rng::range(2.5f, GameSeq::inst().getDifV(6.f, 2.7f), rng::Type::GAME);
+}
+
+//enemy arrow
+EneArrow::EneArrow(const EntityArgs& args, uint32_t spr_ene)
+  : Enemy(args,spr_ene)
+{
+  m_flag.on(EntityFlag::HaveDot);
+  m_dir = args.m_dir;
+  const auto l = m_dir.magnitude();
+  if (l < const_param::EPSILON) {
+    m_dir.set(0.f,-1.f);
+  }
+  else {
+    m_dir /= l;
+  }
+  m_speed = GameSeq::inst().getDifV(45, 60);
+}
+
+void EneArrow::appear()
+{
+  this->attr_ene_bullet();
+  this->spr8x8(m_spr_ene);
+  this->apply_angle();
+}
+
+void EneArrow::upd_ene(float dt)
+{
+  m_mov = m_dir * m_speed * dt;
+  auto s = static_cast<uint32_t>(m_elapsed / (const_param::FRAME2SEC * 8)) % 2;
+  this->spr8x8(m_spr_ene + s*2);
+}
+
+bool EneArrow::hit_wall(const Vec2f& dir)
+{
+  m_dir = dir;
+  this->apply_angle();
+  return false;
+}
+
+void EneArrow::apply_angle()
+{
+  auto ang = std::atan2(m_dir.y, m_dir.x);
+  m_spr.setRotation(fw::rad2deg(ang));
+}
+
+//enemy arrow2
+EneArrow2::EneArrow2(const EntityArgs& args)
+  : EneArrow(args, 384)
+{}
+
+bool EneArrow2::hit_wall(const Vec2f&)
+{
+  m_dir *= -1.f;
+  this->apply_angle();
+  return false;
 }

@@ -47,3 +47,26 @@ private:
   float m_mvtm = 0.0f;
   uint32_t m_animdir = 0;
 };
+
+class EneArrow : public Enemy {
+public:
+  EneArrow(const EntityArgs& args, uint32_t spr_ene);
+  EneArrow(const EntityArgs& args) : EneArrow(args, 368){}
+  ~EneArrow() = default;
+protected:
+  void appear() override;
+  void upd_ene(float dt) override;
+  bool hit_wall(const Vec2f& dir) override;
+  void apply_angle();
+  Vec2f m_dir;
+  float m_speed;
+};
+
+//arrow2,”½ŽË‚ªˆá‚¤
+class EneArrow2 : public EneArrow {
+public:
+  EneArrow2(const EntityArgs& args);
+  ~EneArrow2() = default;
+protected:
+  bool hit_wall(const Vec2f& dir) override;
+};
