@@ -16,6 +16,7 @@ struct EntityArgs {
   Vec2f m_dir{ 1.f,0.f };
   float m_radius = 3; //default
   float m_mass = 1; //default
+  float m_param0 = 0.0f; //misc param
   EntityArgs() = default;
   EntityArgs(const Vec2f& pos, const Vec2f& dir = { 1.f, 0.f })
     : m_pos(pos)
@@ -109,7 +110,7 @@ protected:
   FwFlag<EntityFlag> m_flag;
   uint32_t m_no = 0;
   int32_t m_health = 1;
-  //exp_resi = 1,
+  int32_t m_exp_resi = 1;
   FwFlag<HitMask> m_hit_mask; //HitMask
   FwFlag<HitMask> m_colli_attr; //hitŽž’Ê’m‚·‚éattribute
   sf::Sprite m_spr;

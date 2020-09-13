@@ -92,6 +92,7 @@ EneHulk::EneHulk(const EntityArgs& args)
 {
   m_flag.on(EntityFlag::HaveDot);
   m_health = 30;
+  m_exp_resi = 15;
   this->setmvtm();
   m_animdir = rng::rand_int(1, rng::Type::GAME);
 }
@@ -180,4 +181,35 @@ bool EneArrow2::hit_wall(const Vec2f&)
   m_dir *= -1.f;
   this->apply_angle();
   return false;
+}
+
+//enemy sphe
+EneSphe::EneSphe(const EntityArgs& args)
+  : Enemy(args, 308)
+{
+  m_flag.on(EntityFlag::HaveDot);
+  m_health = 2;
+  m_exp_resi = 2;
+  //self.drw = self.drw_blink
+  m_rotr = m_pos.magnitude();
+  m_rdir = args.m_param0 > 0.0f ? 1.0f : -1.0f;
+  m_speed = GameSeq::inst().getDifV(50, 60);
+}
+
+void EneSphe::appear()
+{
+  this->attr_ene_bullet();
+  this->spr8x8(m_spr_ene);
+}
+
+void EneSphe::upd_ene(float dt)
+{
+  //self:upd_blink(dt)
+  auto s = static_cast<uint32_t>(m_elapsed / (const_param::FRAME2SEC * 4)) % 2;
+  this->spr8x8(m_spr_ene + s); //FIXME:ˆÚ“®Œü‚«‚Åsprite•Ï‚¦‚Ä‚¢‚È‚¢  
+
+  if (m_rotr > const_param::EPSILON) {
+    auto rad = m_speed * dt / m_rotr * m_rdir;
+    m_mov = m_pos.rotate(rad) - m_pos;
+  }
 }

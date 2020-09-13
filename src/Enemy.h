@@ -70,3 +70,15 @@ public:
 protected:
   bool hit_wall(const Vec2f& dir) override;
 };
+
+class EneSphe : public Enemy {
+public:
+  EneSphe(const EntityArgs& args);
+  ~EneSphe() = default;
+private:
+  void appear() override;
+  void upd_ene(float dt) override;
+  float m_rotr;
+  float m_rdir = 1.f;
+  float m_speed;
+};
