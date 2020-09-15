@@ -57,6 +57,13 @@ void ModeMng::draw1(sf::RenderWindow& window)
   }
 }
 
+void ModeMng::draw2(sf::RenderWindow& window)
+{
+  if (m_cur_work) {
+    m_cur_work->draw2(window);
+  }
+}
+
 ModeType ModeMng::get_current_mode_type() const
 {
   if (m_cur_work) {

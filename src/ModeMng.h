@@ -13,6 +13,7 @@ public:
   void update_post();
   void draw0(sf::RenderWindow& window);
   void draw1(sf::RenderWindow& window);
+  void draw2(sf::RenderWindow& window);
 
   ModeType get_current_mode_type() const;
   template<typename T>

@@ -9,6 +9,8 @@ public:
   {}
   Player* get_player() { return m_e; }
   const Player* get_player() const { return m_e; }
+  int32_t get_life() const { return m_life; }
+  uint64_t get_score() const { return m_score; }
 private:
   Player* m_e = nullptr;
   int32_t m_life = 3;

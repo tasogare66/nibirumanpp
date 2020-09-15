@@ -20,6 +20,7 @@ Resource::~Resource()
 
 void Resource::setup_at_boot()
 {
+  //sprite
   sf::Image img;
   if (img.loadFromFile("rom/sprites.gif")) {
     auto msk_col = img.getPixel(0,0);
@@ -29,6 +30,8 @@ void Resource::setup_at_boot()
   } else {
     FW_ASSERT(0);
   }
+  //font
+  if (!m_base_font.loadFromFile("rom/heavy_data.ttf")) FW_ASSERT(0);
 }
 
 sf::IntRect Resource::get_spr_rect(uint32_t id)

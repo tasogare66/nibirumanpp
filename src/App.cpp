@@ -28,11 +28,13 @@ void App::update(float dt, sf::RenderWindow& window)
 void App::draw(sf::RenderWindow& window)
 {
   window.setView(Camera::inst().update_view());
+  auto& modem = ModeMng::inst();
   {
-    auto& modem = ModeMng::inst();
     modem.draw0(window);
     ObjLst::inst().draw(window);
     modem.draw1(window);
   }
   window.setView(window.getDefaultView());
+
+  modem.draw2(window);
 }

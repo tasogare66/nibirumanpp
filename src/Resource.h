@@ -9,7 +9,9 @@ public:
   const sf::Texture& get_pix_tex() const { return m_pix_tex; }
   const sf::Texture& get_spr_tex() const { return m_spr_tex; }
   static sf::IntRect get_spr_rect(uint32_t id);
+  const sf::Font& get_base_font() const { return m_base_font; }
 private:
   sf::Texture m_pix_tex;
   sf::Texture m_spr_tex;
+  sf::Font m_base_font;
 };
