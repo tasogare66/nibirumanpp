@@ -19,6 +19,13 @@ const SeqPlayer* GameSeq::get_seq_player(uint32_t id) const {
   return nullptr;
 }
 
+SeqPlayer* GameSeq::get_seq_player_w(uint32_t id)
+{
+  if (id < m_seq_pls.size()) return &m_seq_pls[id];
+  FW_ASSERT(0);
+  return nullptr;
+}
+
 const Player* GameSeq::get_player_for_enemy()
 {
   if (m_seq_pls.size() <= 0) {
@@ -32,6 +39,13 @@ const Player* GameSeq::get_player_for_enemy()
 
 const std::vector<Player*>& GameSeq::get_player_entities() {
   return m_pl_entities;
+}
+
+void GameSeq::add_score(uint32_t player_index, PlayerScore v)
+{
+  if (auto* player = inst().get_seq_player_w(player_index)) {
+    player->add_score(v);
+  }
 }
 
 float GameSeq::getDifV(float a, float b) {
