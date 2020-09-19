@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Vec2.h"
 #include "FwFlag.h"
 class Shash;
@@ -35,7 +35,14 @@ enum class EntityFlag : uint32_t {
 };
 enum class HitMask : uint32_t {
   Enemy = 1 << 0,
-  Player = 1 << 1,
+  Player0 = 1 << 1,
+  Player1 = 1 << 2,
+  Player2 = 1 << 3,
+  Player3 = 1 << 4,
+  Generated_Pl0 = 1 << 5,
+  Generated_Pl1 = 1 << 6,
+  Generated_Pl2 = 1 << 7,
+  Generated_Pl3 = 1 << 8,
 };
 
 class Entity {
@@ -50,7 +57,7 @@ public:
   virtual void init() {}
   virtual void update(float dt);
   virtual void draw(sf::RenderWindow& window);
-  virtual bool hit_wall(const Vec2f&) { return false; } //true‚Ìê‡repulse‚È‚µ
+  virtual bool hit_wall(const Vec2f&) { return false; } //trueï¿½Ìê‡repulseï¿½È‚ï¿½
   virtual void hitcb(const Entity*, const Vec2f&, float) {}
   virtual void dead() {}
   virtual void set_blink() {}
@@ -111,8 +118,9 @@ protected:
   uint32_t m_no = 0;
   int32_t m_health = 1;
   int32_t m_exp_resi = 1;
+  uint32_t m_score = 0;
   FwFlag<HitMask> m_hit_mask; //HitMask
-  FwFlag<HitMask> m_colli_attr; //hit’Ê’m‚·‚éattribute
+  FwFlag<HitMask> m_colli_attr; //hitæ™‚é€šçŸ¥ã™ã‚‹attribute
   sf::Sprite m_spr;
   static constexpr uint32_t m_dummy_spr_id = 1;
   uint32_t m_spr_id = m_dummy_spr_id;

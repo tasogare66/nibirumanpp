@@ -33,17 +33,20 @@ uint32_t ObjLst::request(Entity* o)
 void ObjLst::update(float dt)
 {
   this->upd_move(dt);
-  this->upd_del();
+  this->upd_del(); //1st
+  this->upd_prepare();
   this->upd_reciprocal();
   this->upd_colliders(m_pxs);
   this->upd_colliders(m_bullets, [](Entity* o, const Vec2f& dir) { return o->hit_wall(dir); });
   this->upd_colliders(m_ene_bullets, [](Entity* o, const Vec2f& dir) { return o->hit_wall(dir); });
   this->upd_verlet(dt);
+  this->upd_del(); //2nd
   this->upd_add();
   m_prev_dt = dt;
 }
 
-void ObjLst::upd_colliders(std::vector<Entity*>& lst, std::function<bool(Entity*,Vec2f)> func)
+template<typename T>
+void ObjLst::upd_colliders(std::vector<T*>& lst, std::function<bool(Entity*,Vec2f)> func)
 {
   //inner circel
   constexpr auto lvradius = const_param::LvRadius;
@@ -83,31 +86,41 @@ void ObjLst::upd_add()
   m_request.clear();
 }
 
+template<typename T>
+void del_obj_from_list(std::vector<T*>& lst, std::function<void(Entity*)> func=nullptr) {
+  auto first = lst.begin();
+  auto last = lst.end();
+  auto result = first;
+  for (; first != last; ++first) {
+    if (not (*first)->get_flag().check(EntityFlag::del)) {
+      if (first == result)
+        ++result;
+      else
+        *result++ = std::move(*first);
+    }
+    else {
+      if (func) func(*first);
+    }
+  }
+  lst.erase(result, lst.end());
+}
+
 void ObjLst::upd_del()
 {
-  auto del_obj_from_list = [](std::vector<Entity*>& lst, std::function<void(Entity*)> func=nullptr) {
-    auto first = lst.begin();
-    auto last = lst.end();
-    auto result = first;
-    for (; first != last; ++first) {
-      if (not (*first)->get_flag().check(EntityFlag::del)) {
-        if (first == result)
-          ++result;
-        else
-          *result++ = std::move(*first);
-      }
-      else {
-        if (func) func(*first);
-      }
-    }
-    lst.erase(result, lst.end());
-  };
   del_obj_from_list(m_pxs, [this](Entity* o) { m_px_sha->remove(o); });
   del_obj_from_list(m_bullets);
   del_obj_from_list(m_ene_bullets, [this](Entity* o) { m_enblt_sha->remove(o); });
   del_obj_from_list(m_ene_dot, [this](Entity* o) { m_endot_sha->remove(o); });
   del_obj_from_list(m_verlets);
-  del_obj_from_list(m_objs, [](Entity* o) { delete o; });
+  del_obj_from_list(m_objs, [](Entity* o) { o->dead(); delete o; });
+}
+
+void ObjLst::upd_prepare()
+{
+  //clear hit_mask
+  for (auto o : m_objs) {
+    o->m_hit_mask.reset();
+  }
 }
 
 void ObjLst::upd_move(float dt)
@@ -157,9 +170,11 @@ void ObjLst::reciprocal_each(Entity* p1, Entity* p2)
 
 void ObjLst::blt_vs_ene(Entity* o, Entity* b)
 {
-  constexpr auto flg = fw::underlying_cast(EntityFlag::Ally) | fw::underlying_cast(EntityFlag::del);
-  if (o->m_flag.check(static_cast<EntityFlag>(flg))) return; //player, delは除く
+  //constexpr auto flg = fw::underlying_cast(EntityFlag::Ally) | fw::underlying_cast(EntityFlag::del);
+  constexpr auto flg = fw::underlying_cast(EntityFlag::Ally);
+  if (o->m_flag.check(static_cast<EntityFlag>(flg))) return; //playerは除く
   if (intersect_circle_vs_circle(o, b)) {
+    o->m_hit_mask.on(b->m_colli_attr);
     o->sub_health(b);
     b->del();
   }

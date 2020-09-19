@@ -35,7 +35,8 @@ void ModeGame::init()
   m_spawner.init();
   //add player
   auto* reticle = new Reticle(EntityArgs{ Vec2f() });
-  auto p = new Player({ Vec2f() }, reticle);
+  int32_t player_index = 0;
+  auto p = new Player({ Vec2f() }, reticle, player_index);
   GameSeq::inst().add_player(p);
   //text
   m_score_text.setFont(Resource::inst().get_base_font());

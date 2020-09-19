@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 
 #include "EneDot.h"
 #include "GameSeq.h"
@@ -32,10 +32,20 @@ void Enemy::update(float dt)
 
 void Enemy::dead()
 {
-  //GAME:add_score(self.score)
-  if (m_flag.check(EntityFlag::HaveDot)) {
-    new EneDot(m_pos);
-    //psfx(2, 'D-4', 20, 1)
+  bool kill_by_player = false;
+  for (int32_t i = 0; i < Player::m_player_max;++i) {
+    if (m_hit_mask.check(Player::get_generated_player_hit_mask(i))) {
+      kill_by_player = true;
+      GameSeq::add_score(i,m_score);
+      FW_ASSERT(m_score);
+    }
+  }
+  FW_ASSERT(kill_by_player);
+  if (kill_by_player) {
+    if (m_flag.check(EntityFlag::HaveDot)) {
+      new EneDot(m_pos);
+      //psfx(2, 'D-4', 20, 1)
+    }
   }
 }
 
@@ -44,6 +54,7 @@ EneSnake::EneSnake(const EntityArgs& args)
   : Enemy(args, 274)
 {
   m_flag.on(EntityFlag::HaveDot);
+  m_score = 20;
 }
 void EneSnake::appear()
 {
@@ -69,6 +80,7 @@ EneGrunt::EneGrunt(const EntityArgs& args)
   : Enemy(args,288)
 {
   m_flag.on(EntityFlag::HaveDot);
+  m_score = 10;
 }
 void EneGrunt::appear()
 {
@@ -206,7 +218,7 @@ void EneSphe::upd_ene(float dt)
 {
   //self:upd_blink(dt)
   auto s = static_cast<uint32_t>(m_elapsed / (const_param::FRAME2SEC * 4)) % 2;
-  this->spr8x8(m_spr_ene + s); //FIXME:ˆÚ“®Œü‚«‚Åsprite•Ï‚¦‚Ä‚¢‚È‚¢  
+  this->spr8x8(m_spr_ene + s); //FIXME:ç§»å‹•å‘ãã§spriteå¤‰ãˆã¦ã„ãªã„  
 
   if (m_rotr > const_param::EPSILON) {
     auto rad = m_speed * dt / m_rotr * m_rdir;

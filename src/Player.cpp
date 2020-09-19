@@ -5,11 +5,14 @@
 #include "PlBullet.h"
 #include "Player.h"
 
-Player::Player(const EntityArgs& args, const Entity* reticle)
+Player::Player(const EntityArgs& args, const Entity* reticle, int32_t index)
   : Entity(EntityType::Player, args)
   , m_reticle(reticle)
+  , m_index(index)
 {
   m_flag.on(EntityFlag::Ally);
+  m_colli_attr.on(Player::get_player_hit_mask(index));
+  m_product_colli_attr = Player::get_generated_player_hit_mask(index);
 }
 
 void Player::init()
@@ -47,7 +50,7 @@ void Player::update(float dt)
 	  auto v = m_reticle->get_pos() - m_pos;
 	  const auto d = v.magnitude();
 	  if (d > const_param::EPSILON) {
-  		new PlBullet(m_pos, v/d);
+  		new PlBullet(m_pos, v/d, this);
 		if (m_armslv >= 1) {
 		  //	local ang = math.rad(20)
 		  //	local c, s = cos(ang), sin(ang)

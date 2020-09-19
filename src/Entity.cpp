@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 
 #include "Resource.h"
 #include "ConstParam.h"
@@ -108,7 +108,7 @@ void Entity::set_position(const Vec2f& ipos) {
 }
 
 void Entity::updateEstimateAABB() {
-  //mov���܂߂čX�V
+  //movも含めて更新
   m_aabb0 = m_pos + m_mov - m_half_extents;
 }
 
@@ -195,7 +195,6 @@ void Entity::sub_health_dmg(int32_t dmg)
   m_health -= dmg;
   if (m_health <= 0) {
     this->del();
-    this->dead();
   } else {
     this->set_blink();
   }
