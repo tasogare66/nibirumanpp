@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 
 #include <iostream>
 #include <iomanip>
@@ -56,7 +56,7 @@ private:
 class Annotation {
 public:
   explicit Annotation(const MovTest text)
-    : val(std::move(text)) //text const‚¾‚Æcopy‚±‚ñ‚É‚È‚é
+    : val(std::move(text)) //text constã ã¨copyã“ã‚“ã«ãªã‚‹
   {}
   MovTest val;
 };
@@ -71,7 +71,7 @@ void process(string&& rvalarg) {
 template<typename T>
 void logAndProcess(T&& param) {
   cout << "call log process" << endl;
-  process(std::forward<T>(param)); //param‚ª‰E•Ó’l‚Ìê‡‰E•Ó’l‚ÉƒLƒƒƒXƒg
+  process(std::forward<T>(param)); //paramãŒå³è¾ºå€¤ã®å ´åˆå³è¾ºå€¤ã«ã‚­ãƒ£ã‚¹ãƒˆ
   //process(std::move<T>(param));
   //process(param);
 }

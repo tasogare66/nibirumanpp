@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 namespace const_param {
   inline constexpr float EPSILON = 1e-08f;
   inline constexpr float FRAME2SEC = 1.f / 60.f;

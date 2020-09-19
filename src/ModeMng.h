@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Singleton.h"
 #include "ModeType.h"
 class Mode;

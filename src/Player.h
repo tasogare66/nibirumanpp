@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Entity.h"
 
 class Player : public Entity {
@@ -35,5 +35,5 @@ private:
   uint32_t m_animcnt = 0;
   uint32_t m_animdir = 0;
   bool m_active = true;
-  HitMask m_product_colli_attr; //¶¬•¨‚Éİ’è
+  HitMask m_product_colli_attr; //ç”Ÿæˆç‰©ã«è¨­å®š
 };

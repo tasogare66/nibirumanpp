@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 enum class ModeType : uint8_t {
   NONE = 0,
   TITLE,

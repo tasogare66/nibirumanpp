@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "ModeType.h"
 class Mode {
 public:

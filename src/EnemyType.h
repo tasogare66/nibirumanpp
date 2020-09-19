@@ -1,4 +1,4 @@
-#ifndef __ENEMY_TYPE_H__
+﻿#ifndef __ENEMY_TYPE_H__
 #define __ENEMY_TYPE_H__
 
 #undef ENEMY_TYPE_DECL

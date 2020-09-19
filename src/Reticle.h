@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Entity.h"
 
 class Reticle : public Entity {

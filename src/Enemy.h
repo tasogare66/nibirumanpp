@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Entity.h"
 
 class Player;
@@ -62,7 +62,7 @@ protected:
   float m_speed;
 };
 
-//arrow2,”½Ë‚ªˆá‚¤
+//arrow2,åå°„ãŒé•ã†
 class EneArrow2 : public EneArrow {
 public:
   EneArrow2(const EntityArgs& args);

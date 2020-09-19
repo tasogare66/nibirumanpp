@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Mode.h"
 #include "Spawner.h"
 class ModeGame : public Mode {

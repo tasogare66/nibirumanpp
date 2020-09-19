@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 
 #include "imgui.h"
 #include "ModeMng.h"
@@ -9,7 +9,7 @@
 #include "DwGui.h"
 
 namespace dwgui {
-  //script‚ÌÄ“Ç‚İ‚İ
+  //scriptã®å†èª­ã¿è¾¼ã¿
   void setup_spawner_script() {
     if (auto* mg = ModeMng::inst().get_current_mode<ModeGame>()) {
       mg->get_spawner_w().reinit();
@@ -31,8 +31,8 @@ void DwGui::show_window_internal()
     m_screenshot_req = true;
   }
 
-  // ¶¬ƒXƒNƒŠƒvƒg‚ğ–³Œø‚É
-  ImGui::Checkbox("DisableSpawn", &m_disable_spawn_script); // ƒXƒNƒŠƒvƒg‚ğOFF
+  // ç”Ÿæˆã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’ç„¡åŠ¹ã«
+  ImGui::Checkbox("DisableSpawn", &m_disable_spawn_script); // ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’OFF
   {
     const char* items[] = {
 #undef ENEMY_TYPE_DECL
@@ -48,19 +48,19 @@ void DwGui::show_window_internal()
   }
   // restart
   if (ImGui::Button("Restart")) {
-    // “G‚Ì‘Síœ
+    // æ•µã®å…¨å‰Šé™¤
     //PlayImpl::singleton().m_enemy_spawner->request_remove_all();
-    // “G¶¬ƒXƒNƒŠƒvƒg‚ÌÄ“Ç‚İ‚İ
+    // æ•µç”Ÿæˆã‚¹ã‚¯ãƒªãƒ—ãƒˆã®å†èª­ã¿è¾¼ã¿
     dwgui::setup_spawner_script();
   }
   // spawner script
   if (ImGui::Button("SetupSpawnerScript")) {
-    // “G¶¬ƒXƒNƒŠƒvƒg‚ÌÄ“Ç‚İ‚İ
+    // æ•µç”Ÿæˆã‚¹ã‚¯ãƒªãƒ—ãƒˆã®å†èª­ã¿è¾¼ã¿
     dwgui::setup_spawner_script();
   }
   ImGui::SameLine();
   if (ImGui::Button("RemoveEnemy")) {
-    // “G‚Ì‘Síœ
+    // æ•µã®å…¨å‰Šé™¤
 	//PlayImpl::singleton().m_enemy_spawner->request_remove_all();
   }
 //  PlayImpl::singleton().spawner_log_disp();

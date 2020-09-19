@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <functional>
 #include "Vec2.h"
 #include "Singleton.h"

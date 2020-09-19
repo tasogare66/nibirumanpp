@@ -1,6 +1,6 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 
-// warning‘Îˆ
+// warningå¯¾å‡¦
 #pragma warning( push )
 #pragma warning( disable : 4100 )
 #pragma warning( disable : 4189 )
@@ -40,7 +40,7 @@ namespace scr
     {}
     virtual ~LuaScriptBase() = default;
 
-    // lua“Ç‚İ‚ñ‚ÅƒZƒbƒgƒAƒbƒv
+    // luaèª­ã¿è¾¼ã‚“ã§ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—
     void load_and_setup(const std::string_view& in_scr_name)
     {
       std::string fname(m_script_dir);
@@ -48,8 +48,8 @@ namespace scr
       //luaL_openlibs(m_ctx.state());
       m_ctx.importLibs();
       try {
-        this->bind_base(); // ‘Sscript‚É’ñ‹Ÿ‚·‚é‚à‚Ì
-        this->bind(); // Šescript‚ÅŒÂ•Ê‚Ébind
+        this->bind_base(); // å…¨scriptã«æä¾›ã™ã‚‹ã‚‚ã®
+        this->bind(); // å„scriptã§å€‹åˆ¥ã«bind
         m_ctx.doFile(fname.c_str());
       }
       catch (const LuaIntf::LuaException& e) {
@@ -81,7 +81,7 @@ namespace scr
     {
       if (m_end_flag == false && m_error_flag == false)
       {
-        // ŒÂ•Ê‚ÌXVˆ—
+        // å€‹åˆ¥ã®æ›´æ–°å‡¦ç†
         m_dt = dt;
         this->update(dt);
 
@@ -101,7 +101,7 @@ namespace scr
         }
 
         if (auto ret = m_thread.toInteger(-1)) {
-          // I—¹
+          // çµ‚äº†
           m_end_flag = true;
         }
       }
@@ -161,8 +161,8 @@ namespace scr
     LuaIntf::LuaState m_thread = nullptr;
     bool m_end_flag = true;
     bool m_error_flag = false;
-    bool m_assert_flag = false; // false‚¾‚Æ~‚ß‚é
-    const char* m_co_str; // ƒRƒ‹[ƒ`ƒ“ÀsŠÖ”
+    bool m_assert_flag = false; // falseã ã¨æ­¢ã‚ã‚‹
+    const char* m_co_str; // ã‚³ãƒ«ãƒ¼ãƒãƒ³å®Ÿè¡Œé–¢æ•°
   };
 
   void spawn_base(EnemyType type, const EntityArgs& entity_args) {
@@ -193,10 +193,10 @@ namespace scr
   public:
     ScrSpawner() = default;
     ~ScrSpawner() = default;
-    uint32_t get_spawn_num() const { //¶‘¶‚µ‚Ä‚¢‚é“G‚Ì”
+    uint32_t get_spawn_num() const { //ç”Ÿå­˜ã—ã¦ã„ã‚‹æ•µã®æ•°
       return ObjLst::inst().get_spawn_num();
     }
-    uint32_t get_spawn_ttl() const { //¶¬‚µ‚½“G‚Ì‘”
+    uint32_t get_spawn_ttl() const { //ç”Ÿæˆã—ãŸæ•µã®ç·æ•°
       return ObjLst::inst().get_spawn_ttl();
     }
     void spawn(EnemyType type, LuaRef tbl) {
@@ -235,7 +235,7 @@ namespace scr
     virtual void update(float dt) override {
     }
   };
-  // “G¶¬—p‚Ìlua scriptì¬
+  // æ•µç”Ÿæˆç”¨ã®lua scriptä½œæˆ
   ILuaScript* create_lua_enemy_spawner()
   {
     return new LuaEnemySpawner();

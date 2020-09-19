@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include <array>
 #include "FwUtil.h"
 
@@ -6,7 +6,7 @@ namespace fw {
 namespace util {
   std::string get_datetime_string()
   {
-    //Œ»İæ“¾
+    //ç¾åœ¨æ™‚åˆ»å–å¾—
     struct tm now;
     time_t tt = time(nullptr);
     localtime_s(&now, &tt);

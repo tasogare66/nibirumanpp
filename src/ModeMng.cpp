@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 
 #include "Mode.h"
 #include "ModeGame.h"
@@ -80,7 +80,7 @@ T* ModeMng::get_current_mode()
   }
   return nullptr;
 }
-template ModeGame* ModeMng::get_current_mode<ModeGame>(); //instance‰»
+template ModeGame* ModeMng::get_current_mode<ModeGame>(); //instanceåŒ–
 
 void ModeMng::init()
 {

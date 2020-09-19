@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 namespace rng{
   enum class Type : uint8_t {
     COMMON,

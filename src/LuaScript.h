@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 enum class EnemyType;
 struct EntityArgs;
 
@@ -15,6 +15,6 @@ namespace scr
 
   void spawn_base(EnemyType type, const EntityArgs& entity_args);
 
-  // “G¶¬—p
+  // æ•µç”Ÿæˆç”¨
   ILuaScript* create_lua_enemy_spawner();
 }
