@@ -191,7 +191,7 @@ void Entity::do_verlet(float dt, float inv_prev_dt, float decel)
 
 void Entity::sub_health_dmg(int32_t dmg)
 {
-  if (m_flag.check(EntityFlag::del) || dmg <= 0) return;
+  if (m_flag.check(EntityFlag::Del) || dmg <= 0) return;
   m_health -= dmg;
   if (m_health <= 0) {
     this->del();

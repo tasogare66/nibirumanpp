@@ -26,7 +26,7 @@ struct EntityArgs {
 };
 
 enum class EntityFlag : uint32_t {
-  del = 1 << 0,
+  Del = 1 << 0,
   AttrVerlet = 1 << 1,
   Ally = 1 << 2,
   Invincible = 1 << 3,
@@ -98,7 +98,7 @@ protected:
   void  set_velocity(const Vec2f& ivel) {
     m_vel = ivel;
   }
-  void del() { m_flag.on(EntityFlag::del); }
+  void del() { m_flag.on(EntityFlag::Del); }
   void spr8x8(uint32_t id);
 
   EntityType m_type=EntityType::None;
