@@ -4,6 +4,8 @@
 #include "ConstParam.h"
 #include "ObjLst.h"
 #include "Shash.h"
+#include "Player.h"
+
 #include "Entity.h"
 
 Entity::Entity(EntityType type, const EntityArgs& args)
@@ -210,4 +212,35 @@ void Entity::spr8x8(uint32_t id)
   m_spr.setTextureRect(rect);
   m_spr_id = id;
   m_spr.setOrigin(static_cast<float>(rect.width)/2.0f, static_cast<float>(rect.height) / 2.0f);
+}
+
+bool Entity::check_kill_by_generated_player(std::function<void(int32_t i)> cb) const
+{
+  bool kill_by_player = false;
+  for (int32_t i = 0; i < Entity_PLAYER_MAX; ++i) {
+    if (m_hit_mask.check(Player::get_generated_player_hit_mask(i))) {
+      kill_by_player = true;
+      cb(i);
+    }
+  }
+  return kill_by_player;
+}
+
+bool Entity::check_kill_by_player(std::function<void(int32_t i)> cb) const
+{
+  bool kill_by_player = false;
+  for (int32_t i = 0; i < Entity_PLAYER_MAX; ++i) {
+    if (m_hit_mask.check(Player::get_player_hit_mask(i))) {
+      kill_by_player = true;
+      cb(i);
+    }
+  }
+  return kill_by_player;
+}
+
+template<>
+const Player* Entity::cast_to<Player>() const
+{
+  if (m_type == EntityType::Player) return static_cast<const Player*>(this);
+  return nullptr;
 }

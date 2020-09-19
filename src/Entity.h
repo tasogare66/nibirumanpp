@@ -1,7 +1,9 @@
 ﻿#pragma once
+#include <functional>
 #include "Vec2.h"
 #include "FwFlag.h"
 class Shash;
+class Player;
 
 enum class EntityType : uint32_t {
   None=0,
@@ -43,7 +45,11 @@ enum class HitMask : uint32_t {
   Generated_Pl1 = 1 << 6,
   Generated_Pl2 = 1 << 7,
   Generated_Pl3 = 1 << 8,
+
+  PlayerAll = (Player0|Player1|Player2|Player3),
+  Generated_PlAll = (Generated_Pl0| Generated_Pl1| Generated_Pl2| Generated_Pl3),
 };
+static constexpr int32_t Entity_PLAYER_MAX = 4;
 
 class Entity {
 public:
@@ -83,9 +89,16 @@ public:
   const Vec2f& get_aabb0() const { return m_aabb0; }
 
   const FwFlag<EntityFlag>& get_flag() const { return m_flag; }
+  const FwFlag<HitMask>& get_colli_attr() const { return  m_colli_attr; }
 
   void sub_health_dmg(int32_t dmg);
   void sub_health(const Entity* t);
+
+  bool check_kill_by_generated_player(std::function<void(int32_t)> cb) const;
+  bool check_kill_by_player(std::function<void(int32_t)> cb) const;
+
+  template<typename T>
+  const T* cast_to() const;
 
 protected:
   friend class ObjLst;

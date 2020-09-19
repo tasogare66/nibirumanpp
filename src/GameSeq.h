@@ -31,8 +31,10 @@ public:
   const SeqPlayer* get_seq_player(uint32_t id) const;
   SeqPlayer* get_seq_player_w(uint32_t id);
   const Player* get_player_for_enemy();
-  const std::vector<Player*>& get_player_entities();
+  const Player* get_player_entity(uint32_t player_index) const;
+  const std::vector<Player*>& get_player_entities() const;
   static void add_score(uint32_t player_index, PlayerScore v);
+  static void add_multiplier(uint32_t player_index);
   float getDifV(float a, float b);
 private:
   std::vector<Player*> m_pl_entities;

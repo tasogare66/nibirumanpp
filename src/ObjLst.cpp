@@ -206,7 +206,7 @@ void ObjLst::upd_reciprocal()
     auto pl_pos = pl->get_pos();
     m_endot_sha->each(pl_pos.x - capr, pl_pos.y - capr, capr * 2.0f, capr * 2.0f,
       [&](Entity* o) {
-      if (o->m_flag.check(EntityFlag::Del)) return; //delは除く
+      //if (o->m_flag.check(EntityFlag::Del)) return; //delは除く
       auto diff = o->m_pos - pl->m_pos;
       auto d = diff.magnitude();
       auto target = capr + o->m_radius;

@@ -1,10 +1,15 @@
 ﻿#include "stdafx.h"
 
+#include "Player.h"
+#include "GameSeq.h"
+#include "Random.h"
+
 #include "EneDot.h"
 
 EneDot::EneDot(const EntityArgs& args)
   : Entity(EntityType::Dot, args)
 {
+  m_score = 300;
   this->spr8x8(m_ene_spr);
 }
 
@@ -16,6 +21,25 @@ void EneDot::init()
 
 void EneDot::update(float dt)
 {
+  if (!m_capture_pl && m_hit_mask.check(HitMask::PlayerAll)) {
+    //capture設定
+    int32_t hit[Entity_PLAYER_MAX] = {};
+    int32_t pt = 0;
+    auto cbfunc = [&pt,&hit](int32_t idx) {
+      hit[pt++] = idx;
+    };
+    if (this->check_kill_by_player(cbfunc)) {
+      if (pt > 0) {
+        auto r = rng::rand_int(pt-1);
+        m_capture_pl = GameSeq::inst().get_player_entity( hit[r] );
+      } else {
+        FW_ASSERT(0);
+      }
+    } else {
+      FW_ASSERT(0);
+    }
+  }
+
   if (m_capture_pl) {
     auto t = m_captime * m_captime * m_captime;
     this->set_position(fw::lerp(m_pos, m_capture_pl->get_pos(), t));
@@ -32,14 +56,24 @@ void EneDot::update(float dt)
 
 void EneDot::hitcb(const Entity* o, const Vec2f& dir, float dist)
 {
+  m_hit_mask.on(o->get_colli_attr());
+
+  auto player = o->cast_to<Player>();
+  if (!player) return;
+  if (m_capture_pl && m_capture_pl != player) return; //capture済ならcapture_playerのみ
+
   if (dist < m_radius) {
-    // GAME:add_score(self.score)
-    // GAME:add_multiplier()
-    // GAME:reduceDiff(0.5)
-    //psfx(4,'F-6',5,2)
+    //capture済ならそのplayer
+    //そうでないなら各playerに入れる(同フレームでは複数入る)
+    auto idx = m_capture_pl ? m_capture_pl->get_index() : player->get_index();
+    GameSeq::add_score(idx, m_score);
+    GameSeq::add_multiplier(idx);
     this->del();
   }
-  else {
-    m_capture_pl = o;
-  }
+}
+
+void EneDot::dead()
+{
+  // GAME:reduceDiff(0.5)
+  //psfx(4,'F-6',5,2)
 }

@@ -37,7 +37,14 @@ const Player* GameSeq::get_player_for_enemy()
   return nullptr;
 }
 
-const std::vector<Player*>& GameSeq::get_player_entities() {
+const Player* GameSeq::get_player_entity(uint32_t player_index) const
+{
+  if (player_index < m_pl_entities.size()) return m_pl_entities[player_index];
+  FW_ASSERT(0);
+  return nullptr;
+}
+
+const std::vector<Player*>& GameSeq::get_player_entities() const {
   return m_pl_entities;
 }
 
@@ -45,6 +52,13 @@ void GameSeq::add_score(uint32_t player_index, PlayerScore v)
 {
   if (auto* player = inst().get_seq_player_w(player_index)) {
     player->add_score(v);
+  }
+}
+
+void GameSeq::add_multiplier(uint32_t player_index)
+{
+  if (auto* player = inst().get_seq_player_w(player_index)) {
+    //FIXME:  
   }
 }
 

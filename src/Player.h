@@ -11,15 +11,15 @@ public:
   float get_capradius() const { return m_capradius; }
   auto get_index() const { return m_index; } //player index
 
-  static constexpr int32_t m_player_max = 4;
   static HitMask get_player_hit_mask(int32_t player_index) {
-    FW_ASSERT(player_index >= 0 && player_index < m_player_max);
+    FW_ASSERT(player_index >= 0 && player_index < Entity_PLAYER_MAX);
     return static_cast<HitMask>(fw::underlying_cast(HitMask::Player0) << player_index);
   }
   static HitMask get_generated_player_hit_mask(int32_t player_index) {
-    FW_ASSERT(player_index >= 0 && player_index < m_player_max);
+    FW_ASSERT(player_index >= 0 && player_index < Entity_PLAYER_MAX);
     return static_cast<HitMask>(fw::underlying_cast(HitMask::Generated_Pl0) << player_index);
   }
+
   auto get_product_colli_attr() const { return m_product_colli_attr; }
 
 private:
