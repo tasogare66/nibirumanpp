@@ -46,32 +46,33 @@ void Player::update(float dt)
   //shot
   if (m_shot_repeat > 0) --m_shot_repeat;
   if (inputm.on(InputButton_Shot) && not this->is_dashing()) {
-	if (m_shot_repeat <= 0) {
-	  auto v = m_reticle->get_pos() - m_pos;
-	  const auto d = v.magnitude();
-	  if (d > const_param::EPSILON) {
-  		new PlBullet(m_pos, v/d, this);
-		if (m_armslv >= 1) {
-		  //	local ang = math.rad(20)
-		  //	local c, s = cos(ang), sin(ang)
-		  //	ObjLstA:add(self.pos.x, self.pos.y, PlBullet, { dir = Vec2.new(v.x * c - v.y * s,v.y * c + v.x * s) })
-		  //	ObjLstA : add(self.pos.x, self.pos.y, PlBullet, { dir = Vec2.new(v.x * c + v.y * s,v.y * c - v.x * s) })
-		}
-		//	psfx(3, 'C-3', 9, 0)
-		constexpr int32_t shot_repeat_cnt[] = { 4, 6, 5 };
-		m_shot_repeat = shot_repeat_cnt[std::clamp<size_t>(m_armslv,0,fw::array_size(shot_repeat_cnt)-1)];
-	  }
-	}
+    if (m_shot_repeat <= 0) {
+      auto v = m_reticle->get_pos() - m_pos;
+      const auto d = v.magnitude();
+      if (d > const_param::EPSILON) {
+        v /= d;
+        new PlBullet(m_pos+v*4.f, v, this);
+        if (m_armslv >= 1) {
+          //	local ang = math.rad(20)
+          //	local c, s = cos(ang), sin(ang)
+          //	ObjLstA:add(self.pos.x, self.pos.y, PlBullet, { dir = Vec2.new(v.x * c - v.y * s,v.y * c + v.x * s) })
+          //	ObjLstA : add(self.pos.x, self.pos.y, PlBullet, { dir = Vec2.new(v.x * c + v.y * s,v.y * c - v.x * s) })
+        }
+        //	psfx(3, 'C-3', 9, 0)
+        constexpr int32_t shot_repeat_cnt[] = { 4, 6, 5 };
+        m_shot_repeat = shot_repeat_cnt[std::clamp<size_t>(m_armslv,0,fw::array_size(shot_repeat_cnt)-1)];
+      }
+    }
   }
 }
 
 void Player::draw(sf::RenderWindow& window)
 {
   auto sprid = 400 + m_animdir * 16 + m_animcnt;
-	//if self:check_flag(Flag_Invincible) and self.active then
-	//  local r = self.invincible_time // (FRAME2SEC*6)
-	//  if r % 2 == 0 then self.spr = 267 end
-	//	end
+    //if self:check_flag(Flag_Invincible) and self.active then
+    //  local r = self.invincible_time // (FRAME2SEC*6)
+    //  if r % 2 == 0 then self.spr = 267 end
+    //	end
 
   this->spr8x8(sprid);
   Entity::draw(window);
