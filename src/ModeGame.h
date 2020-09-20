@@ -19,4 +19,5 @@ private:
   Spawner m_spawner;
   sf::CircleShape m_stg_circle;
   sf::Text m_score_text;
+  sf::Sprite m_spr;
 };

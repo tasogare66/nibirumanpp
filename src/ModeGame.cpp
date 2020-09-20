@@ -40,6 +40,8 @@ void ModeGame::init()
   GameSeq::inst().add_player(p);
   //text
   m_score_text.setFont(Resource::inst().get_base_font());
+  //sprite
+  m_spr.setTexture(Resource::inst().get_spr_tex());
 }
 
 void ModeGame::dest()
@@ -65,6 +67,14 @@ void ModeGame::draw0(sf::RenderWindow& window)
 
 void ModeGame::draw1(sf::RenderWindow& window)
 {
+  if (const auto* sp = GameSeq::inst().get_seq_player(0)) {
+    const int32_t dsp_life_num = std::min(sp->get_life(), 10);
+    m_spr.setTextureRect(Resource::get_spr_rect(481));
+    for (int32_t i = 1; i < dsp_life_num; ++i) {
+      m_spr.setPosition(i*8.f,0.f);
+      window.draw(m_spr);
+    }
+  }
 }
 
 void ModeGame::draw2(sf::RenderWindow& window)
@@ -72,9 +82,9 @@ void ModeGame::draw2(sf::RenderWindow& window)
   char buf[256]={};
   if (const auto* sp = GameSeq::inst().get_seq_player(0)) {
     snprintf(buf, fw::array_size(buf), "% 10lld", sp->get_score());
-    m_score_text.setCharacterSize(32);
+    m_score_text.setCharacterSize(32+24);
     m_score_text.setString(buf);
-    m_score_text.setPosition(172.f/4.f, 0.f);
+    m_score_text.setPosition(172.f/4.f, 32.f);
     window.draw(m_score_text);
   }
 }

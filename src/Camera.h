@@ -10,6 +10,7 @@ public:
   void upd(const std::vector<Player*>&);
   const sf::View& update_view();
   const sf::View& get_view() const { return m_view; }
+  const sf::View& get_view_2d() const { return m_view_2d; }
 private:
   Vec2f upd_shake();
   Vec2f m_inr_center;
@@ -18,4 +19,5 @@ private:
   Vec2f m_trs;
   float m_scale = 4.0;
   sf::View m_view;
+  sf::View m_view_2d;
 };
