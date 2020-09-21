@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 
 #include "Mode.h"
+#include "ModeTitle.h"
 #include "ModeGame.h"
 #include "ModeMng.h"
 
@@ -15,10 +16,12 @@ ModeMng::~ModeMng()
 void ModeMng::request(ModeType req)
 {
   switch (req) {
+  case ModeType::TITLE:
+    m_req_work = std::make_unique<ModeTitle>(req);
+    break;
   case ModeType::GAME:
     m_req_work = std::make_unique<ModeGame>(req);
     break;
-  case ModeType::TITLE:
   default:
     FW_ASSERT(0);
     break;

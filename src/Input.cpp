@@ -24,13 +24,33 @@ float Input::update(float dt, sf::RenderWindow& window)
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::X) || sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
     m |= InputButton_Dash;
   }
+
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+    m |= InputButton_Decide;
+  }
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::X)) {
+    m |= InputButton_Cancel;
+  }
+
   //mouse position
   auto imousePos = sf::Mouse::getPosition(window); //window position
   auto mxy = window.mapPixelToCoords(imousePos, Camera::inst().get_view()); //window position to global position
 
+  m_mask_trig = m & (~m_mask);
+  m_mask_off = m_mask & (~m) ;
   m_mask = m;
   m_mpos = mxy;
   m_dt = dt;
 
   return dt;
+}
+
+bool Input::decided() const
+{
+  return this->off(InputButton_Decide);
+}
+
+bool Input::canceled() const
+{
+  return this->off(InputButton_Cancel);
 }

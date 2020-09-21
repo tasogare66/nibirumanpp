@@ -10,7 +10,7 @@
 App::App()
 {
   Resource::inst().setup_at_boot();
-  ModeMng::inst().request(ModeType::GAME);
+  ModeMng::inst().request(ModeType::TITLE);
 }
 
 void App::update(float dt, sf::RenderWindow& window)

@@ -5,9 +5,13 @@ enum class ModeType : uint8_t {
   GAME,
 };
 
-template<class T>
-struct ModeToType {
-  static ModeType type;
-};
+class ModeTitle;
 class ModeGame;
-template<> ModeType ModeToType<ModeGame>::type = ModeType::GAME;
+
+template<typename T>
+struct ModeToType;
+
+template<>
+struct ModeToType<ModeTitle> { static constexpr ModeType type = ModeType::TITLE; };
+template<>
+struct ModeToType<ModeGame> { static constexpr ModeType type = ModeType::GAME; };
