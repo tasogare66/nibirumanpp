@@ -2,7 +2,9 @@
 
 #include "ConstParam.h"
 #include "Input.h"
+#include "Camera.h"
 #include "PlBullet.h"
+
 #include "Player.h"
 
 Player::Player(const EntityArgs& args, const Entity* reticle, int32_t index)
@@ -29,8 +31,8 @@ void Player::update(float dt)
   auto chara_dir = m_reticle->get_pos() - this->get_pos();
   m_animdir = (chara_dir.x > 0) ? 0 : 1;
   m_animdir |= ((chara_dir.y < 0) ? 2 : 0);
-  //if self:check_dead() then return end
-  //self : check_invincible(dt)
+  if (this->check_dead()) return;
+  this->upd_invincible(dt);
   //self : upd_armslv(dt)
 
   Vec2f v;
@@ -76,4 +78,39 @@ void Player::draw(sf::RenderWindow& window)
 
   this->spr8x8(sprid);
   Entity::draw(window);
+}
+
+bool Player::check_dead()
+{
+  if (m_hit_mask.check(HitMask::Enemy)) {
+    m_hit_mask.off(HitMask::Enemy);
+    if (not this->is_dashing()) {
+      Camera::inst().req_shake(1.4f);
+      //if GAME : decriment_life() > 0 then
+      //  GAME : reset_multiplier()
+      //  ObjLstA : add(self.pos.x, self.pos.y, ForceF)
+      //  end
+      //this->reset_dash();
+      this->set_invincible();
+      //GAME : reduceDiff(300)
+      return true;
+    }
+  }
+  return false;
+}
+
+void Player::set_invincible()
+{
+  m_flag.on(EntityFlag::Invincible);
+  m_invincible_time = 0.0f;
+}
+
+void Player::upd_invincible(float dt)
+{
+  if (m_flag.check(EntityFlag::Invincible)) {
+    if (m_invincible_time > 3.0f) { //3秒
+      m_flag.off(EntityFlag::Invincible);
+    }
+    m_invincible_time += dt;
+  }
 }

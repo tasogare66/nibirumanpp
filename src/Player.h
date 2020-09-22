@@ -24,6 +24,9 @@ public:
 
 private:
   bool is_dashing() const { return false; }
+  bool check_dead();
+  void set_invincible();
+  void upd_invincible(float dt);
 
   const int32_t m_index; //player index
   int32_t m_shot_repeat = 0;

@@ -1,7 +1,9 @@
 ﻿#include "stdafx.h"
 
 #include "ConstParam.h"
+#include "Random.h"
 #include "Player.h"
+
 #include "Camera.h"
 
 void Camera::upd(const std::vector<Player*>& pls)
@@ -25,5 +27,12 @@ const sf::View& Camera::update_view()
 
 Vec2f Camera::upd_shake()
 {
-  return Vec2f();
+  auto ofs = Vec2f();
+  if (m_shake <= 0) return ofs;
+  ofs.x = rng::range(-16.f, 16.f);
+  ofs.y = rng::range(-16.f, 16.f);
+  ofs *= m_shake;
+  float fade = 0.95f;
+  m_shake = m_shake * fade;
+  return ofs;
 }

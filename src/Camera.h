@@ -11,6 +11,12 @@ public:
   const sf::View& update_view();
   const sf::View& get_view() const { return m_view; }
   const sf::View& get_view_2d() const { return m_view_2d; }
+  void req_shake(float v) { m_shake = std::min(m_shake + v, 4.0f); }
+  void reset() {
+    m_inr_center.set(0.0f, 0.0f);
+    m_center.set(0.0f, 0.0f);
+    m_shake = 0.0f;
+  }
 private:
   Vec2f upd_shake();
   Vec2f m_inr_center;
@@ -20,4 +26,5 @@ private:
   float m_scale = 4.0;
   sf::View m_view;
   sf::View m_view_2d;
+  float m_shake = 0.0f;
 };
