@@ -58,8 +58,23 @@ void GameSeq::add_score(uint32_t player_index, PlayerScore v)
 void GameSeq::add_multiplier(uint32_t player_index)
 {
   if (auto* player = inst().get_seq_player_w(player_index)) {
-    //FIXME:  
+    player->add_multiplier();
   }
+}
+
+void GameSeq::reset_multiplier(uint32_t player_index)
+{
+  if (auto* player = inst().get_seq_player_w(player_index)) {
+    player->reset_multiplier();
+  }
+}
+
+int32_t GameSeq::decriment_life(uint32_t player_index)
+{
+  if (auto* player = inst().get_seq_player_w(player_index)) {
+    return player->decriment_life();
+  }
+  return 0;
 }
 
 float GameSeq::getDifV(float a, float b) {

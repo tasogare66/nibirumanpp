@@ -23,7 +23,10 @@ public:
   auto get_product_colli_attr() const { return m_product_colli_attr; }
 
 private:
+  bool is_dash() const { return false; }
   bool is_dashing() const { return false; }
+  void reset_dash() {
+  }
   bool check_dead();
   void set_invincible();
   void upd_invincible(float dt);

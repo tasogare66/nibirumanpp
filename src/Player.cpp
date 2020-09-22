@@ -3,6 +3,7 @@
 #include "ConstParam.h"
 #include "Input.h"
 #include "Camera.h"
+#include "GameSeq.h"
 #include "PlBullet.h"
 
 #include "Player.h"
@@ -84,15 +85,15 @@ bool Player::check_dead()
 {
   if (m_hit_mask.check(HitMask::Enemy)) {
     m_hit_mask.off(HitMask::Enemy);
-    if (not this->is_dashing()) {
+    if (not this->is_dash()) {
       Camera::inst().req_shake(1.4f);
-      //if GAME : decriment_life() > 0 then
-      //  GAME : reset_multiplier()
-      //  ObjLstA : add(self.pos.x, self.pos.y, ForceF)
-      //  end
-      //this->reset_dash();
+      if (GameSeq::decriment_life(m_index) > 0) {
+        //  ObjLstA : add(self.pos.x, self.pos.y, ForceF)
+      }
+      this->reset_dash();
       this->set_invincible();
-      //GAME : reduceDiff(300)
+      GameSeq::reset_multiplier(m_index);
+      GameSeq::inst().reduceDiff(300);
       return true;
     }
   }

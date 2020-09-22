@@ -10,16 +10,30 @@ public:
   {}
   Player* get_player() { return m_e; }
   const Player* get_player() const { return m_e; }
+  int32_t decriment_life() {
+    m_life = std::max(m_life - 1, 0);
+    return m_life;
+  }
   int32_t get_life() const { return m_life; }
   void add_score(PlayerScore v) {
     m_score += static_cast<PlayerScore>(std::floor(v * m_multiplier));
   }
   PlayerScore get_score() const { return m_score; }
+  void add_multiplier() {
+    m_multiplier = std::min(m_multiplier + 0.01f, 15.f);
+    m_multime = m_multimeLimit;
+  }
+  void reset_multiplier() {
+    m_multiplier = 1.0;
+    m_multime = 0.0f;
+  }
 private:
   Player* m_e = nullptr;
   int32_t m_life = 3;
   PlayerScore m_score = 0;
   float m_multiplier = 1.0f;
+  float m_multime = 0.0f;
+  static constexpr float m_multimeLimit = 6.0f;
 };
 
 class GameSeq : public Singleton<GameSeq> {
@@ -35,9 +49,15 @@ public:
   const std::vector<Player*>& get_player_entities() const;
   static void add_score(uint32_t player_index, PlayerScore v);
   static void add_multiplier(uint32_t player_index);
+  static void reset_multiplier(uint32_t player_index);
+  static int32_t decriment_life(uint32_t player_index);
   float getDifV(float a, float b);
+  void  reduceDiff(int32_t v) { FW_ASSERT(v>0); m_diffsub += std::max(v,0); }
 private:
   std::vector<Player*> m_pl_entities;
   std::vector<SeqPlayer> m_seq_pls;
   uint32_t m_get_player_cnt = 0;
+  float m_difficulty = 0.0f;
+  uint64_t m_ticcnt = 0;
+  int32_t m_diffsub = 500;
 };
