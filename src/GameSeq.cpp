@@ -80,3 +80,15 @@ int32_t GameSeq::decriment_life(uint32_t player_index)
 float GameSeq::getDifV(float a, float b) {
   return a;
 }
+
+bool GameSeq::check_game_over() const
+{
+  bool ret = true;
+  for (const auto& seq_pl : m_seq_pls) {
+    if (seq_pl.get_life() > 0) {
+      ret = false;
+      break;
+    }
+  }
+  return ret;;
+}

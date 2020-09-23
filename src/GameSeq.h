@@ -53,6 +53,7 @@ public:
   static int32_t decriment_life(uint32_t player_index);
   float getDifV(float a, float b);
   void  reduceDiff(int32_t v) { FW_ASSERT(v>0); m_diffsub += std::max(v,0); }
+  bool check_game_over() const;
 private:
   std::vector<Player*> m_pl_entities;
   std::vector<SeqPlayer> m_seq_pls;

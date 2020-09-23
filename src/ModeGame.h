@@ -1,8 +1,14 @@
 ﻿#pragma once
 #include "Mode.h"
+#include "ConstParam.h"
 #include "Spawner.h"
 class ModeGame : public Mode {
 public:
+  enum class State {
+    Entry,
+    Play,
+    Over,
+  };
   ModeGame(ModeType in_mode_type);
   ~ModeGame();
   void init() override;
@@ -16,7 +22,12 @@ public:
   const auto& get_spawner() const { return m_spawner; }
 private:
   void base_clr();
+  void upd_info(float dt);
   Spawner m_spawner;
+  State m_state = State::Entry;
+  float m_ovelp = 0.0f;
+  float m_enttm = const_param::SCR_WIDTH + 10.f;
+  float m_entstrx = 50.f;
   sf::CircleShape m_stg_circle;
   sf::Text m_score_text;
   sf::Sprite m_spr;

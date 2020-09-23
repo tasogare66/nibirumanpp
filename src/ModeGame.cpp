@@ -1,12 +1,15 @@
 ﻿#include "stdafx.h"
 
 #include "ConstParam.h"
+#include "Input.h"
+#include "ModeMng.h"
 #include "Player.h"
 #include "Reticle.h"
 #include "Camera.h"
 #include "ObjLst.h"
 #include "GameSeq.h"
 #include "Resource.h"
+
 #include "ModeGame.h"
 
 ModeGame::ModeGame(ModeType in_mode_type)
@@ -26,6 +29,10 @@ ModeGame::~ModeGame()
 void ModeGame::base_clr()
 {
   ObjLst::reset();
+}
+
+void ModeGame::upd_info(float dt)
+{
 }
 
 void ModeGame::init()
@@ -51,8 +58,35 @@ void ModeGame::dest()
 
 bool ModeGame::ctrl(float dt)
 {
-  m_spawner.exec(dt);
-  return true;
+  bool ret = true;
+  if (m_state == State::Entry) {
+    //GAME.pl:set_active(self.enttm < 0)
+    if (m_enttm + m_entstrx < 0.f) {
+      m_state = State::Play;
+    }
+    m_enttm -= (dt * 190.f);
+  }
+  if (m_state == State::Play) {
+    auto func = [this,dt]() {
+      if (GameSeq::inst().check_game_over()) {
+        m_state = State::Over;
+        //Input: term()
+        //HISCORE = max(self.score, HISCORE)
+        return;
+      }
+      m_spawner.exec(dt);
+      this->upd_info(dt);
+    };
+    func();
+  }
+  if (m_state == State::Over) {
+    if (Input::inst().decided()) {
+      ModeMng::inst().request(ModeType::TITLE);
+    }
+    m_ovelp += dt;
+    ret = false;
+  }
+  return ret;
 }
 
 void ModeGame::ctrl_post()
