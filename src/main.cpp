@@ -3,6 +3,7 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 #include "App.h"
+#include "ConstParam.h"
 #include "DwGui.h"
 
 #if DEBUG&0 //count number of memory allocations
@@ -30,7 +31,7 @@ void take_screenshot(const sf::RenderWindow& window)
 }
 
 int main() {
-  sf::RenderWindow window(sf::VideoMode(1280, 720), "nibiruman2080");
+  sf::RenderWindow window(sf::VideoMode(static_cast<uint32_t>(const_param::WND_WIDTH), static_cast<uint32_t>(const_param::WND_HEIGHT)), "nibiruman2080");
   window.setFramerateLimit(60);
   ImGui::SFML::Init(window);
   ImGui::GetIO().IniFilename = "ram/imgui.ini";

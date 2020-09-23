@@ -46,7 +46,7 @@ void ModeGame::init()
   auto p = new Player({ Vec2f() }, reticle, player_index);
   GameSeq::inst().add_player(p);
   //text
-  m_score_text.setFont(Resource::inst().get_base_font());
+  m_text.setFont(Resource::inst().get_base_font());
   //sprite
   m_spr.setTexture(Resource::inst().get_spr_tex());
 }
@@ -113,12 +113,41 @@ void ModeGame::draw1(sf::RenderWindow& window)
 
 void ModeGame::draw2(sf::RenderWindow& window)
 {
+  auto lambda_draw_text = [this,&window](float ix, float iy, int32_t icol) {
+    m_text.setFillColor(const_param::ticcol(icol));
+    m_text.setPosition(ix, iy);
+    window.draw(m_text);
+  };
+
   char buf[256]={};
+  constexpr auto txt_chr_size = 32 + 24;
+  m_text.setCharacterSize(txt_chr_size);
   if (const auto* sp = GameSeq::inst().get_seq_player(0)) {
     snprintf(buf, fw::array_size(buf), "% 10lld", sp->get_score());
-    m_score_text.setCharacterSize(32+24);
-    m_score_text.setString(buf);
-    m_score_text.setPosition(172.f/4.f, 32.f);
-    window.draw(m_score_text);
+    m_text.setString(buf);
+    m_text.setPosition(172.f/4.f, 32.f);
+    window.draw(m_text);
+  }
+
+  if (m_state == State::Entry) {
+    //local y, merg = 48, 2
+    //  rect(0, y - merg, SCR_WIDTH, 5 + merg * 2, 2)
+    //  local str = "SAVE THE LAST HUMANS"
+    //  local x = self.enttm
+    //  self.entstrx = print(str, x, y, 11)
+  }
+  else if (m_state == State::Over) {
+    auto r = static_cast<int32_t>(m_ovelp / (const_param::FRAME2SEC * 26.f));
+    if (r % 2 == 0) {
+      std::string_view gov = "GAME OVER";
+      m_text.setString(gov.data());
+      auto bound = m_text.getLocalBounds();
+      float x = (const_param::WND_WIDTH - bound.width) / 2.0f;
+      float y = ((128 - 8) / 2)*6.f;
+      constexpr auto ofs = 3.f;
+      lambda_draw_text(x - ofs, y - ofs, 3);
+      lambda_draw_text(x + ofs, y + ofs, 3);
+      lambda_draw_text(x,y,15);
+    }
   }
 }
