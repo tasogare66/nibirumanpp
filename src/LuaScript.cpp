@@ -205,6 +205,7 @@ namespace scr
       entity_args.m_pos.y = tbl["py"].value<float>();
       entity_args.m_dir.x = tbl["dirx"].value<float>();
       entity_args.m_dir.y = tbl["diry"].value<float>();
+      entity_args.m_param0 = tbl["prm0"].value<float>();
       spawn_base(type, entity_args);
     }
   private:
@@ -224,6 +225,10 @@ namespace scr
       LuaBinding(m_ctx.state()).beginModule("EnemyType")
         .addConstant("SNAKE", EnemyType::SNAKE)
         .addConstant("GRUNT", EnemyType::GRUNT)
+        .addConstant("HULK", EnemyType::HULK)
+        .addConstant("ARROW", EnemyType::ARROW)
+        .addConstant("ARROW2", EnemyType::ARROW2)
+        .addConstant("SPHE", EnemyType::SPHE)
         .endModule();
       LuaIntf::LuaBinding(m_ctx.state()).beginClass<ScrSpawner>("ScrSpawner")
         .addConstructor(LUA_ARGS())

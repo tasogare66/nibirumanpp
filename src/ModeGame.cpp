@@ -42,6 +42,7 @@ void ModeGame::init()
   GameSeq::inst().reset();
   m_spawner.init();
   const auto entry_num = GameSeq::inst().get_entry_num();
+  FW_ASSERT(entry_num<=2);
   const Vec2f entry_1[] = { Vec2f(0.f,0.f) };
   const Vec2f entry_2[] = { Vec2f(-15.f,0.f), Vec2f(15.0f,0.f) };
   auto* ptbl = (entry_num == 1) ? entry_1 : entry_2;

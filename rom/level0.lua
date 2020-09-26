@@ -23,10 +23,11 @@ function wait_for_second(sec,func)
   end
 end
 
-function ene_spawn(t,px,py,dir)
+function ene_spawn(t,px,py,dir,prm0)
   local dirx,diry = 0,1
+  prm0 = prm0 or 0
   if(dir)then dirx,diry=dir.x,dir.y end
-  SCRSPW:spawn(t, {px=px, py=py, dirx=dirx, diry=diry})
+  SCRSPW:spawn(t, {px=px, py=py, dirx=dirx, diry=diry, prm0=prm0})
 end
 
 ------------------------------------------
@@ -118,12 +119,54 @@ Spawner.cross_co = function(self,args)
   self:runlst(lst)
 end
 
+function Spawner:line_onr_co(args)
+	local m=matrix_roty(args.rot)
+	local w=9
+	for i=args.sti,args.edi do
+		local v = matrix{{i*w},{0},{1}}
+		local pos=m*v
+		ene_spawn(args.t,pos[1][1],pos[2][1],nil,args.rdir)
+	end
+end
+function Spawner:radial_co(args)
+	local num=16
+	for i=0,num-1 do
+		self:runco(Spawner.line_onr_co,{t=args.t,rot=360/num*i,sti=14,edi=18,rdir=-1+i%2*2})
+	end
+	wait_for_second(args.end_wait or 0)
+end
+
 ------------------------------------------
 function Spawner:registration()
+	local tbl = {
+---[[
+    -- { Spawner.spiral_co, { t=EnemyType.GRUNT } },
+    -- { Spawner.spiral_co, { t=EnemyType.SNAKE } },
+    -- { Spawner.cross_co, { t=EnemyType.GRUNT } },
+    -- { Spawner.cross_co, { t=EnemyType.SNAKE } },
+    -- { Spawner.circle_co, { t=EnemyType.GRUNT, radius=120,end_wait=4,num=40 } },
+    -- { Spawner.circle_co, { t=EnemyType.SNAKE, radius=120,end_wait=4,num=40 } },
+    -- { Spawner.circle_co, { t=EnemyType.ARROW, radius=85,end_wait=4,num=59,dirt=randi_range(0,2)-1 } },
+    -- { Spawner.random_co, { t=EnemyType.GRUNT, str=60, edr=160, num=75, end_wait=4 }, },
+    -- { Spawner.random_co, { t=EnemyType.GRUNT, edr=60, num=25, end_wait=4 }, },
+    -- { Spawner.random_co, { t=EnemyType.SNAKE, str=60, edr=160, num=75, end_wait=4 }, },
+    -- { Spawner.random_co, { t=EnemyType.SNAKE, edr=60, num=25, end_wait=4 }, },
+    -- { Spawner.random_co, { t=EnemyType.HULK, str=80, edr=160, num=10, end_wait=4 }, },
+
+    { Spawner.radial_co, {t=EnemyType.SPHE,end_wait=4} },
+--]]
+  }
+
+  if SCRSPW.num >= 200 then return end
+  if self:num()<1 and #tbl>0 then
+    local lot = randi_range(1,#tbl)
+    local c=tbl[lot]
+    self:runco(c[1],c[2])
+  end
 end
 
 function Spawner:init()
-  self:runco(Spawner.test_co, {t=EnemyType.SNAKE})
+  --self:runco(Spawner.test_co, {t=EnemyType.SNAKE})
   --self:runco(Spawner.random_co, {t=EnemyType.GRUNT, str=60, edr=160, num=75, end_wait=4 })
   --self:runco(Spawner.spiral_co, { t=EnemyType.GRUNT })
   --self:runco(Spawner.circle_co, { t=EnemyType.GRUNT, radius=120,end_wait=4,num=40 })
