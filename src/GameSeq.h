@@ -40,6 +40,10 @@ class GameSeq : public Singleton<GameSeq> {
 public:
   GameSeq() = default;
   ~GameSeq() = default;
+  //menu
+  void set_entry_num(uint32_t num) { FW_ASSERT(num<=2); m_entry_num = num; }
+  uint32_t get_entry_num() const { return m_entry_num; }
+  //game
   void reset();
   void add_player(Player* e);
   const SeqPlayer* get_seq_player(uint32_t id) const;
@@ -55,6 +59,8 @@ public:
   void  reduceDiff(int32_t v) { FW_ASSERT(v>0); m_diffsub += std::max(v,0); }
   bool check_game_over() const;
 private:
+  uint32_t m_entry_num = 1;
+  //game
   std::vector<Player*> m_pl_entities;
   std::vector<SeqPlayer> m_seq_pls;
   uint32_t m_get_player_cnt = 0;

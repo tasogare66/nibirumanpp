@@ -6,6 +6,7 @@
 #include "GameUtil.h"
 #include "ConstParam.h"
 #include "Resource.h"
+#include "GameSeq.h"
 
 #include "ModeTitle.h"
 
@@ -43,7 +44,8 @@ bool ModeTitle::ctrl(float dt)
   const auto& input = Input::inst();
   if (m_decided) {
     if (m_decided_time < 0) {
-     // GAME = mode_game.new(self.decide_type)
+      // GAME = mode_game.new(self.decide_type)
+      GameSeq::inst().set_entry_num(sCURSOR == 1 ? 2 : 1);
       ModeMng::inst().request(ModeType::GAME);
     }
     m_decided_time -= dt;

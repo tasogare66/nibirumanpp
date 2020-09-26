@@ -41,11 +41,16 @@ void ModeGame::init()
   this->base_clr();
   GameSeq::inst().reset();
   m_spawner.init();
-  //add player
-  auto* reticle = new Reticle(EntityArgs{ Vec2f() });
-  int32_t player_index = 0;
-  auto p = new Player({ Vec2f() }, reticle, player_index);
-  GameSeq::inst().add_player(p);
+  const auto entry_num = GameSeq::inst().get_entry_num();
+  const Vec2f entry_1[] = { Vec2f(0.f,0.f) };
+  const Vec2f entry_2[] = { Vec2f(-15.f,0.f), Vec2f(15.0f,0.f) };
+  auto* ptbl = (entry_num == 1) ? entry_1 : entry_2;
+  for (uint32_t player_index = 0; player_index < entry_num; ++player_index) {
+    //add player
+    auto* reticle = new Reticle(EntityArgs{ Vec2f() });
+    auto p = new Player({ ptbl[player_index] }, reticle, player_index);
+    GameSeq::inst().add_player(p);
+  }
   //text
   m_text.setFont(Resource::inst().get_base_font());
   //sprite
