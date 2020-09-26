@@ -125,6 +125,7 @@
     <ClCompile Include="src\ModeGame.cpp" />
     <ClCompile Include="src\ModeMng.cpp" />
     <ClCompile Include="src\ModeTitle.cpp" />
+    <ClCompile Include="src\GameUtil.cpp" />
     <ClCompile Include="src\ObjLst.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\PlBullet.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="src\ModeMng.h" />
     <ClInclude Include="src\ModeTitle.h" />
     <ClInclude Include="src\ModeType.h" />
+    <ClInclude Include="src\GameUtil.h" />
     <ClInclude Include="src\ObjLst.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\PlBullet.h" />

@@ -15,4 +15,6 @@ private:
   float m_elp = 0.0f;
   bool m_decided = false;
   float m_decided_time = 0.0f;
+  sf::Text m_text;
+  static int32_t sCURSOR;
 };

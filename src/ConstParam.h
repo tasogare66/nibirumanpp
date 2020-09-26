@@ -11,6 +11,7 @@ namespace const_param {
   inline constexpr float BOUNCE = 0.5f;
   inline constexpr float WND_WIDTH = 1280.f;
   inline constexpr float WND_HEIGHT = 720.f;
+  inline constexpr uint32_t TXT_CHR_SIZE = 32+24;
   static const std::array<sf::Color, 16> TIC_PAL = {
     sf::Color(0x140C1CFF), sf::Color(0x442434FF), sf::Color(0x30346DFF), sf::Color(0x4A4E4DFF),
     sf::Color(0x854C30FF), sf::Color(0x346524FF), sf::Color(0xD04648FF), sf::Color(0x757161FF),
