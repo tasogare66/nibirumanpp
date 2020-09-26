@@ -9,6 +9,7 @@
 #include "ObjLst.h"
 #include "GameSeq.h"
 #include "Resource.h"
+#include "GameUtil.h"
 
 #include "ModeGame.h"
 
@@ -114,13 +115,11 @@ void ModeGame::draw1(sf::RenderWindow& window)
 void ModeGame::draw2(sf::RenderWindow& window)
 {
   auto lambda_draw_text = [this,&window](float ix, float iy, int32_t icol) {
-    m_text.setFillColor(const_param::ticcol(icol));
-    m_text.setPosition(ix, iy);
-    window.draw(m_text);
+    gmutil::draw_text(window, m_text, ix, iy, icol);
   };
 
   char buf[256]={};
-  constexpr auto txt_chr_size = 32 + 24;
+  constexpr auto txt_chr_size = const_param::TXT_CHR_SIZE;
   m_text.setCharacterSize(txt_chr_size);
   if (const auto* sp = GameSeq::inst().get_seq_player(0)) {
     snprintf(buf, fw::array_size(buf), "% 10lld", sp->get_score());
@@ -139,8 +138,7 @@ void ModeGame::draw2(sf::RenderWindow& window)
   else if (m_state == State::Over) {
     auto r = static_cast<int32_t>(m_ovelp / (const_param::FRAME2SEC * 26.f));
     if (r % 2 == 0) {
-      std::string_view gov = "GAME OVER";
-      m_text.setString(gov.data());
+      m_text.setString("GAME OVER");
       auto bound = m_text.getLocalBounds();
       float x = (const_param::WND_WIDTH - bound.width) / 2.0f;
       float y = ((128 - 8) / 2)*6.f;
