@@ -1,5 +1,7 @@
 ﻿#include "stdafx.h"
 
+#include "Random.h"
+
 #include "GameSeq.h"
 
 void GameSeq::reset()
@@ -35,6 +37,12 @@ const Player* GameSeq::get_player_for_enemy()
   auto* seq_pl = this->get_seq_player((m_get_player_cnt++) % m_seq_pls.size());
   if (seq_pl) return seq_pl->get_player();
   return nullptr;
+}
+
+int32_t GameSeq::decide_target_index() const
+{
+  FW_ASSERT(!m_pl_entities.empty());
+  return rng::rand_int(static_cast<int32_t>(m_pl_entities.size())-1,rng::Type::GAME);
 }
 
 const Player* GameSeq::get_player_entity(uint32_t player_index) const

@@ -49,6 +49,7 @@ public:
   const SeqPlayer* get_seq_player(uint32_t id) const;
   SeqPlayer* get_seq_player_w(uint32_t id);
   const Player* get_player_for_enemy();
+  int32_t decide_target_index() const; //spawn時のtarget(player)の指定,random
   const Player* get_player_entity(uint32_t player_index) const;
   const std::vector<Player*>& get_player_entities() const;
   static void add_score(uint32_t player_index, PlayerScore v);

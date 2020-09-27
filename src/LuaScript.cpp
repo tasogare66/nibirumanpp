@@ -15,6 +15,8 @@
 #include "ConstParam.h"
 #include "EnemyType.h"
 #include "Enemy.h"
+#include "GameSeq.h"
+#include "Player.h"
 
 #include "LuaScript.h"
 
@@ -126,7 +128,17 @@ namespace scr
         .addFunction("randomi", [](int max) { return rng::rand_int(max, m_rng_type); })
         .addProperty("dt", [this]() { return m_dt; })
         .addProperty("LvRadius", []() { return const_param::LvRadius; })
+        .addFunction("decide_target_index", []() { return GameSeq::inst().decide_target_index(); })
+        .addFunction("get_target_position", [](int id) {
+          const auto* tgt = get_player_entity(id);
+          auto p = tgt->get_pos();
+          return std::make_tuple(p.x, p.y);
+        })
         .endModule();
+    }
+
+    static const Player* get_player_entity(int32_t index) {
+      return GameSeq::inst().get_player_entity(index);
     }
 
     void set_log(const char* log)

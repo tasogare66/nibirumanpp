@@ -163,25 +163,45 @@ function Spawner:radial_co(args)
   wait_for_second(args.end_wait or 0)
 end
 
+Spawner.chase_co=function(self,args)
+  --num:数
+  --spd:追尾速
+  local ply_id=GAME.decide_target_index()
+  local p=Vec2.new(0,0)
+  local dir=Vec2.new()
+  for i=1,args.num do
+    wait_for_second(args.step_wait,function()
+      local px,py=GAME.get_target_position(ply_id)
+      dir=Vec2.new(px,py)-p
+      dir:SetNormalize()
+      p:Add(dir*args.spd*Spawner_dt)
+    end)
+    ene_spawn(args.t,p.x,p.y,dir)
+  end
+end
+
 ------------------------------------------
 function Spawner:registration()
   local tbl = {
 ---[[
-    -- { Spawner.spiral_co, { t=EnemyType.GRUNT } },
-    -- { Spawner.spiral_co, { t=EnemyType.SNAKE } },
-    -- { Spawner.cross_co, { t=EnemyType.GRUNT } },
-    -- { Spawner.cross_co, { t=EnemyType.SNAKE } },
-    -- { Spawner.circle_co, { t=EnemyType.GRUNT, radius=120,end_wait=4,num=40 } },
-    -- { Spawner.circle_co, { t=EnemyType.SNAKE, radius=120,end_wait=4,num=40 } },
-    -- { Spawner.circle_co, { t=EnemyType.ARROW, radius=85,end_wait=4,num=59,dirt=randi_range(0,2)-1 } },
-    -- { Spawner.random_co, { t=EnemyType.GRUNT, str=60, edr=160, num=75, end_wait=4 }, },
-    -- { Spawner.random_co, { t=EnemyType.GRUNT, edr=60, num=25, end_wait=4 }, },
-    -- { Spawner.random_co, { t=EnemyType.SNAKE, str=60, edr=160, num=75, end_wait=4 }, },
-    -- { Spawner.random_co, { t=EnemyType.SNAKE, edr=60, num=25, end_wait=4 }, },
-    -- { Spawner.random_co, { t=EnemyType.HULK, str=80, edr=160, num=10, end_wait=4 }, },
+    { Spawner.spiral_co, { t=EnemyType.GRUNT } },
+    { Spawner.spiral_co, { t=EnemyType.SNAKE } },
+    { Spawner.cross_co, { t=EnemyType.GRUNT } },
+    { Spawner.cross_co, { t=EnemyType.SNAKE } },
+    { Spawner.circle_co, { t=EnemyType.GRUNT, radius=120,end_wait=4,num=40 } },
+    { Spawner.circle_co, { t=EnemyType.SNAKE, radius=120,end_wait=4,num=40 } },
+    { Spawner.circle_co, { t=EnemyType.ARROW, radius=85,end_wait=4,num=59,dirt=randi_range(0,2)-1 } },
+    { Spawner.random_co, { t=EnemyType.GRUNT, str=60, edr=160, num=75, end_wait=4 }, },
+    { Spawner.random_co, { t=EnemyType.GRUNT, edr=60, num=25, end_wait=4 }, },
+    { Spawner.random_co, { t=EnemyType.SNAKE, str=60, edr=160, num=75, end_wait=4 }, },
+    { Spawner.random_co, { t=EnemyType.SNAKE, edr=60, num=25, end_wait=4 }, },
+    { Spawner.random_co, { t=EnemyType.HULK, str=80, edr=160, num=10, end_wait=4 }, },
     { Spawner.square_co, { t=EnemyType.ARROW, y=115, rot=randi_range(0,1)*45, end_wait=4 }, },
     { Spawner.square_co, { t=EnemyType.ARROW2, y=115, rot=randi_range(0,1)*45, end_wait=4 }, },
-    -- { Spawner.radial_co, {t=EnemyType.SPHE,end_wait=4} },
+    { Spawner.chase_co, { t=EnemyType.GRUNT, num=50, step_wait=0.4, spd=35 } },
+    { Spawner.chase_co, { t=EnemyType.SNAKE, num=50, step_wait=0.4, spd=35 } },
+    { Spawner.chase_co, { t=EnemyType.ARROW, num=50, step_wait=0.4, spd=35 } },
+    { Spawner.radial_co, {t=EnemyType.SPHE,end_wait=4} },
 --]]
   }
 
