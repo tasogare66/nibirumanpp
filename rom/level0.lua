@@ -119,26 +119,53 @@ Spawner.cross_co = function(self,args)
   self:runlst(lst)
 end
 
+Spawner.line_intercept_co = function(self,args)
+  local end_wait=args.end_wait or 0
+  local m = matrix_roty(args.rot)
+  local y = args.y
+  local width=9
+  local r=GAME.LvRadius-8
+  local len=sqrt(r*r-y*y)
+  local num=len//width
+  local ene_args=table.clone(args.args)
+  local dir = m*matrix{{ene_args.dir.x},{ene_args.dir.y},{1}}
+  ene_args.dir.x,ene_args.dir.y=dir[1][1],dir[2][1]
+  for i=-num, num do
+    local v = matrix{{i*width},{y},{1}}
+    local pos = m*v
+    ene_spawn(args.t,pos[1][1],pos[2][1],ene_args.dir)
+  end
+  wait_for_second(end_wait)
+end
+Spawner.square_co = function(self,args)
+  --y:切片
+  --end_wait:終わり待ち
+  local ud=1+randi_range(0,1)*(-2)
+  for i=0,3 do
+    self:runco(Spawner.line_intercept_co, { t=args.t, args={dir=Vec2.new(0,ud)}, y=args.y, rot=90*i+args.rot, end_wait=args.end_wait })
+  end
+end
+
 function Spawner:line_onr_co(args)
-	local m=matrix_roty(args.rot)
-	local w=9
-	for i=args.sti,args.edi do
-		local v = matrix{{i*w},{0},{1}}
-		local pos=m*v
-		ene_spawn(args.t,pos[1][1],pos[2][1],nil,args.rdir)
-	end
+  local m=matrix_roty(args.rot)
+  local w=9
+  for i=args.sti,args.edi do
+    local v = matrix{{i*w},{0},{1}}
+    local pos=m*v
+    ene_spawn(args.t,pos[1][1],pos[2][1],nil,args.rdir)
+  end
 end
 function Spawner:radial_co(args)
-	local num=16
-	for i=0,num-1 do
-		self:runco(Spawner.line_onr_co,{t=args.t,rot=360/num*i,sti=14,edi=18,rdir=-1+i%2*2})
-	end
-	wait_for_second(args.end_wait or 0)
+  local num=16
+  for i=0,num-1 do
+    self:runco(Spawner.line_onr_co,{t=args.t,rot=360/num*i,sti=14,edi=18,rdir=-1+i%2*2})
+  end
+  wait_for_second(args.end_wait or 0)
 end
 
 ------------------------------------------
 function Spawner:registration()
-	local tbl = {
+  local tbl = {
 ---[[
     -- { Spawner.spiral_co, { t=EnemyType.GRUNT } },
     -- { Spawner.spiral_co, { t=EnemyType.SNAKE } },
@@ -152,8 +179,9 @@ function Spawner:registration()
     -- { Spawner.random_co, { t=EnemyType.SNAKE, str=60, edr=160, num=75, end_wait=4 }, },
     -- { Spawner.random_co, { t=EnemyType.SNAKE, edr=60, num=25, end_wait=4 }, },
     -- { Spawner.random_co, { t=EnemyType.HULK, str=80, edr=160, num=10, end_wait=4 }, },
-
-    { Spawner.radial_co, {t=EnemyType.SPHE,end_wait=4} },
+    { Spawner.square_co, { t=EnemyType.ARROW, y=115, rot=randi_range(0,1)*45, end_wait=4 }, },
+    { Spawner.square_co, { t=EnemyType.ARROW2, y=115, rot=randi_range(0,1)*45, end_wait=4 }, },
+    -- { Spawner.radial_co, {t=EnemyType.SPHE,end_wait=4} },
 --]]
   }
 

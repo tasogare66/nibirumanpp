@@ -437,5 +437,13 @@ function randi_range(l,r)
   return l+GAME.randomi(r-l);
 end
 
+function table.clone(org)
+  local copy={}
+  for orig_key, orig_value in pairs(org) do
+    copy[orig_key] = orig_value
+  end
+  return copy
+end
+
 
 return matrix

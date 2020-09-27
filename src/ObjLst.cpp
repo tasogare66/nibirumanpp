@@ -192,7 +192,7 @@ void ObjLst::upd_reciprocal()
   }
   // bullet vs ene_bullet
   for (auto* b : m_bullets) {
-    auto& aabb0 = b->get_aabb0();
+    const auto& aabb0 = b->get_aabb0();
     float r2 = b->get_radius() * 2.f;
     m_enblt_sha->each(aabb0.x, aabb0.y, r2, r2,
       [&b](Entity* o) { blt_vs_ene(o, b); }
@@ -200,6 +200,20 @@ void ObjLst::upd_reciprocal()
   }
 
   auto& pls = GameSeq::inst().get_player_entities();
+  // player vs ene_bullet
+  for (const auto& pl : pls) {
+    if (pl->m_flag.check(EntityFlag::Invincible)) continue;
+    const auto& pl_aabb0 = pl->get_aabb0();
+    const auto pl_radius2 = pl->get_radius() * 2.0f;
+    m_enblt_sha->each(pl_aabb0.x, pl_aabb0.y, pl_radius2, pl_radius2,
+      [&pl](Entity* o) {
+      if (o->m_flag.check(EntityFlag::Del)) return; //delは除く
+      if (intersect_circle_vs_circle(o, pl)) {
+        pl->m_hit_mask.on(o->m_colli_attr);
+        o->m_hit_mask.on(pl->m_colli_attr);
+      }
+    });
+  }
   // player vs enedot
   for (const auto& pl : pls) {
     auto capr = pl->get_capradius();
