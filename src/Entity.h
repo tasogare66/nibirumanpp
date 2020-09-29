@@ -12,6 +12,7 @@ enum class EntityType : uint32_t {
   Enemy,
   Dot,
   Human,
+  Force,
 };
 struct EntityArgs {
   Vec2f m_pos;
@@ -59,6 +60,7 @@ public:
   void attr_bullet();
   void attr_ene_bullet();
   void attr_ene_dot();
+  void attr_forces();
   void attr_spawned();
   virtual void init() {}
   virtual void update(float dt);

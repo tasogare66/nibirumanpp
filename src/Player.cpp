@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "GameSeq.h"
 #include "PlBullet.h"
+#include "Force.h"
 
 #include "Player.h"
 
@@ -67,6 +68,11 @@ void Player::update(float dt)
       }
     }
   }
+#if DEBUG&1
+  if (inputm.trig(InputButton_Dash)) {
+    new ForceF(m_pos);
+  }
+#endif
 }
 
 void Player::draw(sf::RenderWindow& window)

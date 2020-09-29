@@ -67,6 +67,11 @@ void Entity::attr_ene_dot()
   this->set_sha(ObjLst::inst().m_endot_sha.get());
 }
 
+void Entity::attr_forces()
+{
+  ObjLst::inst().m_forces.push_back(this);
+}
+
 void Entity::attr_spawned()
 {
   FW_ASSERT(not m_flag.check(EntityFlag::Spawned));
