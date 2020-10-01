@@ -23,7 +23,7 @@ private:
   static bool intersect_circle_vs_circle(const Entity* p1, const Entity* p2);
   static void reciprocal_each(Entity* p1, Entity* p2);
   static void blt_vs_ene(Entity* o, Entity* b);
-  static void force_vs_ene(Entity* o, Entity* f);
+  static void force_vs_ene(Entity* o, const Entity* f);
   template<typename T>
   void upd_colliders(std::vector<T*>&, std::function<bool(Entity*,Vec2f)> func=nullptr);
   void upd_verlet(float dt);

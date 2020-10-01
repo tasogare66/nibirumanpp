@@ -1,15 +1,20 @@
 ﻿#include "stdafx.h"
 
+#include "ConstParam.h"
+
 #include "Force.h"
 
-ForceF::ForceF(const Vec2f pos, const HitMask colli_attr)
+ForceF::ForceF(const Vec2f pos, const HitMask colli_attr, float power)
   : Entity(EntityType::Force, { pos })
   , m_inner_r(23.0f)
 {
+  const auto t = power;
+  m_health = static_cast<int32_t>(std::max(fw::lerp(1.f, 50.f, t), 10.f));
   m_circle.setRadius(m_inner_r);
   m_circle.setOrigin(-m_pos.x+m_inner_r,-m_pos.y+ m_inner_r);
   m_circle.setFillColor(sf::Color(0));
-  m_circle.setOutlineThickness(1.f);
+  m_circle.setOutlineThickness(0.3f);
+  m_circle.setOutlineColor(const_param::ticcol(6));
   m_colli_attr.on(colli_attr);
 }
 
@@ -33,7 +38,7 @@ void ForceF::draw(sf::RenderWindow& window)
   window.draw(m_circle);
 }
 
-void ForceF::hitcb_w(Entity* o, const Vec2f& dir, float d)
+void ForceF::hitcb_w(Entity* o, const Vec2f& dir, float d) const
 {
   if (d < o->get_radius() + m_inner_r) {
     o->on_hit_mask(m_colli_attr);

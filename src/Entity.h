@@ -67,7 +67,7 @@ public:
   virtual void draw(sf::RenderWindow& window);
   virtual bool hit_wall(const Vec2f&) { return false; } //true�̏ꍇrepulse�Ȃ�
   virtual void hitcb(const Entity*, const Vec2f&, float) {}
-  virtual void hitcb_w(Entity*, const Vec2f&, float) {}
+  virtual void hitcb_w(Entity*, const Vec2f&, float) const {}
   virtual void dead() {}
   virtual void set_blink() {}
 

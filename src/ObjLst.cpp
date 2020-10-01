@@ -180,7 +180,7 @@ void ObjLst::blt_vs_ene(Entity* o, Entity* b)
   }
 }
 
-void ObjLst::force_vs_ene(Entity* o, Entity* f)
+void ObjLst::force_vs_ene(Entity* o, const Entity* f)
 {
   constexpr auto flg = fw::underlying_cast(EntityFlag::Ally);
   if (o->m_flag.check(static_cast<EntityFlag>(flg))) return; //playerは除く
@@ -212,20 +212,19 @@ void ObjLst::upd_reciprocal()
     );
   }
 
-  // force vs enemy
-  for (auto *f : m_forces) {
+  // force
+  for (const auto *f : m_forces) {
     const auto& aabb0 = f->get_aabb0();
     float r2 = f->get_radius() * 2.f;
+    // vs enemy
     m_px_sha->each(aabb0.x, aabb0.y, r2, r2,
       [&f](Entity* o) { force_vs_ene(o, f); }
     );
+    // vs ene_bullet
+    m_enblt_sha->each(aabb0.x, aabb0.y, r2, r2,
+      [&f](Entity* o) { force_vs_ene(o, f); }
+    );
   }
-  // force vs ene_bullet
-      //for _, f in pairs(self.forces) do
-      //  self.ENBLT_SHA : each(f.aabb0.x, f.aabb0.y, f.radius * 2, f.radius * 2,
-      //    function(o) force_vs_ene(o, f) end)
-      //  end
-  // clear forces
   m_forces.clear();
 
   auto& pls = GameSeq::inst().get_player_entities();
