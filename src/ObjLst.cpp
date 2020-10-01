@@ -189,7 +189,7 @@ void ObjLst::force_vs_ene(Entity* o, Entity* f)
   float d = diff.magnitude();
   float target = f->get_radius() + o->get_radius();
   if (d < target) {
-    f->hitcb(o, diff, d);
+    f->hitcb_w(o, diff, d); //oに対して設定
   }
 }
 

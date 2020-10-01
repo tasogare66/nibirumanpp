@@ -67,6 +67,7 @@ public:
   virtual void draw(sf::RenderWindow& window);
   virtual bool hit_wall(const Vec2f&) { return false; } //true�̏ꍇrepulse�Ȃ�
   virtual void hitcb(const Entity*, const Vec2f&, float) {}
+  virtual void hitcb_w(Entity*, const Vec2f&, float) {}
   virtual void dead() {}
   virtual void set_blink() {}
 
@@ -92,9 +93,11 @@ public:
 
   const FwFlag<EntityFlag>& get_flag() const { return m_flag; }
   const FwFlag<HitMask>& get_colli_attr() const { return  m_colli_attr; }
+  void on_hit_mask(FwFlag<HitMask> mask) { m_hit_mask.on(mask); }
 
   void sub_health_dmg(int32_t dmg);
   void sub_health(const Entity* t);
+  float get_exp_resi() const { return m_exp_resi; }
 
   bool check_kill_by_generated_player(std::function<void(int32_t)> cb) const;
   bool check_kill_by_player(std::function<void(int32_t)> cb) const;
@@ -132,7 +135,7 @@ protected:
   FwFlag<EntityFlag> m_flag;
   uint32_t m_no = 0;
   int32_t m_health = 1;
-  int32_t m_exp_resi = 1;
+  float m_exp_resi = 1.0f;
   uint32_t m_score = 0;
   FwFlag<HitMask> m_hit_mask; //HitMask
   FwFlag<HitMask> m_colli_attr; //hit時通知するattribute

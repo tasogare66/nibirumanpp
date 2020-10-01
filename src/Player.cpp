@@ -70,7 +70,7 @@ void Player::update(float dt)
   }
 #if DEBUG&1
   if (inputm.trig(InputButton_Dash)) {
-    new ForceF(m_pos);
+    new ForceF(m_pos, this->get_product_colli_attr());
   }
 #endif
 }
