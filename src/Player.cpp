@@ -68,9 +68,10 @@ void Player::update(float dt)
       }
     }
   }
-#if DEBUG&1
+#if DEBUG&01
   if (inputm.trig(InputButton_Dash)) {
-    new ForceF(m_pos, this->get_product_colli_attr());
+    //new ForceF(m_pos, this->get_product_colli_attr());
+    new ForceD(m_pos, this->get_product_colli_attr());
   }
 #endif
 }
@@ -94,7 +95,7 @@ bool Player::check_dead()
     if (not this->is_dash()) {
       Camera::inst().req_shake(1.4f);
       if (GameSeq::decriment_life(m_index) > 0) {
-        //  ObjLstA : add(self.pos.x, self.pos.y, ForceF)
+        new ForceF(m_pos, this->get_product_colli_attr());
       }
       this->reset_dash();
       this->set_invincible();

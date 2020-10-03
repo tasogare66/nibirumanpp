@@ -18,10 +18,13 @@ private:
 
 class ForceD : public Entity {
 public:
-  explicit ForceD(const Vec2f pos);
+  explicit ForceD(const Vec2f pos, const HitMask colli_attr);
   virtual ~ForceD() = default;
   void init() override;
   void update(float dt) override;
+protected:
+  void hitcb_w(Entity*, const Vec2f&, float) const override;
 private:
   float m_elp = 0.0f;
+  uint32_t m_base_spr;
 };
