@@ -3,6 +3,9 @@
 #include "Mode.h"
 #include "ModeTitle.h"
 #include "ModeGame.h"
+#include "ObjLst.h"
+#include "PtclLst.h"
+#include "Camera.h"
 #include "ModeMng.h"
 
 ModeMng::ModeMng()
@@ -28,10 +31,18 @@ void ModeMng::request(ModeType req)
   }
 }
 
+void ModeMng::base_clr()
+{
+  ObjLst::reset_inst();
+  PtclLst::reset_inst();
+  Camera::reset_inst();
+}
+
 bool ModeMng::update(float dt)
 {
   if (m_req_work) {
     this->dest();
+    this->base_clr();
     m_cur_work = std::move(m_req_work);
     m_req_work.reset();
     this->init();

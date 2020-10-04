@@ -4,8 +4,8 @@
 
 Resource::Resource()
 {
-  constexpr uint32_t x = 8;
-  constexpr uint32_t y = 8;
+  constexpr uint32_t x = 1;
+  constexpr uint32_t y = 1;
   if (m_pix_tex.create(x, y)) {
     //error
   }

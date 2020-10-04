@@ -6,6 +6,7 @@
 #include "Resource.h"
 #include "ConstParam.h"
 #include "Random.h"
+#include "PtclLst.h"
 
 #include "Enemy.h"
 
@@ -41,6 +42,7 @@ void Enemy::dead()
       new EneDot(m_pos);
       //psfx(2, 'D-4', 20, 1)
     }
+    PtclLst::add(m_pos, 15);
   } else {
     FW_ASSERT(0);
   }

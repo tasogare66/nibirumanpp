@@ -21,7 +21,6 @@ public:
   auto& get_spawner_w() { return m_spawner; }
   const auto& get_spawner() const { return m_spawner; }
 private:
-  void base_clr();
   void upd_info(float dt);
   Spawner m_spawner;
   State m_state = State::Entry;

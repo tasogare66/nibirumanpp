@@ -115,6 +115,9 @@
     <ClCompile Include="src\Force.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="src\PtclLst.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ModeGame.h">
@@ -224,6 +227,9 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\Force.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PtclLst.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>

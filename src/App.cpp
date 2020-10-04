@@ -5,6 +5,8 @@
 #include "Input.h"
 #include "Camera.h"
 #include "Resource.h"
+#include "PtclLst.h"
+
 #include "App.h"
 
 App::App()
@@ -21,6 +23,7 @@ void App::update(float dt, sf::RenderWindow& window)
   auto& modem = ModeMng::inst();
   if (modem.update(dt)) {
     ObjLst::inst().update(dt);
+    PtclLst::inst().update(dt);
   }
   modem.update_post();
 }
@@ -30,6 +33,7 @@ void App::draw(sf::RenderWindow& window)
   window.setView(Camera::inst().update_view());
   auto& modem = ModeMng::inst();
   modem.draw0(window);
+  PtclLst::inst().draw(window);
   ObjLst::inst().draw(window);
 
   window.setView(Camera::inst().get_view_2d());

@@ -9,7 +9,7 @@ public:
     return getReference(uptr());
   }
 
-  static void reset()
+  static void reset_inst()
   {
     uptr().reset(T::createInstance());
   }

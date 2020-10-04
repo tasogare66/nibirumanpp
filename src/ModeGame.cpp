@@ -27,18 +27,12 @@ ModeGame::~ModeGame()
 {
 }
 
-void ModeGame::base_clr()
-{
-  ObjLst::reset();
-}
-
 void ModeGame::upd_info(float dt)
 {
 }
 
 void ModeGame::init()
 {
-  this->base_clr();
   GameSeq::inst().reset();
   m_spawner.init();
   const auto entry_num = GameSeq::inst().get_entry_num();
@@ -60,7 +54,6 @@ void ModeGame::init()
 
 void ModeGame::dest()
 {
-  this->base_clr();
 }
 
 bool ModeGame::ctrl(float dt)

@@ -19,6 +19,7 @@ public:
   template<typename T>
   T* get_current_mode();
 private:
+  void base_clr();
   void init();
   void dest();
   bool ctrl(float dt);
