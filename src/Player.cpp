@@ -47,6 +47,74 @@ void Player::update(float dt)
     v.normalize();
     m_mov = v * (60 * dt);
   }
+
+  //dash
+  auto dashon = inputm.on(InputButton_Dash);
+  if (this->get_flag().check(EntityFlag::Invincible) && m_invincible_time < 1.0f) dashon = false; //ignore start invincible
+  if (m_dashst == 0) {
+    if (m_coolt > 0.0f) {
+      m_coolt -= dt;
+      if (m_coolt <= 0.0f) { /*psfx(9, 'G-4', 40, 3);*/ }
+    } else {
+      if (dashon) {
+        auto v = m_reticle->get_pos() - m_pos;
+        auto len = v.magnitude();
+        if (len > const_param::EPSILON) {
+          v /= len;
+          Camera::inst().req_shake(0.2f);
+          this->set_vel_force(v * 6.8f);
+          m_dashvec = v;
+          m_dashvec_old = v;
+          m_dasht = m_dash_limit;
+          m_dashst = 1;
+        }
+      }
+    }
+  } else if (m_dashst == 1) {
+    m_dasht -= dt;
+    m_dashvec = m_pos - m_old_pos;
+    m_dashvec.normalize();
+    //if (self.elp//FRAME2SEC)%10==0 then
+    //  psfx(8, 'G-6', 10, 0)
+    //end
+
+    if (m_dash_limit - m_dasht < 0.1f || (dashon && m_dasht >= 0)) {
+      this->set_vel_force(m_dashvec * 6.8f);
+      if (v.x != 0.0f || v.y != 0.0f) {
+        auto ang = Vec2f::angle(m_dashvec, v);
+        auto dif = std::min(ang, fw::deg2rad(1.0f));
+        if (Vec2f::cross(m_dashvec, v) < 0.0f) {
+          dif = -dif;
+        }
+        m_dashvec.set_rotate(dif);
+      }
+      auto th = Vec2f::dot(m_dashvec, m_dashvec_old);
+      if (th <= 0.5f) { //cos60°
+        new ForceF(m_pos, this->get_product_colli_attr(), this->dash_pow());
+        Camera::inst().req_shake(0.3f);
+      }
+      else {
+        new ForceD(m_pos, this->get_product_colli_attr());
+      }
+    }
+    else {
+      new ForceF(m_pos, this->get_product_colli_attr(), this->dash_pow());
+      Camera::inst().req_shake(0.3f);
+      this->set_vel_force(m_dashvec * 0.2f);
+      m_flwt = m_dash_followt;
+      m_coolt = m_dash_coolt;
+      m_dashst = 2;
+    }
+    m_dashvec_old = m_dashvec;
+  }
+  else if (m_dashst >= 2) { //invincible
+    m_flwt -= dt;
+    this->lim_vel_force(0.2f);
+    if (m_flwt < 0.0f) {
+      m_dashst = 0;
+    }
+  }
+
   //shot
   if (m_shot_repeat > 0) --m_shot_repeat;
   if (inputm.on(InputButton_Shot) && not this->is_dashing()) {
@@ -68,7 +136,7 @@ void Player::update(float dt)
       }
     }
   }
-#if DEBUG&01
+#if DEBUG&0
   if (inputm.trig(InputButton_Dash)) {
     //new ForceF(m_pos, this->get_product_colli_attr());
     new ForceD(m_pos, this->get_product_colli_attr());

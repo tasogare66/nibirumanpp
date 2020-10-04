@@ -23,9 +23,14 @@ public:
   auto get_product_colli_attr() const { return m_product_colli_attr; }
 
 private:
-  bool is_dash() const { return false; }
-  bool is_dashing() const { return false; }
+  bool is_dash() const { return (m_dashst != 0); }
+  bool is_dashing() const { return (m_dashst == 1); }
+  float dash_pow() const {
+    return 1.0f - std::max(m_dasht / m_dash_limit, 0.0f);
+  }
   void reset_dash() {
+    m_flwt = 0.0f;
+    m_coolt = 0.0f;
   }
   bool check_dead();
   void set_invincible();
@@ -42,4 +47,13 @@ private:
   uint32_t m_animdir = 0;
   bool m_active = true;
   HitMask m_product_colli_attr; //生成物に設定
+  int m_dashst = 0;
+  float m_dasht = 0.0f;
+  float m_flwt = 0.0f;
+  float m_coolt = 0.0f;
+  Vec2f m_dashvec = {0.f,1.f};
+  Vec2f m_dashvec_old;
+  static constexpr float m_dash_limit = 2.2f;
+  static constexpr float m_dash_coolt = 4.2f;
+  static constexpr float m_dash_followt = 0.9f;
 };
