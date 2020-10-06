@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 
 #include "ConstParam.h"
+#include "PtclLst.h"
 
 #include "Force.h"
 
@@ -23,6 +24,7 @@ void ForceF::init()
   this->attr_forces();
   this->set_radius(29.0f);
   FW_ASSERT(m_radius >= m_inner_r);
+  PtclLst::add_sqr(m_pos, 20, m_inner_r-4.0f);
 }
 
 void ForceF::update(float dt)
