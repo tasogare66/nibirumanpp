@@ -120,6 +120,7 @@
     <ClCompile Include="src\Force.cpp" />
     <ClCompile Include="src\FwUtil.cpp" />
     <ClCompile Include="src\GameSeq.cpp" />
+    <ClCompile Include="src\Human.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\LuaScript.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="src\fw_assert.h" />
     <ClInclude Include="src\FwFlag.h" />
     <ClInclude Include="src\GameSeq.h" />
+    <ClInclude Include="src\Human.h" />
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\LuaScript.h" />
     <ClInclude Include="src\Mode.h" />

@@ -4,6 +4,7 @@
 class EneDot : public Entity {
 public:
   EneDot(const EntityArgs& args);
+  virtual ~EneDot();
   void init() override;
   void update(float dt) override;
   void hitcb(const Entity*, const Vec2f&, float) override;

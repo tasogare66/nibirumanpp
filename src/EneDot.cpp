@@ -13,6 +13,10 @@ EneDot::EneDot(const EntityArgs& args)
   this->spr8x8(m_ene_spr);
 }
 
+EneDot::~EneDot()
+{
+}
+
 void EneDot::init()
 {
   m_flag.on(EntityFlag::Ally);

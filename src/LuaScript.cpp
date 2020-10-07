@@ -17,6 +17,7 @@
 #include "Enemy.h"
 #include "GameSeq.h"
 #include "Player.h"
+#include "Human.h"
 
 #include "LuaScript.h"
 
