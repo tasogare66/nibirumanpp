@@ -118,7 +118,7 @@ protected:
     m_vel = ivel;
   }
   void del() { m_flag.on(EntityFlag::Del); }
-  void spr8x8(uint32_t id);
+  void spr8x8(uint32_t id, uint16_t w=1, uint16_t h=1);
 
   EntityType m_type=EntityType::None;
   Vec2f m_pos;

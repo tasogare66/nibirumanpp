@@ -4,6 +4,7 @@
 #include "ConstParam.h"
 #include "GameSeq.h"
 #include "Player.h"
+#include "Pop2D.h"
 
 #include "Human.h"
 
@@ -59,6 +60,7 @@ void Human::dead()
     GameSeq::add_score(p->get_index(), m_score);
     GameSeq::inst().reduceDiff(30);
     //GAME.pl : add_armslv()
+    new Pop2D(m_pos);
     //ObjLstA : add(self.pos.x, self.pos.y, Pop2D)
     //psfx(6, 'E-4', 20, 3)
   } else {

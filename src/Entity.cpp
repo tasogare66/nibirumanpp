@@ -213,9 +213,11 @@ void Entity::sub_health(const Entity* t) {
   this->sub_health_dmg(t->m_health);
 }
 
-void Entity::spr8x8(uint32_t id)
+void Entity::spr8x8(uint32_t id, uint16_t w, uint16_t h)
 {
   auto rect = Resource::get_spr_rect(id);
+  rect.width *= w;
+  rect.height *= h;
   m_spr.setTextureRect(rect);
   m_spr_id = id;
   m_spr.setOrigin(static_cast<float>(rect.width)/2.0f, static_cast<float>(rect.height) / 2.0f);

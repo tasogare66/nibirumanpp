@@ -131,6 +131,7 @@
     <ClCompile Include="src\ObjLst.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\PlBullet.cpp" />
+    <ClCompile Include="src\Pop2D.cpp" />
     <ClCompile Include="src\PtclLst.cpp" />
     <ClCompile Include="src\Random.cpp" />
     <ClCompile Include="src\Resource.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="src\ObjLst.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\PlBullet.h" />
+    <ClInclude Include="src\Pop2D.h" />
     <ClInclude Include="src\PtclLst.h" />
     <ClInclude Include="src\Random.h" />
     <ClInclude Include="src\Resource.h" />
