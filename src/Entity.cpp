@@ -5,6 +5,8 @@
 #include "ObjLst.h"
 #include "Shash.h"
 #include "Player.h"
+#include "Random.h"
+#include "GameSeq.h"
 
 #include "Entity.h"
 
@@ -241,6 +243,29 @@ bool Entity::check_kill_by_player(std::function<void(int32_t i)> cb) const
     }
   }
   return kill_by_player;
+}
+
+const Player* Entity::check_kill_by_player_random() const
+{
+  if (!m_hit_mask.check(HitMask::PlayerAll)) return nullptr;
+
+  int32_t hit[Entity_PLAYER_MAX] = {};
+  int32_t pt = 0;
+  auto cbfunc = [&pt, &hit](int32_t idx) {
+    hit[pt++] = idx;
+  };
+  if (this->check_kill_by_player(cbfunc)) {
+    if (pt > 0) {
+      auto r = (pt==1)?0 : rng::rand_int(pt - 1); //1体だとrandomしない
+      return GameSeq::inst().get_player_entity(hit[r]);
+    } else {
+      FW_ASSERT(0);
+    }
+  } else {
+    FW_ASSERT(0);
+  }
+
+  return nullptr;
 }
 
 template<>

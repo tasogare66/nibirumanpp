@@ -2,6 +2,8 @@
 
 #include "Random.h"
 #include "ConstParam.h"
+#include "GameSeq.h"
+#include "Player.h"
 
 #include "Human.h"
 
@@ -10,6 +12,7 @@ Human::Human(const EntityArgs& args)
 {
   m_flag.on(EntityFlag::Ally);
   m_colli_attr.reset();
+  m_score = 1000;
 }
 
 Human::~Human()
@@ -52,9 +55,13 @@ void Human::upd_ene(float dt)
 
 void Human::dead()
 {
-//GAME:add_score(self.score)
-//GAME : reduceDiff(30)
-//GAME.pl : add_armslv()
-//ObjLstA : add(self.pos.x, self.pos.y, Pop2D)
-//psfx(6, 'E-4', 20, 3)
+  if (const auto* p = this->check_kill_by_player_random()) {
+    GameSeq::add_score(p->get_index(), m_score);
+    GameSeq::inst().reduceDiff(30);
+    //GAME.pl : add_armslv()
+    //ObjLstA : add(self.pos.x, self.pos.y, Pop2D)
+    //psfx(6, 'E-4', 20, 3)
+  } else {
+    FW_ASSERT(0);
+  }
 }

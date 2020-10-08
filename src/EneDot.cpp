@@ -25,23 +25,8 @@ void EneDot::init()
 
 void EneDot::update(float dt)
 {
-  if (!m_capture_pl && m_hit_mask.check(HitMask::PlayerAll)) {
-    //capture設定
-    int32_t hit[Entity_PLAYER_MAX] = {};
-    int32_t pt = 0;
-    auto cbfunc = [&pt,&hit](int32_t idx) {
-      hit[pt++] = idx;
-    };
-    if (this->check_kill_by_player(cbfunc)) {
-      if (pt > 0) {
-        auto r = rng::rand_int(pt-1);
-        m_capture_pl = GameSeq::inst().get_player_entity( hit[r] );
-      } else {
-        FW_ASSERT(0);
-      }
-    } else {
-      FW_ASSERT(0);
-    }
+  if (!m_capture_pl) {
+    m_capture_pl = this->check_kill_by_player_random();
   }
 
   if (m_capture_pl) {
