@@ -45,11 +45,15 @@ int32_t GameSeq::decide_target_index() const
   return rng::rand_int(static_cast<int32_t>(m_pl_entities.size())-1,rng::Type::GAME);
 }
 
-const Player* GameSeq::get_player_entity(uint32_t player_index) const
+Player* GameSeq::get_player_entity_w(uint32_t player_index) const
 {
   if (player_index < m_pl_entities.size()) return m_pl_entities[player_index];
   FW_ASSERT(0);
   return nullptr;
+}
+
+const Player* GameSeq::get_player_entity(uint32_t player_index) const {
+  return this->get_player_entity_w(player_index);
 }
 
 const std::vector<Player*>& GameSeq::get_player_entities() const {

@@ -247,7 +247,7 @@ bool Entity::check_kill_by_player(std::function<void(int32_t i)> cb) const
   return kill_by_player;
 }
 
-const Player* Entity::check_kill_by_player_random() const
+Player* Entity::check_kill_by_player_random() const
 {
   if (!m_hit_mask.check(HitMask::PlayerAll)) return nullptr;
 
@@ -259,7 +259,7 @@ const Player* Entity::check_kill_by_player_random() const
   if (this->check_kill_by_player(cbfunc)) {
     if (pt > 0) {
       auto r = (pt==1)?0 : rng::rand_int(pt - 1); //1体だとrandomしない
-      return GameSeq::inst().get_player_entity(hit[r]);
+      return GameSeq::inst().get_player_entity_w(hit[r]);
     } else {
       FW_ASSERT(0);
     }

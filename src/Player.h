@@ -21,6 +21,7 @@ public:
   }
 
   auto get_product_colli_attr() const { return m_product_colli_attr; }
+  void add_armslv();
 
 private:
   bool is_dash() const { return (m_dashst != 0); }
@@ -35,12 +36,14 @@ private:
   bool check_dead();
   void set_invincible();
   void upd_invincible(float dt);
+  void upd_armslv(float dt);
 
   const int32_t m_index; //player index
   int32_t m_shot_repeat = 0;
   float m_invincible_time = 0.f;
   float m_capradius = 20.0f;
-  int32_t m_armslv = 0;
+  uint8_t m_armslv = 0;
+  float m_armstime = 0.0f;
   const Entity* m_reticle = nullptr;
   float m_elp = 0.0f;
   uint32_t m_animcnt = 0;

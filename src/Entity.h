@@ -101,7 +101,7 @@ public:
 
   bool check_kill_by_generated_player(std::function<void(int32_t)> cb) const;
   bool check_kill_by_player(std::function<void(int32_t)> cb) const;
-  const Player* check_kill_by_player_random() const;
+  Player* check_kill_by_player_random() const;
 
   template<typename T>
   const T* cast_to() const;

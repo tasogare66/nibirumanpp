@@ -7,7 +7,7 @@ namespace fw {
 
   static constexpr float DEG2RAD = static_cast<float>(M_PI / 180);
   static constexpr float RAD2DEG = static_cast<float>(180 / M_PI);
-  inline float deg2rad(float deg) {
+  inline constexpr float deg2rad(float deg) {
     return deg * DEG2RAD;
   }
   inline float rad2deg(float rad) {

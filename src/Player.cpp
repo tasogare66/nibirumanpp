@@ -35,7 +35,7 @@ void Player::update(float dt)
   m_animdir |= ((chara_dir.y < 0) ? 2 : 0);
   if (this->check_dead()) return;
   this->upd_invincible(dt);
-  //self : upd_armslv(dt)
+  this->upd_armslv(dt);
 
   Vec2f v;
   const auto& inputm = Input::inst();
@@ -123,12 +123,14 @@ void Player::update(float dt)
       const auto d = v.magnitude();
       if (d > const_param::EPSILON) {
         v /= d;
-        new PlBullet(m_pos+v*4.f, v, this);
+        auto mzl = m_pos + v*4.f;
+        new PlBullet(mzl, v, this);
         if (m_armslv >= 1) {
-          //	local ang = math.rad(20)
-          //	local c, s = cos(ang), sin(ang)
-          //	ObjLstA:add(self.pos.x, self.pos.y, PlBullet, { dir = Vec2.new(v.x * c - v.y * s,v.y * c + v.x * s) })
-          //	ObjLstA : add(self.pos.x, self.pos.y, PlBullet, { dir = Vec2.new(v.x * c + v.y * s,v.y * c - v.x * s) })
+          constexpr auto ang = fw::deg2rad(20.f);
+          auto c = std::cos(ang);
+          auto s = std::sin(ang);
+          new PlBullet(mzl, Vec2f(v.x * c - v.y * s, v.y * c + v.x * s), this);
+          new PlBullet(mzl, Vec2f(v.x * c + v.y * s, v.y * c - v.x * s), this);
         }
         //	psfx(3, 'C-3', 9, 0)
         constexpr int32_t shot_repeat_cnt[] = { 4, 6, 5 };
@@ -188,5 +190,20 @@ void Player::upd_invincible(float dt)
       m_flag.off(EntityFlag::Invincible);
     }
     m_invincible_time += dt;
+  }
+}
+
+void Player::add_armslv()
+{
+  m_armslv = std::min(m_armslv + 1, 3);
+  m_armstime = 18.0f;
+}
+
+void Player::upd_armslv(float dt)
+{
+  if (m_armstime > 0.0f) {
+    m_armstime -= dt;
+  } else {
+    m_armslv = 0;
   }
 }

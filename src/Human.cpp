@@ -56,12 +56,11 @@ void Human::upd_ene(float dt)
 
 void Human::dead()
 {
-  if (const auto* p = this->check_kill_by_player_random()) {
-    GameSeq::add_score(p->get_index(), m_score);
+  if (auto* player = this->check_kill_by_player_random()) {
+    GameSeq::add_score(player->get_index(), m_score);
     GameSeq::inst().reduceDiff(30);
-    //GAME.pl : add_armslv()
+    player->add_armslv();
     new Pop2D(m_pos);
-    //ObjLstA : add(self.pos.x, self.pos.y, Pop2D)
     //psfx(6, 'E-4', 20, 3)
   } else {
     FW_ASSERT(0);
