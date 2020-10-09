@@ -212,7 +212,7 @@ void ObjLst::upd_reciprocal()
     );
   }
 
-  // force
+  // force vs enemy
   for (const auto *f : m_forces) {
     const auto& aabb0 = f->get_aabb0();
     float r2 = f->get_radius() * 2.f;

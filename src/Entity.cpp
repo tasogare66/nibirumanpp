@@ -78,7 +78,7 @@ void Entity::attr_spawned()
 {
   FW_ASSERT(not m_flag.check(EntityFlag::Spawned));
   m_flag.on(EntityFlag::Spawned);
-  ++ObjLst::inst().m_spawn_num;
+  ++ObjLst::inst().m_spawn_ttl;
 }
 
 void Entity::update(float dt)

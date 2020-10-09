@@ -211,6 +211,10 @@ function Spawner:registration()
     local c=tbl[lot]
     self:runco(c[1],c[2])
   end
+	if SCRSPW.ttl >= self.human_step*700 then
+		self:runco(Spawner.random_co, {t=EnemyType.HUMAN,num=3})
+		self.human_step=self.human_step+1
+	end
 end
 
 function Spawner:init()
@@ -263,6 +267,8 @@ end
 Spawner.new = function()
   local inst = setmetatable({
     lst={},
+    human_step=1,
+    boss_step=1,
   },Spawner)
   return inst
 end

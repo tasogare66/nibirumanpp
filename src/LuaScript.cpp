@@ -242,6 +242,7 @@ namespace scr
         .addConstant("ARROW", EnemyType::ARROW)
         .addConstant("ARROW2", EnemyType::ARROW2)
         .addConstant("SPHE", EnemyType::SPHE)
+        .addConstant("HUMAN", EnemyType::HUMAN)
         .endModule();
       LuaIntf::LuaBinding(m_ctx.state()).beginClass<ScrSpawner>("ScrSpawner")
         .addConstructor(LUA_ARGS())
