@@ -224,3 +224,32 @@ void EneSphe::upd_ene(float dt)
     m_mov = m_pos.rotate(rad) - m_pos;
   }
 }
+
+//boss bullet
+BossBullet::BossBullet(const EntityArgs& args)
+  : Enemy(args, 336)
+  , m_speed(50.f)
+{
+  m_dir = args.m_dir;
+  m_dir.normalize();
+}
+
+void BossBullet::init()
+{
+  this->attr_ene_bullet();
+  this->spr8x8(m_spr_ene);
+}
+
+void BossBullet::update(float dt)
+{
+  m_mov = m_dir * m_speed * dt;
+  auto s = static_cast<uint32_t>(m_elapsed / (const_param::FRAME2SEC * 8)) % 3;
+  this->spr8x8(m_spr_ene + s);
+  m_elapsed += dt;
+}
+
+bool BossBullet::hit_wall(const Vec2f&)
+{
+  this->del();
+  return true;
+}

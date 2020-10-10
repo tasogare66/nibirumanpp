@@ -65,7 +65,7 @@ public:
   virtual void init() {}
   virtual void update(float dt);
   virtual void draw(sf::RenderWindow& window);
-  virtual bool hit_wall(const Vec2f&) { return false; } //true�̏ꍇrepulse�Ȃ�
+  virtual bool hit_wall(const Vec2f&) { return false; } //trueの場合repulse行わない
   virtual void hitcb(const Entity*, const Vec2f&, float) {}
   virtual void hitcb_w(Entity*, const Vec2f&, float) const {}
   virtual void dead() {}

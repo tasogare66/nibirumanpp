@@ -52,7 +52,7 @@ class EneArrow : public Enemy {
 public:
   EneArrow(const EntityArgs& args, uint32_t spr_ene);
   EneArrow(const EntityArgs& args) : EneArrow(args, 368){}
-  ~EneArrow() = default;
+  virtual ~EneArrow() = default;
 protected:
   void appear() override;
   void upd_ene(float dt) override;
@@ -80,5 +80,17 @@ private:
   void upd_ene(float dt) override;
   float m_rotr;
   float m_rdir = 1.f;
+  float m_speed;
+};
+
+class BossBullet : public Enemy {
+public:
+  BossBullet(const EntityArgs& args);
+  virtual ~BossBullet() = default;
+protected:
+  void init() override;
+  void update(float dt) override;
+  bool hit_wall(const Vec2f& dir) override;
+  Vec2f m_dir;
   float m_speed;
 };
