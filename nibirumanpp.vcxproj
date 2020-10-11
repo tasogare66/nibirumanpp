@@ -112,6 +112,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\App.cpp" />
+    <ClCompile Include="src\Boss.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\DwGui.cpp" />
     <ClCompile Include="src\EneDot.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="external\imgui\imconfig.h" />
     <ClInclude Include="external\imgui\imgui.h" />
     <ClInclude Include="src\App.h" />
+    <ClInclude Include="src\Boss.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\ConstParam.h" />
     <ClInclude Include="src\DwGui.h" />

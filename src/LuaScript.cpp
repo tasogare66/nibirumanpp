@@ -18,6 +18,7 @@
 #include "GameSeq.h"
 #include "Player.h"
 #include "Human.h"
+#include "Boss.h"
 
 #include "LuaScript.h"
 
@@ -243,6 +244,7 @@ namespace scr
         .addConstant("ARROW2", EnemyType::ARROW2)
         .addConstant("SPHE", EnemyType::SPHE)
         .addConstant("HUMAN", EnemyType::HUMAN)
+        .addConstant("BOSS_BABY", EnemyType::BOSS_BABY)
         .endModule();
       LuaIntf::LuaBinding(m_ctx.state()).beginClass<ScrSpawner>("ScrSpawner")
         .addConstructor(LUA_ARGS())
