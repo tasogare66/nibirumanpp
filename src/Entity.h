@@ -30,11 +30,12 @@ struct EntityArgs {
 
 enum class EntityFlag : uint32_t {
   Del = 1 << 0,
-  AttrVerlet = 1 << 1,
-  Ally = 1 << 2,
-  Invincible = 1 << 3,
-  HaveDot = 1 << 4,
-  Spawned = 1 << 5,
+  Suicide = 1 << 1,
+  AttrVerlet = 1 << 2,
+  Ally = 1 << 3,
+  Invincible = 1 << 4,
+  HaveDot = 1 << 5,
+  Spawned = 1 << 6,
 };
 enum class HitMask : uint32_t {
   Enemy = 1 << 0,
@@ -118,6 +119,10 @@ protected:
     m_vel = ivel;
   }
   void del() { m_flag.on(EntityFlag::Del); }
+  void suiside() {
+    constexpr auto flg = fw::underlying_cast(EntityFlag::Del) | fw::underlying_cast(EntityFlag::Suicide);
+    m_flag.on(static_cast<EntityFlag>(flg));
+  }
   void spr8x8(uint32_t id, uint16_t w=1, uint16_t h=1);
 
   EntityType m_type=EntityType::None;

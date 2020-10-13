@@ -18,6 +18,9 @@ public:
   void upd_ene(float dt) override;
   void draw(sf::RenderWindow& window) override;
 private:
+  void arms0(float t, int32_t num=10, float ofs=0.0f);
+
   sf::CircleShape m_circle;
   sf::Sprite m_spr_body;
+  float m_arms_timer = 0.0f;
 };

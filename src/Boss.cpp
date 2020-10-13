@@ -3,6 +3,7 @@
 #include "ConstParam.h"
 #include "Resource.h"
 #include "PtclLst.h"
+#include "Random.h"
 
 #include "Boss.h"
 
@@ -49,6 +50,9 @@ void BossBaby::update(float dt)
 
 void BossBaby::upd_ene(float dt)
 {
+  m_arms_timer += dt;
+
+  this->arms0(0.2f);
 }
 
 void BossBaby::draw(sf::RenderWindow& window)
@@ -57,4 +61,21 @@ void BossBaby::draw(sf::RenderWindow& window)
 
     m_circle.setOrigin(-m_pos.x + m_radius, -m_pos.y + m_radius);
   window.draw(m_circle);
+}
+
+
+void BossBaby::arms0(float t, int32_t num, float ofs)
+{
+  ofs = rng::randf(ofs);
+  if (m_arms_timer > t) {
+    float radius = m_radius + 3.0f;
+    float rad_step = 2.0f * static_cast<float>(M_PI) / num;
+    for (int32_t i = 0; i < num; ++i) {
+      auto rad = rad_step * i + ofs;
+      auto c = std::cos(rad);
+      auto s = std::sin(rad);
+      new BossBullet(EntityArgs(Vec2f(m_pos.x+c*radius, m_pos.y+s*radius), Vec2f(c,s)));
+    }
+    m_arms_timer = fmod(m_arms_timer,t);
+  }
 }

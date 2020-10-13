@@ -90,6 +90,7 @@ public:
 protected:
   void init() override;
   void update(float dt) override;
+  void upd_ene(float) override {}
   bool hit_wall(const Vec2f& dir) override;
   Vec2f m_dir;
   float m_speed;

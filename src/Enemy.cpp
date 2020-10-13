@@ -44,7 +44,7 @@ void Enemy::dead()
     }
     PtclLst::add(m_pos, 15);
   } else {
-    FW_ASSERT(0);
+    FW_ASSERT(m_flag.check(EntityFlag::Suicide));
   }
 }
 
@@ -250,6 +250,6 @@ void BossBullet::update(float dt)
 
 bool BossBullet::hit_wall(const Vec2f&)
 {
-  this->del();
+  this->suiside();
   return true;
 }
