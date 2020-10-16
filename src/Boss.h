@@ -1,5 +1,8 @@
 ﻿#pragma once
 #include "Enemy.h"
+namespace scr {
+class ILuaScript;
+}
 
 class Boss : public Enemy {
 public:
@@ -20,6 +23,7 @@ public:
 private:
   void arms0(float t, int32_t num=10, float ofs=0.0f);
 
+  scr::ILuaScript* m_script=nullptr;
   sf::CircleShape m_circle;
   sf::Sprite m_spr_body;
   float m_arms_timer = 0.0f;

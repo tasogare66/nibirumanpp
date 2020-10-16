@@ -1,6 +1,7 @@
 ﻿#pragma once
 enum class EnemyType;
 struct EntityArgs;
+class Boss;
 
 namespace scr
 {
@@ -17,4 +18,6 @@ namespace scr
 
   // 敵生成用
   ILuaScript* create_lua_enemy_spawner();
+  // boss用
+  ILuaScript* create_lua_boss_sequence(std::string_view in_co_str, Boss* boss);
 }

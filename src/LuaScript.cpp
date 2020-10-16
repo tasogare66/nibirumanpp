@@ -113,7 +113,9 @@ namespace scr
 
   protected:
     virtual void bind() = 0;
-    virtual void update(float dt) = 0;
+    virtual void update(float dt) {
+      static_cast<void>(dt);
+    }
 
   private:
     void bind_base()
@@ -253,12 +255,100 @@ namespace scr
         .addProperty("ttl", &ScrSpawner::get_spawn_ttl)
         .endClass();
     }
-    virtual void update(float dt) override {
-    }
   };
   // 敵生成用のlua script作成
   ILuaScript* create_lua_enemy_spawner()
   {
     return new LuaEnemySpawner();
+  }
+
+
+  class LuaBossSequence : public LuaScriptBase {
+  public:
+    LuaBossSequence(std::string_view in_co_str, Boss* in_boss)
+      : LuaScriptBase(in_co_str.data())
+      , m_boss(in_boss)
+    {
+      // コンストラクタでセットアップ
+      this->load_and_setup("boss0.lua");
+    }
+    virtual ~LuaBossSequence() = default;
+
+  private:
+    virtual void bind() override
+    {
+#if 0
+      LuaBinding(m_ctx.state()).beginModule("boss")
+        // local_position取得
+        .addFunction("get_local_position", [this]() {
+        return std::move(this->get_local_position());
+      })
+        // local_positionに加算
+        .addFunction("add_local_position", [this](float in_x, float in_y, float in_z) {
+        auto add_pos = fw::Vector3(in_x, in_y, in_z);
+        m_boss->SetLocalPos(m_boss->GetLocalPos() + add_pos);
+        if (m_boss->p_cmp) {
+          m_boss->p_cmp->add_position(add_pos);
+        }
+      })
+        // local_positionを設定
+        .addFunction("lerp_local_position", [this](float t, float st_x, float st_y, float st_z, float ed_x, float ed_y, float ed_z) {
+        auto st = fw::Vector3(st_x, st_y, st_z);
+        auto ed = fw::Vector3(ed_x, ed_y, ed_z);
+        t = fw::clamp(t, 0.0f, 1.0f);
+        auto cur = lerp(t, st, ed);
+        m_boss->SetLocalPos(cur);
+        if (m_boss->p_cmp) {
+          m_boss->p_cmp->set_position(cur);
+        }
+      })
+        // targetのposition取得
+        .addFunction("get_target_position", [this]() {
+        const auto* tgt = gm::EnemyCommonKnowledge::singleton().get_target();
+        if (tgt) {
+          const auto& lp = tgt->m_position;
+          std::tuple<float, float, float> ret = std::make_tuple(lp.getX(), lp.getY(), lp.getZ());
+          return std::move(ret);
+        }
+        return std::move(this->get_local_position()); // 取れない場合は自分の位置
+      })
+        // vitalの取得
+        .addFunction("get_vital", [this]() {
+        return m_boss->get_vital();
+      })
+        // velocityの取得
+        .addFunction("get_velocity", [this]() {
+        const auto& v = m_boss->get_velocity();
+        std::tuple<float, float, float> ret = std::make_tuple(v.getX(), v.getY(), v.getZ());
+        return std::move(ret);
+      })
+        // 向きたい向きの設定
+        .addFunction("set_req_forward", [this](float in_x, float in_y, float in_z) {
+        auto dir = fw::Vector3(in_x, in_y, in_z);
+        m_boss->set_req_forward(dir);
+      })
+        // (回転時の)角速度の設定
+        .addFunction("set_angular_velocity", [this](float in_deg) {
+        m_boss->set_angular_velocity(in_deg);
+      })
+        // 武器の使用
+        .addFunction("use_arms", [this](int id) {
+        m_boss->use_arms(id);
+      })
+        .addProperty("dt", [this]() { return m_dt; })
+        .endModule();
+#endif
+    }
+  private:
+    //std::tuple<float, float, float> get_local_position() const {
+    //  const auto& lp = m_boss->GetLocalPos();
+    //  return std::move(std::make_tuple(lp.getX(), lp.getY(), lp.getZ()));
+    //}
+    Boss* m_boss = nullptr;
+  };
+  // boss用のlua script作成
+  ILuaScript* create_lua_boss_sequence(std::string_view in_co_str, Boss* boss)
+  {
+    return new LuaBossSequence(in_co_str, boss);
   }
 }

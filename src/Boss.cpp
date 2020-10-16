@@ -4,6 +4,7 @@
 #include "Resource.h"
 #include "PtclLst.h"
 #include "Random.h"
+#include "LuaScript.h"
 
 #include "Boss.h"
 
@@ -27,6 +28,8 @@ BossBaby::BossBaby(const EntityArgs& args)
   m_circle.setFillColor(sf::Color(0));
   m_circle.setOutlineThickness(0.5f);
   m_circle.setOutlineColor(const_param::ticcol(9));
+  //script
+  m_script = scr::create_lua_boss_sequence(std::string_view("update_baby"), this);
 }
 
 void BossBaby::appear()
@@ -53,6 +56,10 @@ void BossBaby::upd_ene(float dt)
   m_arms_timer += dt;
 
   this->arms0(0.2f);
+
+  if (m_script) {
+    m_script->exec(dt);
+  }
 }
 
 void BossBaby::draw(sf::RenderWindow& window)
