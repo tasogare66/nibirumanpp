@@ -46,7 +46,9 @@ void ForceF::hitcb_w(Entity* o, const Vec2f& dir, float d) const
     o->on_hit_mask(m_colli_attr);
     o->sub_health_dmg(static_cast<int32_t>(m_health * o->get_exp_resi()));
   } else {
-    o->add_vel_force(dir / d * 2.f);
+    if (not o->get_flag().check(EntityFlag::IgnoreForceAddVel)) {
+      o->add_vel_force(dir / d * 2.f);
+    }
   }
 }
 

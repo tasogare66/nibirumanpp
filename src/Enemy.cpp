@@ -230,6 +230,7 @@ BossBullet::BossBullet(const EntityArgs& args)
   : Enemy(args, 336)
   , m_speed(50.f)
 {
+  m_flag.on(EntityFlag::IgnoreForceAddVel);
   m_dir = args.m_dir;
   m_dir.normalize();
 }

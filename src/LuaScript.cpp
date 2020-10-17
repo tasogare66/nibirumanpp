@@ -239,14 +239,14 @@ namespace scr
     virtual void bind() override {
 
       LuaBinding(m_ctx.state()).beginModule("EnemyType")
-        .addConstant("SNAKE", EnemyType::SNAKE)
-        .addConstant("GRUNT", EnemyType::GRUNT)
-        .addConstant("HULK", EnemyType::HULK)
-        .addConstant("ARROW", EnemyType::ARROW)
-        .addConstant("ARROW2", EnemyType::ARROW2)
-        .addConstant("SPHE", EnemyType::SPHE)
-        .addConstant("HUMAN", EnemyType::HUMAN)
-        .addConstant("BOSS_BABY", EnemyType::BOSS_BABY)
+#undef ENEMY_TYPE_DECL
+#define ENEMY_TYPE_DECL(_id,_cls)	.addConstant(#_id, EnemyType::_id)
+
+#include "EnemyType.h"
+
+#undef ENEMY_TYPE_DECL
+        //.addConstant("SNAKE", EnemyType::SNAKE)
+        //.addConstant("GRUNT", EnemyType::GRUNT)
         .endModule();
       LuaIntf::LuaBinding(m_ctx.state()).beginClass<ScrSpawner>("ScrSpawner")
         .addConstructor(LUA_ARGS())

@@ -36,6 +36,7 @@ enum class EntityFlag : uint32_t {
   Invincible = 1 << 4,
   HaveDot = 1 << 5,
   Spawned = 1 << 6,
+  IgnoreForceAddVel = 1 << 7, //forceで力加えない
 };
 enum class HitMask : uint32_t {
   Enemy = 1 << 0,
