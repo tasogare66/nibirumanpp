@@ -13,6 +13,20 @@ Boss::Boss(const EntityArgs& args, uint32_t spr_ene)
 {
 }
 
+Vec2f Boss::get_dir(Vec2f tgt) {
+  auto dir = tgt - m_pos;
+  auto len = dir.magnitude();
+  if (len > const_param::EPSILON) {
+    return dir / len;
+  }
+  return dir;
+}
+
+void Boss::move_to(float px,float py,float spd)
+{
+  m_mov += this->get_dir({ px,py }) * spd * m_dt;
+}
+
 //level_0
 BossBaby::BossBaby(const EntityArgs& args)
   : Boss(args, 328)
@@ -30,6 +44,7 @@ BossBaby::BossBaby(const EntityArgs& args)
   m_circle.setOutlineColor(const_param::ticcol(9));
   //script
   m_script = scr::create_lua_boss_sequence(std::string_view("update_baby"), this);
+  m_script->reset_thread();
 }
 
 void BossBaby::appear()
@@ -39,6 +54,7 @@ void BossBaby::appear()
 
 void BossBaby::update(float dt)
 {
+  this->update_dt(dt);
   Enemy::update(dt);
   //self:upd_blink(dt)
     //self.animcnt = (self.elapsed//(FRAME2SEC*20)%2)
@@ -70,6 +86,18 @@ void BossBaby::draw(sf::RenderWindow& window)
   window.draw(m_circle);
 }
 
+void BossBaby::use_arms(int type, const LuaIntf::LuaRef& tbl)
+{
+  switch (type) {
+  case 0:
+    {
+    }
+    break;
+  default:
+    FW_ASSERT(0);
+    break;
+  }
+}
 
 void BossBaby::arms0(float t, int32_t num, float ofs)
 {

@@ -437,6 +437,12 @@ function randi_range(l,r)
   return l+GAME.randomi(r-l);
 end
 
+function get_tgt_pos(id)
+  id = id or GAME.decide_target_index()
+  return GAME.get_target_position(id) --px,py
+end
+
+
 function table.clone(org)
   local copy={}
   for orig_key, orig_value in pairs(org) do

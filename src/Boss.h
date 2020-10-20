@@ -1,5 +1,8 @@
 ﻿#pragma once
 #include "Enemy.h"
+namespace LuaIntf {
+class LuaRef;
+}
 namespace scr {
 class ILuaScript;
 }
@@ -8,8 +11,14 @@ class Boss : public Enemy {
 public:
   Boss(const EntityArgs& args, uint32_t spr_ene=0);
   virtual ~Boss() = default;
+
+  virtual void move_to(float px, float py, float spd);
+  virtual void use_arms(int type, const LuaIntf::LuaRef& tbl) {}
 protected:
+  void update_dt(float dt) { m_dt = dt; }
+  Vec2f get_dir(Vec2f tgt);
   int32_t m_health_max=1;
+  float m_dt=1.0f/60.0f;
 };
 
 class BossBaby final : public Boss {
@@ -20,6 +29,8 @@ public:
   void update(float dt) override;
   void upd_ene(float dt) override;
   void draw(sf::RenderWindow& window) override;
+
+  void use_arms(int type, const LuaIntf::LuaRef& tbl) override;
 private:
   void arms0(float t, int32_t num=10, float ofs=0.0f);
 
