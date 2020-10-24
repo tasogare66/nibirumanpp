@@ -11,6 +11,9 @@ public:
 protected:
   virtual void appear() {}
   virtual void upd_ene(float dt) = 0;
+  void set_blink() {} //FIXME:  
+  void upd_blink(float dt) {} //FIXME:  
+  bool is_blink() const { return false; } //FIXME:  
   bool m_appear_flag = true;
   float m_elapsed = 0.0f;
   uint32_t m_spr_ene = Entity::m_dummy_spr_id;

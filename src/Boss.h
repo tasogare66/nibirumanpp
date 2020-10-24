@@ -29,6 +29,7 @@ public:
   void update(float dt) override;
   void upd_ene(float dt) override;
   void draw(sf::RenderWindow& window) override;
+  void dead() override;
 
   void use_arms(int type, const LuaIntf::LuaRef& tbl) override;
 private:
@@ -38,4 +39,6 @@ private:
   sf::CircleShape m_circle;
   sf::Sprite m_spr_body;
   float m_arms_timer = 0.0f;
+  Vec2f m_dspofs;
+  uint32_t m_animcnt=0;
 };

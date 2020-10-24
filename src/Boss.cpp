@@ -5,6 +5,9 @@
 #include "PtclLst.h"
 #include "Random.h"
 #include "LuaScript.h"
+#include "Camera.h"
+#include "GameUtil.h"
+#include "EneDot.h"
 
 #include "Boss.h"
 
@@ -56,11 +59,11 @@ void BossBaby::update(float dt)
 {
   this->update_dt(dt);
   Enemy::update(dt);
-  //self:upd_blink(dt)
-    //self.animcnt = (self.elapsed//(FRAME2SEC*20)%2)
-    //  if (self.elapsed//(FRAME2SEC*14)%2==0) then --random offset
-    //	self.dspofs:Set(2 - random(4), 2 - random(4))
-    //	end
+  this->upd_blink(dt);
+  m_animcnt = static_cast<uint32_t>(m_elapsed/const_param::FRAME2SEC*20)%2;
+  if (static_cast<uint32_t>(m_elapsed/(const_param::FRAME2SEC*14))%2==0) { //random offset
+    m_dspofs.set(rng::range(-2.f, 2.f), rng::range(-2.f, 2.f));
+  }
   if (m_appear_flag) {
     PtclLst::add_sqr(m_pos, 2, m_radius+6.0f);
     //if self.elapsed//FRAME2SEC%20==0 then psfx(11,'A-4',20,3) end
@@ -81,9 +84,35 @@ void BossBaby::upd_ene(float dt)
 void BossBaby::draw(sf::RenderWindow& window)
 {
   if (m_appear_flag) return;
+  //local p = self.pos + cam
+  //local p2 = p - Vec2.new(self.radius, self.radius)
+  if (this->is_blink()) {
+    this->spr8x8(332, 4, 4);
+    this->Enemy::draw(window);
+  } else {
+    this->spr8x8(m_spr_ene, 4, 4);
+    this->Enemy::draw(window);
 
-    m_circle.setOrigin(-m_pos.x + m_radius, -m_pos.y + m_radius);
+    auto p2 = m_pos + m_dspofs;
+    this->spr8x8(392+ m_animcnt * 4, 4, 4);
+    m_spr.setPosition(p2);
+    window.draw(m_spr);
+  }
+
+  m_circle.setOrigin(-m_pos.x + m_radius, -m_pos.y + m_radius);
   window.draw(m_circle);
+}
+
+void BossBaby::dead()
+{
+  auto num = 300;
+  gmutil::random_circle(num, 0.0f, 70.0f, [this](Vec2f p) { new EneDot(m_pos+p); });
+  gmutil::random_circle(4, 0.0f, m_radius, [this](Vec2f p) { PtclLst::add(m_pos+p, 6); });
+  gmutil::random_circle(6, 3.0f, m_radius*2, [this](Vec2f p) { PtclLst::add(m_pos + p, 15); });
+  Camera::inst().req_shake(2.0f);
+  Enemy::dead();
+  //psfx(5, 'F-3', 30, 3)
+  //GAME.boss = nil
 }
 
 void BossBaby::use_arms(int type, const LuaIntf::LuaRef& tbl)
