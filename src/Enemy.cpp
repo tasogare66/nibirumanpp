@@ -48,6 +48,14 @@ void Enemy::dead()
   }
 }
 
+void Enemy::set_blink()
+{
+  if (m_blink <= 0.f) {
+    m_blink = m_blinktm;
+    //psfx(10, 'C-7', 30, 2)
+  }
+}
+
 //enemy snake
 EneSnake::EneSnake(const EntityArgs& args)
   : Enemy(args, 274)
@@ -116,9 +124,13 @@ void EneHulk::appear()
 
 void EneHulk::upd_ene(float dt)
 {
-  //self:upd_blink(dt)
-  auto s = static_cast<uint32_t>(m_elapsed / (const_param::FRAME2SEC * 8)) % 2;
-  this->spr8x8(m_spr_ene + m_animdir * 2 + s);
+  this->upd_blink(dt);
+  if (this->is_blink()) {
+    this->spr8x8(m_common_blink_spr);
+  } else {
+    auto s = static_cast<uint32_t>(m_elapsed / (const_param::FRAME2SEC * 8)) % 2;
+    this->spr8x8(m_spr_ene + m_animdir * 2 + s);
+  }
 
   const auto* tgt = GameSeq::inst().get_player_for_enemy();
   Vec2f dir;
@@ -215,9 +227,13 @@ void EneSphe::appear()
 
 void EneSphe::upd_ene(float dt)
 {
-  //self:upd_blink(dt)
-  auto s = static_cast<uint32_t>(m_elapsed / (const_param::FRAME2SEC * 4)) % 2;
-  this->spr8x8(m_spr_ene + s); //FIXME:移動向きでsprite変えていない  
+  this->upd_blink(dt);
+  if (this->is_blink()) {
+    this->spr8x8(m_common_blink_spr);
+  } else {
+    auto s = static_cast<uint32_t>(m_elapsed / (const_param::FRAME2SEC * 4)) % 2;
+    this->spr8x8(m_spr_ene + s); //FIXME:移動向きでsprite変えていない  
+  }
 
   if (m_rotr > const_param::EPSILON) {
     auto rad = m_speed * dt / m_rotr * m_rdir;

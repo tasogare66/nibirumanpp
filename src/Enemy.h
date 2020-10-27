@@ -11,12 +11,15 @@ public:
 protected:
   virtual void appear() {}
   virtual void upd_ene(float dt) = 0;
-  void set_blink() {} //FIXME:  
-  void upd_blink(float dt) {} //FIXME:  
-  bool is_blink() const { return false; } //FIXME:  
+  virtual void set_blink() override;
+  void upd_blink(float dt) { if (m_blink > 0.f) { m_blink -= dt; } }
+  bool is_blink() const { return (m_blink >= m_blinktm / 2.f); }
   bool m_appear_flag = true;
   float m_elapsed = 0.0f;
+  float m_blink = 0.0f;
+  static constexpr float m_blinktm = 0.08f;
   uint32_t m_spr_ene = Entity::m_dummy_spr_id;
+  static constexpr uint32_t m_common_blink_spr = 267;
 };
 
 class EneSnake : public Enemy {
