@@ -16,6 +16,7 @@ public:
   virtual void use_arms(int type, const LuaIntf::LuaRef& tbl) {}
 protected:
   void update_dt(float dt) { m_dt = dt; }
+  void upd_ene_base(float dt) { m_elapsed += dt; }
   Vec2f get_dir(Vec2f tgt);
   int32_t m_health_max=1;
   float m_dt=1.0f/60.0f;

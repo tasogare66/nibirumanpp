@@ -414,6 +414,8 @@ matrix.symbol = symbol
 
 
 -- utility
+FRAME2SEC=1/60
+
 function matrix_roty(deg)
 	-- identity matrix with size 4x4
 	local m = matrix (3,"I")

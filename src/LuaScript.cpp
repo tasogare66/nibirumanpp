@@ -4,10 +4,8 @@
 #pragma warning( push )
 #pragma warning( disable : 4100 )
 #pragma warning( disable : 4189 )
-
 #include <lua.hpp>
 #include <LuaIntf/LuaIntf.h>
-
 #pragma warning( pop )
 
 #include "Random.h"
@@ -322,9 +320,8 @@ namespace scr
       //})
         .addFunction("move_to", [this](float px, float py, float spd) { m_boss->move_to(px,py,spd); })
         // 武器の使用
-        .addFunction("use_arms", [this](int id, LuaRef tbl) {
-        //m_boss->use_arms(id);
-      }, LUA_ARGS(int, LuaRef))
+        .addFunction("use_arms", [this](int id, const LuaRef tbl) { m_boss->use_arms(id, tbl); }, LUA_ARGS(int, const LuaRef))
+        .addProperty("elapsed", [this]() { return m_boss->get_elapsed(); })
       //  .addProperty("dt", [this]() { return m_dt; })
         .endModule();
     }

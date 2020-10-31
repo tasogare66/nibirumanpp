@@ -1,5 +1,13 @@
 ﻿#include "stdafx.h"
 
+// warning対処
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+#pragma warning( disable : 4189 )
+#include <lua.hpp>
+#include <LuaIntf/LuaIntf.h>
+#pragma warning( pop )
+
 #include "ConstParam.h"
 #include "Resource.h"
 #include "PtclLst.h"
@@ -73,12 +81,10 @@ void BossBaby::update(float dt)
 void BossBaby::upd_ene(float dt)
 {
   m_arms_timer += dt;
-
-  this->arms0(0.2f);
-
   if (m_script) {
     m_script->exec(dt);
   }
+  this->upd_ene_base(dt);
 }
 
 void BossBaby::draw(sf::RenderWindow& window)
@@ -119,9 +125,13 @@ void BossBaby::use_arms(int type, const LuaIntf::LuaRef& tbl)
 {
   switch (type) {
   case 0:
-    {
-    }
-    break;
+  {
+    float t = tbl["t"].value<float>();
+    int32_t num = tbl.has("num") ? tbl["num"].value<int32_t>() : 10;
+    float ofs = tbl.has("ofs") ? tbl["ofs"].value<float>() : 0.0f;
+    this->arms0(t, num, ofs);
+  }
+  break;
   default:
     FW_ASSERT(0);
     break;
@@ -130,7 +140,7 @@ void BossBaby::use_arms(int type, const LuaIntf::LuaRef& tbl)
 
 void BossBaby::arms0(float t, int32_t num, float ofs)
 {
-  ofs = rng::randf(ofs);
+  ofs = fw::deg2rad(ofs);
   if (m_arms_timer > t) {
     float radius = m_radius + 3.0f;
     float rad_step = 2.0f * static_cast<float>(M_PI) / num;

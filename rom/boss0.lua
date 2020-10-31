@@ -24,13 +24,22 @@ function update_baby()
     upd_for_second(5, function()
       local px,py=get_tgt_pos(tgt)
       boss.move_to(px,py,15)
+      boss.use_arms(0, {t=0.2})
     end)
 
     upd_for_second(2)
     --self:add_vel_force(dir*3)
     upd_for_second(0.3) -- wait
     --self.arms_timer=0
-    upd_for_second(3,function() boss.move_to(0,0,50) end)
+    upd_for_second(3,function()
+      boss.move_to(0,0,50)
+      boss.use_arms(0, {t=0.2})
+    end)
+    --self.arms_timer=0
+    upd_for_second(5,function()
+      local ofs=boss.elapsed//FRAME2SEC*2
+      boss.use_arms(0,{t=0.16,num=35,ofs=ofs})
+    end)
 
   until false -- ずっと続ける
   return 1  -- c++へは、コルーチンが終了したら1を返す

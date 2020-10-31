@@ -8,6 +8,7 @@ public:
   virtual ~Enemy() = default;
   virtual void update(float dt) override;
   virtual void dead() override;
+  float get_elapsed() const { return m_elapsed; }
 protected:
   virtual void appear() {}
   virtual void upd_ene(float dt) = 0;
