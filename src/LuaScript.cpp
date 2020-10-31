@@ -276,10 +276,10 @@ namespace scr
     virtual void bind() override
     {
       LuaBinding(m_ctx.state()).beginModule("boss")
-      //  // local_position取得
-      //  .addFunction("get_local_position", [this]() {
-      //  return std::move(this->get_local_position());
-      //})
+        .addFunction("get_position", [this]() {
+        auto p = m_boss->get_pos();
+        return std::make_tuple(p.x, p.y);
+      })
       //  // local_positionに加算
       //  .addFunction("add_local_position", [this](float in_x, float in_y, float in_z) {
       //  auto add_pos = fw::Vector3(in_x, in_y, in_z);
@@ -318,6 +318,7 @@ namespace scr
       //  .addFunction("set_angular_velocity", [this](float in_deg) {
       //  m_boss->set_angular_velocity(in_deg);
       //})
+        .addFunction("add_vel_force", [this](float in_x, float in_y) { m_boss->add_vel_force(Vec2f(in_x, in_y)); })
         .addFunction("move_to", [this](float px, float py, float spd) { m_boss->move_to(px,py,spd); })
         // 武器の使用
         .addFunction("use_arms", [this](int id, const LuaRef tbl) { m_boss->use_arms(id, tbl); }, LUA_ARGS(int, const LuaRef))

@@ -12,6 +12,11 @@ function upd_for_second(sec,func)
   end
 end
 
+function get_dir(tgt)
+  local dir = tgt-Vec2.new(boss.get_position())
+  return dir:SetNormalize()
+end
+
 ------------------------------------------
 
 --
@@ -27,8 +32,9 @@ function update_baby()
       boss.use_arms(0, {t=0.2})
     end)
 
+    local dir = get_dir(Vec2.new(get_tgt_pos()))
     upd_for_second(2)
-    --self:add_vel_force(dir*3)
+    boss.add_vel_force(dir.x*3,dir.y*3)
     upd_for_second(0.3) -- wait
     --self.arms_timer=0
     upd_for_second(3,function()
