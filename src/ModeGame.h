@@ -2,6 +2,7 @@
 #include "Mode.h"
 #include "ConstParam.h"
 #include "Spawner.h"
+#include "Background.h"
 class ModeGame : public Mode {
 public:
   enum class State {
@@ -30,4 +31,5 @@ private:
   sf::CircleShape m_stg_circle;
   sf::Text m_text;
   sf::Sprite m_spr;
+  Background m_bg;
 };

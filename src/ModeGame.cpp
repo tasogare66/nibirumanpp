@@ -96,6 +96,7 @@ void ModeGame::ctrl_post()
 
 void ModeGame::draw0(sf::RenderWindow& window)
 {
+  m_bg.draw(window);
   window.draw(m_stg_circle);
 }
 

@@ -11,6 +11,7 @@ public:
   const sf::View& update_view();
   const sf::View& get_view() const { return m_view; }
   const sf::View& get_view_2d() const { return m_view_2d; }
+  Vec2f get_top_left() const { return m_view.getCenter() - m_view.getSize() / 2.0f; }
   void req_shake(float v) { m_shake = std::min(m_shake + v, 4.0f); }
   void reset() {
     m_inr_center.set(0.0f, 0.0f);

@@ -1,5 +1,7 @@
 ﻿#include "stdafx.h"
 
+#include <fstream>
+
 #include "Resource.h"
 
 Resource::Resource()
@@ -18,6 +20,13 @@ Resource::~Resource()
 {
 }
 
+inline std::vector<uint8_t> read_vector_from_file(std::string_view file_path)
+{
+  std::ifstream instream(file_path.data(), std::ios::in | std::ios::binary);
+  std::vector<uint8_t> data((std::istreambuf_iterator<char>(instream)), std::istreambuf_iterator<char>());
+  return data;
+}
+
 void Resource::setup_at_boot()
 {
   //sprite
@@ -32,6 +41,9 @@ void Resource::setup_at_boot()
   }
   //font
   if (!m_base_font.loadFromFile("rom/heavy_data.ttf")) FW_ASSERT(0);
+  //map
+  m_map = read_vector_from_file("rom/world.map");
+  FW_ASSERT(m_map.size()>0);
 }
 
 sf::IntRect Resource::get_spr_rect(uint32_t id)
