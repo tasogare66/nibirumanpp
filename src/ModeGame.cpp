@@ -16,11 +16,6 @@
 ModeGame::ModeGame(ModeType in_mode_type)
   : Mode(in_mode_type)
 {
-  constexpr auto lvrad = const_param::LvRadius;
-  m_stg_circle.setRadius(lvrad);
-  m_stg_circle.setOrigin(lvrad, lvrad);
-  m_stg_circle.setFillColor(sf::Color(0));
-  m_stg_circle.setOutlineThickness(1.f);
 }
 
 ModeGame::~ModeGame()
@@ -97,7 +92,6 @@ void ModeGame::ctrl_post()
 void ModeGame::draw0(sf::RenderWindow& window)
 {
   m_bg.draw(window);
-  window.draw(m_stg_circle);
 }
 
 void ModeGame::draw1(sf::RenderWindow& window)

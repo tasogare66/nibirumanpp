@@ -2,12 +2,20 @@
 
 #include "Camera.h"
 #include "Resource.h"
+#include "ConstParam.h"
 #include "Background.h"
 
 Background::Background()
   : m_map(Resource::inst().get_map())
 {
   m_spr.setTexture(Resource::inst().get_spr_tex());
+
+  constexpr auto lvrad = const_param::LvRadius;
+  m_stg_circle.setRadius(lvrad);
+  m_stg_circle.setOrigin(lvrad, lvrad);
+  m_stg_circle.setFillColor(sf::Color(0));
+  m_stg_circle.setOutlineThickness(0.5f);
+  m_stg_circle.setPointCount(m_stg_circle.getPointCount()*2);
 }
 
 void Background::draw(sf::RenderWindow& window)
@@ -35,6 +43,9 @@ void Background::draw(sf::RenderWindow& window)
       window.draw(m_spr, sf::BlendNone);
     }
   }
+
+  //circle
+  window.draw(m_stg_circle);
 }
 
 uint8_t Background::get_map(int32_t x, int32_t y) const
