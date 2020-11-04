@@ -149,10 +149,10 @@ void Player::update(float dt)
 void Player::draw(sf::RenderWindow& window)
 {
   auto sprid = 400 + m_animdir * 16 + m_animcnt;
-    //if self:check_flag(Flag_Invincible) and self.active then
-    //  local r = self.invincible_time // (FRAME2SEC*6)
-    //  if r % 2 == 0 then self.spr = 267 end
-    //	end
+  if (this->get_flag().check(EntityFlag::Invincible) && m_active) {
+    uint32_t r = static_cast<uint32_t>(m_invincible_time / (const_param::FRAME2SEC * 6));
+    if (r % 2 == 0) sprid = 267;
+  }
 
   this->spr8x8(sprid);
   Entity::draw(window);
