@@ -25,6 +25,18 @@ void ModeTitle::init()
 {
   //text
   m_text.setFont(Resource::inst().get_base_font());
+
+  int w = static_cast<int32_t>(const_param::SCR_WIDTH);
+  int h = static_cast<int32_t>(const_param::SCR_HEIGHT);
+  constexpr int32_t num = 2000;
+  m_p.resize(num);
+  for (auto& p:m_p) {
+    p = { rng::rand_int(w) - h, rng::rand_int(w) - h, rng::rand_int(w) };
+  }
+  //pix tex
+  m_spr.setTexture(Resource::inst().get_pix_tex());
+  m_spr.setOrigin(0.5f, 0.5f);
+  m_spr.setColor(const_param::ticcol(10));
 }
 
 void ModeTitle::dest()
@@ -73,6 +85,22 @@ void ModeTitle::ctrl_post()
 
 void ModeTitle::draw0(sf::RenderWindow& window)
 {
+  float w = const_param::SCR_WIDTH;
+  float h = const_param::SCR_HEIGHT;
+  for (auto& p :m_p) {
+    if (p.z > 0) {
+      float x = static_cast<float>(p.x) / p.z * w;
+      float y = static_cast<float>(p.y) / p.z * w;
+      //pix(x, y, 10)
+      m_spr.setPosition(x, y);
+      window.draw(m_spr);
+    }
+    auto mod = [](int x, int divisor)->int {
+      int m = x % divisor;
+      return m + (m < 0 ? divisor : 0);
+    };
+    p.z = mod(p.z, static_cast<int>(w)) - 1;
+  }
 }
 
 void ModeTitle::draw1(sf::RenderWindow& window)

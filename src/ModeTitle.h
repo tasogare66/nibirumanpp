@@ -17,4 +17,6 @@ private:
   float m_decided_time = 0.0f;
   sf::Text m_text;
   static int32_t sCURSOR;
+  std::vector<sf::Vector3i> m_p;
+  sf::Sprite m_spr;
 };
