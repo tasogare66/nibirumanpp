@@ -60,6 +60,8 @@ public:
   float getDifV(float a, float b);
   void  reduceDiff(int32_t v) { FW_ASSERT(v>0); m_diffsub += std::max(v,0); }
   bool check_game_over() const;
+  PlayerScore get_hiscore() const { return m_hiscore; }
+  void update_hiscore();
 private:
   uint32_t m_entry_num = 1;
   //game
@@ -69,4 +71,5 @@ private:
   float m_difficulty = 0.0f;
   uint64_t m_ticcnt = 0;
   int32_t m_diffsub = 500;
+  PlayerScore m_hiscore = 5000;
 };

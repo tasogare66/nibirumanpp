@@ -109,11 +109,9 @@ void ModeTitle::draw1(sf::RenderWindow& window)
 
 void ModeTitle::draw2(sf::RenderWindow& window)
 {
-  //local t = "Nibiruman:2080"
-  //  local y = 36
-  //  local x = print_hcenter(t, y, 12, false, 2)
-  //  print(t, x - 1, y, 12, false, 2)
-  //  print(t, x, y - 1, 12, false, 2)
+  m_text.setCharacterSize(62*2);
+  m_text.setString("Nibiruman:2080");
+  gmutil::draw_text_center(window, m_text, 16.f*8.f, 12);
   //  local dur = self.decide and 6 or 26
   //  local r = self.elp // (FRAME2SEC*dur)
   //  if r % 2 == 0 then
@@ -128,8 +126,14 @@ void ModeTitle::draw2(sf::RenderWindow& window)
   m_text.setString("REPLAY");
   gmutil::draw_text(window, m_text, px, 92.f*5.f, sCURSOR == 2 ? rc : 15);
   //    print("REPLAY", x, 80, sCURSOR == 1 and rc or (Input:exists_log() and 15 or 10))
-  //print_hcenter("HIGH SCORE", 2, 6, false, 1)
-  //    print_hcenter(string.format("%d", HISCORE), 10, 15, true, 1)
+  auto print_hcenter = [this,&window](const char* str,float y, int32_t col) {
+    m_text.setString(str);
+    gmutil::draw_text_center(window, m_text, y, col);
+  };
+  print_hcenter("HIGH SCORE", -6.f, 6);
+  char buf[128];
+  sprintf_s(buf, fw::array_size(buf), "%lld", GameSeq::inst().get_hiscore());
+  print_hcenter(buf, -6.f+42.f, 15); //string.format("%d", HISCORE), 10, 15, true, 1)
   //    print(GAME_VER, 4, SCR_HEIGHT - 16, 7, false)
   //    print("@tasogare66 2020", 4, SCR_HEIGHT - 8, 7, false)
 }

@@ -104,3 +104,10 @@ bool GameSeq::check_game_over() const
   }
   return ret;;
 }
+
+void GameSeq::update_hiscore()
+{
+  for (const auto& seq_pl : m_seq_pls) {
+    m_hiscore = std::max(m_hiscore, seq_pl.get_score());
+  }
+}

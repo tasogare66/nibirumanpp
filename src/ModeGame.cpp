@@ -66,7 +66,7 @@ bool ModeGame::ctrl(float dt)
       if (GameSeq::inst().check_game_over()) {
         m_state = State::Over;
         //Input: term()
-        //HISCORE = max(self.score, HISCORE)
+        GameSeq::inst().update_hiscore();
         return;
       }
       m_spawner.exec(dt);
