@@ -6,12 +6,14 @@
 #include "Camera.h"
 #include "Resource.h"
 #include "PtclLst.h"
+#include "Sound.h"
 
 #include "App.h"
 
 App::App()
 {
   Resource::inst().setup_at_boot();
+  Sound::inst().setup_at_boot();
   ModeMng::inst().request(ModeType::TITLE);
 }
 

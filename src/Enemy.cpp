@@ -7,6 +7,7 @@
 #include "ConstParam.h"
 #include "Random.h"
 #include "PtclLst.h"
+#include "Sound.h"
 
 #include "Enemy.h"
 
@@ -40,7 +41,7 @@ void Enemy::dead()
   if (this->check_kill_by_generated_player(cbfunc)) {
     if (m_flag.check(EntityFlag::HaveDot)) {
       new EneDot(m_pos);
-      //psfx(2, 'D-4', 20, 1)
+      Sound::psfx(SfxId::EneDead, SndChannel::SFX1);
     }
     PtclLst::add(m_pos, 15);
   } else {
@@ -52,7 +53,7 @@ void Enemy::set_blink()
 {
   if (m_blink <= 0.f) {
     m_blink = m_blinktm;
-    //psfx(10, 'C-7', 30, 2)
+    Sound::psfx(SfxId::EneBlink, SndChannel::SFX2);
   }
 }
 

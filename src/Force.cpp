@@ -2,6 +2,7 @@
 
 #include "ConstParam.h"
 #include "PtclLst.h"
+#include "Sound.h"
 
 #include "Force.h"
 
@@ -25,6 +26,7 @@ void ForceF::init()
   this->set_radius(29.0f);
   FW_ASSERT(m_radius >= m_inner_r);
   PtclLst::add_sqr(m_pos, 20, m_inner_r-4.0f);
+  Sound::psfx(SfxId::Force, SndChannel::SFX3);
 }
 
 void ForceF::update(float dt)

@@ -3,6 +3,7 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Audio.hpp>
 
 #include "fw_assert.h"
 #define _USE_MATH_DEFINES

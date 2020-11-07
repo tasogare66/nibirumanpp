@@ -6,6 +6,7 @@
 #include "GameSeq.h"
 #include "PlBullet.h"
 #include "Force.h"
+#include "Sound.h"
 
 #include "Player.h"
 
@@ -132,7 +133,8 @@ void Player::update(float dt)
           new PlBullet(mzl, Vec2f(v.x * c - v.y * s, v.y * c + v.x * s), this);
           new PlBullet(mzl, Vec2f(v.x * c + v.y * s, v.y * c - v.x * s), this);
         }
-        //	psfx(3, 'C-3', 9, 0)
+        Sound::psfx(SfxId::PlShot, SndChannel::SFX0);
+
         constexpr int32_t shot_repeat_cnt[] = { 4, 6, 5 };
         m_shot_repeat = shot_repeat_cnt[std::clamp<size_t>(m_armslv,0,fw::array_size(shot_repeat_cnt)-1)];
       }

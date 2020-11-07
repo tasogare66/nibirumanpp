@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "GameSeq.h"
 #include "Random.h"
+#include "Sound.h"
 
 #include "EneDot.h"
 
@@ -64,5 +65,5 @@ void EneDot::hitcb(const Entity* o, const Vec2f& dir, float dist)
 void EneDot::dead()
 {
   // GAME:reduceDiff(0.5)
-  //psfx(4,'F-6',5,2)
+  Sound::psfx(SfxId::Dot, SndChannel::SFX2);
 }
