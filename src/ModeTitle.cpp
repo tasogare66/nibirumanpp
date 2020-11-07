@@ -7,6 +7,7 @@
 #include "ConstParam.h"
 #include "Resource.h"
 #include "GameSeq.h"
+#include "Sound.h"
 
 #include "ModeTitle.h"
 
@@ -48,7 +49,7 @@ bool ModeTitle::ctrl(float dt)
   auto setdec = [this]() {
     m_decided = true;
     m_decided_time = 1.f;
-    //psfx(7, 'D-4', 30, 0);
+    Sound::psfx(SfxId::MenuDecide, SndChannel::SFX0);
   };
 
   m_elp += dt;

@@ -9,7 +9,12 @@ void Sound::setup_at_boot()
     "sfx 3.wav",
     "sfx 4.wav",
     "sfx 5.wav",
+    "sfx 6.wav",
+    "sfx 7.wav",
+    "sfx 8.wav",
+    "sfx 9.wav",
     "sfx 10.wav",
+    "sfx 11.wav",
   };
   static_assert(fw::array_size(se_names) == static_cast<size_t>(SfxId::MAX));
   char buf[128];

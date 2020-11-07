@@ -16,12 +16,20 @@
 #include "Camera.h"
 #include "GameUtil.h"
 #include "EneDot.h"
+#include "Sound.h"
 
 #include "Boss.h"
 
 Boss::Boss(const EntityArgs& args, uint32_t spr_ene)
   : Enemy(args, spr_ene)
 {
+}
+
+void Boss::dead_base()
+{
+  Camera::inst().req_shake(2.0f);
+  Enemy::dead();
+  Sound::psfx(SfxId::Force, SndChannel::SFX3);
 }
 
 Vec2f Boss::get_dir(Vec2f tgt) {
@@ -74,7 +82,7 @@ void BossBaby::update(float dt)
   }
   if (m_appear_flag) {
     PtclLst::add_sqr(m_pos, 2, m_radius+6.0f);
-    //if self.elapsed//FRAME2SEC%20==0 then psfx(11,'A-4',20,3) end
+    if (const_param::framecnt(m_elapsed)%20==0) Sound::psfx(SfxId::BossAp, SndChannel::SFX3);
   }
 }
 
@@ -115,9 +123,7 @@ void BossBaby::dead()
   gmutil::random_circle(num, 0.0f, 70.0f, [this](Vec2f p) { new EneDot(m_pos+p); });
   gmutil::random_circle(4, 0.0f, m_radius, [this](Vec2f p) { PtclLst::add(m_pos+p, 6); });
   gmutil::random_circle(6, 3.0f, m_radius*2, [this](Vec2f p) { PtclLst::add(m_pos + p, 15); });
-  Camera::inst().req_shake(2.0f);
-  Enemy::dead();
-  //psfx(5, 'F-3', 30, 3)
+  Boss::dead_base();
   //GAME.boss = nil
 }
 

@@ -14,7 +14,12 @@ enum class SfxId{
   PlShot, //3
   Dot, //4
   Force, //5
+  Human, //6
+  MenuDecide, //7
+  Dash, //8
+  DashCoolt, //9
   EneBlink, //10
+  BossAp, //11
   MAX
 };
 

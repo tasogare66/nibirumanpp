@@ -59,11 +59,14 @@ void EneDot::hitcb(const Entity* o, const Vec2f& dir, float dist)
     GameSeq::add_score(idx, m_score);
     GameSeq::add_multiplier(idx);
     this->del();
+    m_acquired = true;
   }
 }
 
 void EneDot::dead()
 {
-  // GAME:reduceDiff(0.5)
-  Sound::psfx(SfxId::Dot, SndChannel::SFX2);
+  if (m_acquired) {
+    // GAME:reduceDiff(0.5)
+    Sound::psfx(SfxId::Dot, SndChannel::SFX2);
+  }
 }

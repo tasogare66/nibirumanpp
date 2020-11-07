@@ -13,5 +13,6 @@ private:
   float m_timer = 6.0f;
   float m_captime = 0.0f;
   const Player* m_capture_pl = nullptr;
+  bool m_acquired = false; //playerが取った
   uint32_t m_ene_spr = 482;
 };

@@ -5,6 +5,7 @@
 #include "GameSeq.h"
 #include "Player.h"
 #include "Pop2D.h"
+#include "Sound.h"
 
 #include "Human.h"
 
@@ -61,7 +62,7 @@ void Human::dead()
     GameSeq::inst().reduceDiff(30);
     player->add_armslv();
     new Pop2D(m_pos);
-    //psfx(6, 'E-4', 20, 3)
+    Sound::psfx(SfxId::Human, SndChannel::SFX3);
   } else {
     FW_ASSERT(0);
   }

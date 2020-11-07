@@ -55,7 +55,7 @@ void Player::update(float dt)
   if (m_dashst == 0) {
     if (m_coolt > 0.0f) {
       m_coolt -= dt;
-      if (m_coolt <= 0.0f) { /*psfx(9, 'G-4', 40, 3);*/ }
+      if (m_coolt <= 0.0f) { Sound::psfx(SfxId::DashCoolt, SndChannel::SFX3); }
     } else {
       if (dashon) {
         auto v = m_reticle->get_pos() - m_pos;
@@ -75,9 +75,9 @@ void Player::update(float dt)
     m_dasht -= dt;
     m_dashvec = m_pos - m_old_pos;
     m_dashvec.normalize();
-    //if (self.elp//FRAME2SEC)%10==0 then
-    //  psfx(8, 'G-6', 10, 0)
-    //end
+    if (const_param::framecnt(m_elp) % 10 == 0) {
+      Sound::psfx(SfxId::Dash, SndChannel::SFX0);
+    }
 
     if (m_dash_limit - m_dasht < 0.1f || (dashon && m_dasht >= 0)) {
       this->set_vel_force(m_dashvec * 6.8f);
