@@ -222,7 +222,9 @@ namespace scr
       entity_args.m_param0 = tbl["prm0"].value<float>();
       spawn_base(type, entity_args);
     }
-  private:
+    bool is_exist_boss() {
+      return Boss::is_exist_boss();
+    }
   };
 
   class LuaEnemySpawner : public LuaScriptBase {
@@ -251,6 +253,7 @@ namespace scr
         .addFunction("spawn", &ScrSpawner::spawn, LUA_ARGS(EnemyType, LuaRef))
         .addProperty("num", &ScrSpawner::get_spawn_num)
         .addProperty("ttl", &ScrSpawner::get_spawn_ttl)
+        .addProperty("is_exist_boss", &ScrSpawner::is_exist_boss)
         .endClass();
     }
   };

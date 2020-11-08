@@ -10,14 +10,18 @@ class ILuaScript;
 class Boss : public Enemy {
 public:
   Boss(const EntityArgs& args, uint32_t spr_ene=0);
-  virtual ~Boss() = default;
-
+  virtual ~Boss();
+  virtual void update(float dt) override;
   virtual void move_to(float px, float py, float spd);
   virtual void use_arms(int type, const LuaIntf::LuaRef& tbl) {}
+  virtual void draw_info(sf::RenderWindow&) const {}
+  static bool is_exist_boss();
 protected:
   void update_dt(float dt) { m_dt = dt; }
   void upd_ene_base(float dt) { m_elapsed += dt; }
   void dead_base();
+  void set_bossrf();
+  void remove_bossrf();
   Vec2f get_dir(Vec2f tgt);
   int32_t m_health_max=1;
   float m_dt=1.0f/60.0f;

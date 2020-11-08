@@ -8,6 +8,10 @@ void GameSeq::reset()
 {
   m_pl_entities.clear();
   m_seq_pls.clear();
+  m_get_player_cnt = 0;
+  m_difficulty = 0.0f;
+  m_ticcnt = 0;
+  m_diffsub = m_diffsub_initial_val;
 }
 
 void GameSeq::add_player(Player* e) {

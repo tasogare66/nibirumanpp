@@ -17,12 +17,19 @@
 #include "GameUtil.h"
 #include "EneDot.h"
 #include "Sound.h"
+#include "ModeMng.h"
+#include "ModeGame.h"
 
 #include "Boss.h"
 
 Boss::Boss(const EntityArgs& args, uint32_t spr_ene)
   : Enemy(args, spr_ene)
 {
+}
+
+Boss::~Boss()
+{
+  this->remove_bossrf();
 }
 
 void Boss::dead_base()
@@ -32,6 +39,28 @@ void Boss::dead_base()
   Sound::psfx(SfxId::Force, SndChannel::SFX3);
 }
 
+//ModeGameに登録
+void Boss::set_bossrf()
+{
+  if (auto* mg = ModeMng::inst().get_current_mode<ModeGame>()) {
+    mg->set_bossrf(this);
+  }
+}
+//ModeGameから削除
+void Boss::remove_bossrf()
+{
+  if (auto* mg = ModeMng::inst().get_current_mode<ModeGame>()) {
+    mg->remove_bossrf(this);
+  }
+}
+//bossが存在するか
+bool Boss::is_exist_boss() {
+  if (auto* mg = ModeMng::inst().get_current_mode<ModeGame>()) {
+    return mg->is_exist_boss();
+  }
+  return false;
+}
+
 Vec2f Boss::get_dir(Vec2f tgt) {
   auto dir = tgt - m_pos;
   auto len = dir.magnitude();
@@ -39,6 +68,12 @@ Vec2f Boss::get_dir(Vec2f tgt) {
     return dir / len;
   }
   return dir;
+}
+
+void Boss::update(float dt)
+{
+  this->set_bossrf();
+  Enemy::update(dt);
 }
 
 void Boss::move_to(float px,float py,float spd)
@@ -74,7 +109,7 @@ void BossBaby::appear()
 void BossBaby::update(float dt)
 {
   this->update_dt(dt);
-  Enemy::update(dt);
+  Boss::update(dt);
   this->upd_blink(dt);
   m_animcnt = static_cast<uint32_t>(m_elapsed/const_param::FRAME2SEC*20)%2;
   if (static_cast<uint32_t>(m_elapsed/(const_param::FRAME2SEC*14))%2==0) { //random offset

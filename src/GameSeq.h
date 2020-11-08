@@ -64,12 +64,13 @@ public:
   void update_hiscore();
 private:
   uint32_t m_entry_num = 1;
+  PlayerScore m_hiscore = 5000;
   //game
   std::vector<Player*> m_pl_entities;
   std::vector<SeqPlayer> m_seq_pls;
   uint32_t m_get_player_cnt = 0;
   float m_difficulty = 0.0f;
   uint64_t m_ticcnt = 0;
-  int32_t m_diffsub = 500;
-  PlayerScore m_hiscore = 5000;
+  static constexpr int32_t m_diffsub_initial_val = 500;
+  int32_t m_diffsub = m_diffsub_initial_val;
 };

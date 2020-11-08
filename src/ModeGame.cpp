@@ -10,6 +10,7 @@
 #include "GameSeq.h"
 #include "Resource.h"
 #include "GameUtil.h"
+#include "Boss.h"
 
 #include "ModeGame.h"
 
@@ -81,6 +82,10 @@ bool ModeGame::ctrl(float dt)
     m_ovelp += dt;
     ret = false;
   }
+  if (ret) {
+    //更新時のみentityの参照クリア
+    this->clear_bossrf();
+  }
   return ret;
 }
 
@@ -108,6 +113,8 @@ void ModeGame::draw1(sf::RenderWindow& window)
 
 void ModeGame::draw2(sf::RenderWindow& window)
 {
+  if (m_boss) m_boss->draw_info(window);
+
   auto lambda_draw_text = [this,&window](float ix, float iy, int32_t icol) {
     gmutil::draw_text(window, m_text, ix, iy, icol);
   };

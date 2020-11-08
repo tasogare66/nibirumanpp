@@ -205,16 +205,21 @@ function Spawner:registration()
 --]]
   }
 
+  if SCRSPW.is_exist_boss then return end
   if SCRSPW.num >= 200 then return end
   if self:num()<1 and #tbl>0 then
     local lot = randi_range(1,#tbl)
     local c=tbl[lot]
     self:runco(c[1],c[2])
   end
-	if SCRSPW.ttl >= self.human_step*700 then
-		self:runco(Spawner.random_co, {t=EnemyType.HUMAN,num=3})
-		self.human_step=self.human_step+1
-	end
+  if SCRSPW.ttl >= self.boss_step*2000 then
+    ene_spawn(EnemyType.BOSS_BABY, 0,-50)
+    self.boss_step=self.boss_step+1
+  end
+  if SCRSPW.ttl >= self.human_step*700 then
+    self:runco(Spawner.random_co, {t=EnemyType.HUMAN,num=3})
+    self.human_step=self.human_step+1
+  end
 end
 
 function Spawner:init()
