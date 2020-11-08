@@ -155,9 +155,32 @@ void Player::draw(sf::RenderWindow& window)
     uint32_t r = static_cast<uint32_t>(m_invincible_time / (const_param::FRAME2SEC * 6));
     if (r % 2 == 0) sprid = 267;
   }
-
   this->spr8x8(sprid);
   Entity::draw(window);
+
+  //gauge
+  if (this->is_dash() || m_coolt > 0.f) {
+    auto c = m_pos - Vec2f(4.f,4.f);
+    float len = 10.0f;
+    c.y = c.y - 2.0f;
+    c.x = c.x - (len - 8.0f) / 2.0f;
+    float r = 0.f;
+    int col = 6;
+    if (this->is_dash()) {
+      r = m_dasht / m_dash_limit;
+      col = 11;
+    }
+    else {
+      r = 1.f - m_coolt / m_dash_coolt;
+    }
+    sf::RectangleShape line(sf::Vector2f(len, 1));
+    line.setPosition(c);
+    line.setFillColor(const_param::ticcol(15));
+    window.draw(line);
+    line.setSize(Vec2f(len*r, 1));
+    line.setFillColor(const_param::ticcol(col));
+    window.draw(line);
+  }
 }
 
 bool Player::check_dead()
