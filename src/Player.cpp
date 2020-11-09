@@ -38,19 +38,16 @@ void Player::update(float dt)
   this->upd_invincible(dt);
   this->upd_armslv(dt);
 
-  Vec2f v;
-  const auto& inputm = Input::inst();
-  if (inputm.on(InputButton_Up)) v.y -= 1.0f;
-  if (inputm.on(InputButton_Down)) v.y += 1.0f;
-  if (inputm.on(InputButton_Left)) v.x -= 1.0f;
-  if (inputm.on(InputButton_Right)) v.x += 1.0f;
-  if (v.sqr_magnitude() >= 0.01f) {
-    v.normalize();
+  const auto& inputd = Input::inst().input_data(m_index);
+  Vec2f v = inputd.m_analog_l;
+  auto len = v.magnitude();
+  if (len > 0.2f) {
+    if (len > 1.0f) v.normalize();
     m_mov = v * (60 * dt);
   }
 
   //dash
-  auto dashon = inputm.on(InputButton_Dash);
+  auto dashon = inputd.on(InputButton_Dash);
   if (this->get_flag().check(EntityFlag::Invincible) && m_invincible_time < 1.0f) dashon = false; //ignore start invincible
   if (m_dashst == 0) {
     if (m_coolt > 0.0f) {
@@ -118,7 +115,7 @@ void Player::update(float dt)
 
   //shot
   if (m_shot_repeat > 0) --m_shot_repeat;
-  if (inputm.on(InputButton_Shot) && not this->is_dashing()) {
+  if (inputd.on(InputButton_Shot) && not this->is_dashing()) {
     if (m_shot_repeat <= 0) {
       auto v = m_reticle->get_pos() - m_pos;
       const auto d = v.magnitude();

@@ -55,6 +55,7 @@ bool ModeTitle::ctrl(float dt)
   m_elp += dt;
 
   const auto& input = Input::inst();
+  const auto& input0d = input.input_data(0);
   if (m_decided) {
     if (m_decided_time < 0) {
       // GAME = mode_game.new(self.decide_type)
@@ -71,10 +72,10 @@ bool ModeTitle::ctrl(float dt)
     //self.decide_type = Input.StateTrace
     //  self : setdec()
  // }
-  else if (input.trig(InputButton_Up)) {
+  else if (input0d.trig(InputButton_Up)) {
     sCURSOR = std::max(sCURSOR-1,0);;
   }
-  else if (input.trig(InputButton_Down) /*&& Input:exists_log()*/) {
+  else if (input0d.trig(InputButton_Down) /*&& Input:exists_log()*/) {
     sCURSOR = std::min(sCURSOR+1,1);
   }
   return true;
