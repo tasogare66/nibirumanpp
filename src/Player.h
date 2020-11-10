@@ -59,4 +59,5 @@ private:
   static constexpr float m_dash_limit = 2.2f;
   static constexpr float m_dash_coolt = 4.2f;
   static constexpr float m_dash_followt = 0.9f;
+  static constexpr float m_analog_threshold = 0.5f;
 };

@@ -115,26 +115,29 @@ void Player::update(float dt)
 
   //shot
   if (m_shot_repeat > 0) --m_shot_repeat;
-  if (inputd.on(InputButton_Shot) && not this->is_dashing()) {
-    if (m_shot_repeat <= 0) {
-      auto v = m_reticle->get_pos() - m_pos;
-      const auto d = v.magnitude();
-      if (d > const_param::EPSILON) {
-        v /= d;
-        auto mzl = m_pos + v*4.f;
-        new PlBullet(mzl, v, this);
-        if (m_armslv >= 1) {
-          constexpr auto ang = fw::deg2rad(20.f);
-          auto c = std::cos(ang);
-          auto s = std::sin(ang);
-          new PlBullet(mzl, Vec2f(v.x * c - v.y * s, v.y * c + v.x * s), this);
-          new PlBullet(mzl, Vec2f(v.x * c + v.y * s, v.y * c - v.x * s), this);
-        }
-        Sound::psfx(SfxId::PlShot, SndChannel::SFX0);
-
-        constexpr int32_t shot_repeat_cnt[] = { 4, 6, 5 };
-        m_shot_repeat = shot_repeat_cnt[std::clamp<size_t>(m_armslv,0,fw::array_size(shot_repeat_cnt)-1)];
+  if (m_shot_repeat <= 0 && not this->is_dashing()) {
+    Vec2f v;
+    if (inputd.m_analog_r.magnitude() >= m_analog_threshold) {
+      v = inputd.m_analog_r; //analog_r優先
+    } else if (inputd.on(InputButton_Shot) && m_reticle) {
+      v = m_reticle->get_pos() - m_pos;
+    }
+    const auto d = v.magnitude();
+    if (d > const_param::EPSILON) {
+      v /= d;
+      auto mzl = m_pos + v*4.f;
+      new PlBullet(mzl, v, this);
+      if (m_armslv >= 1) {
+        constexpr auto ang = fw::deg2rad(20.f);
+        auto c = std::cos(ang);
+        auto s = std::sin(ang);
+        new PlBullet(mzl, Vec2f(v.x * c - v.y * s, v.y * c + v.x * s), this);
+        new PlBullet(mzl, Vec2f(v.x * c + v.y * s, v.y * c - v.x * s), this);
       }
+      Sound::psfx(SfxId::PlShot, SndChannel::SFX0);
+
+      constexpr int32_t shot_repeat_cnt[] = { 4, 6, 5 };
+      m_shot_repeat = shot_repeat_cnt[std::clamp<size_t>(m_armslv, 0, fw::array_size(shot_repeat_cnt) - 1)];
     }
   }
 #if DEBUG&0
