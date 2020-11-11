@@ -76,10 +76,10 @@ uint32_t Input::update_joystick(uint32_t jsid, Vec2f& analog_l, Vec2f& analog_r)
       m |= InputButton_Cancel;
     }
     if (sf::Joystick::isButtonPressed(jsid, 4)) {
-      m |= InputButton_Dash;
+      m |= InputButton_PadDash;
     }
     if (sf::Joystick::getAxisPosition(jsid, sf::Joystick::Z)/100.0f > threshold) {
-      m |= InputButton_Dash;
+      m |= InputButton_PadDash;
     }
     //static int test = 0;
     //if (sf::Joystick::isButtonPressed(jsid, test)) {

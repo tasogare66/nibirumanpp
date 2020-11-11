@@ -47,15 +47,24 @@ void Player::update(float dt)
   }
 
   //dash
-  auto dashon = inputd.on(InputButton_Dash);
-  if (this->get_flag().check(EntityFlag::Invincible) && m_invincible_time < 1.0f) dashon = false; //ignore start invincible
+  auto can_dash = inputd.on(InputButton_Dash) | inputd.on(InputButton_PadDash);
+  if (this->get_flag().check(EntityFlag::Invincible) && m_invincible_time < 1.0f) can_dash = false; //ignore start invincible
   if (m_dashst == 0) {
     if (m_coolt > 0.0f) {
       m_coolt -= dt;
       if (m_coolt <= 0.0f) { Sound::psfx(SfxId::DashCoolt, SndChannel::SFX3); }
     } else {
-      if (dashon) {
-        auto v = m_reticle->get_pos() - m_pos;
+      if (can_dash) {
+        Vec2f v;
+        if (inputd.on(InputButton_PadDash)) {
+          if (inputd.m_analog_r.magnitude() >= m_analog_threshold) {
+            v = inputd.m_analog_r;
+          }
+        }
+        else if (inputd.on(InputButton_Dash)) {
+          v = m_reticle->get_pos() - m_pos;
+        }
+
         auto len = v.magnitude();
         if (len > const_param::EPSILON) {
           v /= len;
@@ -76,7 +85,7 @@ void Player::update(float dt)
       Sound::psfx(SfxId::Dash, SndChannel::SFX0);
     }
 
-    if (m_dash_limit - m_dasht < 0.1f || (dashon && m_dasht >= 0)) {
+    if (m_dash_limit - m_dasht < 0.1f || (can_dash && m_dasht >= 0)) {
       this->set_vel_force(m_dashvec * 6.8f);
       if (v.x != 0.0f || v.y != 0.0f) {
         auto ang = Vec2f::angle(m_dashvec, v);

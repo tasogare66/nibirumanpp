@@ -10,9 +10,10 @@ enum InputButton : uint32_t {
   InputButton_Right = 1 << 3,
   InputButton_Shot = 1 << 4,
   InputButton_Dash = 1 << 5,
+  InputButton_PadDash = 1 << 6,
 
-  InputButton_Decide = 1 << 6,
-  InputButton_Cancel = 1 << 7,
+  InputButton_Decide = 1 << 16,
+  InputButton_Cancel = 1 << 17,
 };
 
 struct InputData {
