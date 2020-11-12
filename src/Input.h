@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <optional>
 #include "Singleton.h"
 #include "Vec2.h"
 #include "ConstParam.h"
@@ -35,13 +36,22 @@ struct InputData {
   bool off(InputButton b) const { return (m_mask_off & b) != 0; }
   const Vec2f& mouse() const { return m_mpos; }
 };
+struct InputPlayer {
+  bool m_enable_keybord = false;
+  std::optional<uint32_t> m_joystick_id;
+  void reset() {
+    m_enable_keybord = false;
+    m_joystick_id.reset();
+  }
+};
 
 class Input : public Singleton<Input> {
 public:
   Input() = default;
   ~Input() = default;
   float update(float dt, sf::RenderWindow& window);
-  const InputData& input_data(uint32_t id) const { FW_ASSERT(id<m_input_data.size()); return m_input_data[id]; }
+  void update_assignment(const uint32_t player_num, bool force_flag=false);
+  const InputData& input_data(uint32_t id) const { FW_ASSERT(id<m_input_data.size()); return m_input_data[id].second; }
   bool decided() const;
   bool canceled() const;
 private:
@@ -49,6 +59,7 @@ private:
   static Vec2f update_mouse(sf::RenderWindow& window);
   static uint32_t update_joystick(uint32_t id, Vec2f& analog_l, Vec2f& analog_r);
   //current
-  std::array<InputData, const_param::PLAYER_NUM_MAX> m_input_data;
+  std::array<std::pair<InputPlayer,InputData>, const_param::PLAYER_NUM_MAX> m_input_data;
   float m_dt = 0.0f;
+  uint32_t m_joystick_num = UINT32_MAX;
 };

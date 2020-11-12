@@ -38,6 +38,8 @@ void ModeTitle::init()
   m_spr.setTexture(Resource::inst().get_pix_tex());
   m_spr.setOrigin(0.5f, 0.5f);
   m_spr.setColor(const_param::ticcol(10));
+  //joystick
+  Input::inst().update_assignment(1, true); //FIXME:outgameでやる?どのplayerまでメニュー操作?  
 }
 
 void ModeTitle::dest()

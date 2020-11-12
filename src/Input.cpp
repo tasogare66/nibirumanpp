@@ -50,6 +50,8 @@ uint32_t Input::update_joystick(uint32_t jsid, Vec2f& analog_l, Vec2f& analog_r)
     //[-100 .. 100]
     analog_l.x += sf::Joystick::getAxisPosition(jsid, sf::Joystick::X)/100.0f;
     analog_l.y += sf::Joystick::getAxisPosition(jsid, sf::Joystick::Y)/100.0f;
+    analog_l.x += sf::Joystick::getAxisPosition(jsid, sf::Joystick::PovX)/100.0f;
+    analog_l.y -= sf::Joystick::getAxisPosition(jsid, sf::Joystick::PovY)/100.0f;
     analog_r.x += sf::Joystick::getAxisPosition(jsid, sf::Joystick::U)/100.0f;
     analog_r.y += sf::Joystick::getAxisPosition(jsid, sf::Joystick::V)/100.0f;
     constexpr float threshold = 0.4f;
@@ -91,13 +93,13 @@ uint32_t Input::update_joystick(uint32_t jsid, Vec2f& analog_l, Vec2f& analog_r)
 
 float Input::update(float dt, sf::RenderWindow& window)
 {
-#if 01
   for (uint32_t i=0;i<m_input_data.size();++i){
-    auto& d = m_input_data[i];
+    auto& p = m_input_data[i].first;
+    auto& d = m_input_data[i].second;
     uint32_t m = 0;
     Vec2f mxy;
     Vec2f analog_l, analog_r;
-    if (true) {
+    if (p.m_enable_keybord) {
       m |= Input::update_keyborad();
       mxy = Input::update_mouse(window);
       //keyboard to analog
@@ -106,8 +108,8 @@ float Input::update(float dt, sf::RenderWindow& window)
       if (m & InputButton_Left) analog_l.x -= 1.0f;
       if (m & InputButton_Right) analog_l.x += 1.0f;
     }
-    if (true) {
-      m |= Input::update_joystick(i, analog_l, analog_r);
+    if (p.m_joystick_id) {
+      m |= Input::update_joystick(p.m_joystick_id.value(), analog_l, analog_r);
     }
     //clamp
     auto apply_clamp = [](auto& v) {
@@ -125,46 +127,43 @@ float Input::update(float dt, sf::RenderWindow& window)
     d.m_analog_l = analog_l;
     d.m_analog_r = analog_r;
   }
-#else
-  decltype(m_mask) m=0;
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-    m |= InputButton_Up;
-  }
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-    m |= InputButton_Down;
-  }
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-    m |= InputButton_Left;
-  }
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-    m |= InputButton_Right;
-  }
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-    m |= InputButton_Shot;
-  }
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::X) || sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-    m |= InputButton_Dash;
-  }
 
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-    m |= InputButton_Decide;
-  }
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::X)) {
-    m |= InputButton_Cancel;
-  }
-
-  //mouse position
-  auto imousePos = sf::Mouse::getPosition(window); //window position
-  auto mxy = window.mapPixelToCoords(imousePos, Camera::inst().get_view()); //window position to global position
-
-  m_mask_trig = m & (~m_mask);
-  m_mask_off = m_mask & (~m) ;
-  m_mask = m;
-  m_mpos = mxy;
-#endif
   m_dt = dt;
 
   return dt;
+}
+
+void Input::update_assignment(const uint32_t player_num, bool force_flag)
+{
+  FW_ASSERT(player_num > 0 && player_num <= const_param::PLAYER_NUM_MAX);
+  std::array<uint32_t, sf::Joystick::Count> connect;
+  uint32_t num = 0;
+  for (uint32_t i = 0; i < sf::Joystick::Count; ++i) {
+    if (sf::Joystick::isConnected(i)) {
+      connect[i] = i;
+      ++num;
+    }
+  }
+
+  if (!force_flag && m_joystick_num == num) return; //数が変わらなければやらない
+
+  m_joystick_num = num;
+  //clear
+  for (auto& p:m_input_data) {
+    auto& ply = p.first;
+    auto& dat = p.second;
+    ply.reset();
+    dat.reset();
+  }
+  //0は必ずkeybord有効
+  m_input_data[0].first.m_enable_keybord = true;
+  //joystick割り当て
+  uint32_t st = (num >= player_num) ? 0 : 1;
+  for (uint32_t jid = 0; jid < num; ++jid) {
+    auto pt = st + jid;
+    if (pt>=m_input_data.size()) break;
+    m_input_data[pt].first.m_joystick_id = jid;
+  }
 }
 
 bool Input::decided() const
