@@ -39,7 +39,7 @@ void ModeGame::init()
   auto* ptbl = (entry_num == 1) ? entry_1 : entry_2;
   for (uint32_t player_index = 0; player_index < entry_num; ++player_index) {
     //add player
-    auto* reticle = new Reticle(EntityArgs{ Vec2f() }, player_index);
+    auto* reticle = (player_index == 0) ? new Reticle(EntityArgs{ Vec2f() }, player_index) : nullptr;
     auto p = new Player({ ptbl[player_index] }, reticle, player_index);
     GameSeq::inst().add_player(p);
   }

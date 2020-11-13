@@ -13,6 +13,8 @@ enum InputButton : uint32_t {
   InputButton_Dash = 1 << 5,
   InputButton_PadDash = 1 << 6,
 
+  InputButton_UseKeybord = 1 << 14, //keybord使用
+  InputButton_UseJoystick = 1 << 15, //joystic使用
   InputButton_Decide = 1 << 16,
   InputButton_Cancel = 1 << 17,
 };
@@ -39,6 +41,7 @@ struct InputData {
 struct InputPlayer {
   bool m_enable_keybord = false;
   std::optional<uint32_t> m_joystick_id;
+  bool m_use_joystic = false; //keybord or joystic
   void reset() {
     m_enable_keybord = false;
     m_joystick_id.reset();
@@ -51,6 +54,7 @@ public:
   ~Input() = default;
   float update(float dt, sf::RenderWindow& window);
   void update_assignment(const uint32_t player_num, bool force_flag=false);
+  const auto& input_pair(uint32_t id) const { FW_ASSERT(id < m_input_data.size()); return m_input_data[id]; }
   const InputData& input_data(uint32_t id) const { FW_ASSERT(id<m_input_data.size()); return m_input_data[id].second; }
   bool decided() const;
   bool canceled() const;
@@ -62,4 +66,5 @@ private:
   std::array<std::pair<InputPlayer,InputData>, const_param::PLAYER_NUM_MAX> m_input_data;
   float m_dt = 0.0f;
   uint32_t m_joystick_num = UINT32_MAX;
+  Vec2f m_prev_mxy;
 };

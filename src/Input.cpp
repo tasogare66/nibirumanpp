@@ -47,24 +47,25 @@ uint32_t Input::update_joystick(uint32_t jsid, Vec2f& analog_l, Vec2f& analog_r)
 {
   uint32_t m = 0;
   if (sf::Joystick::isConnected(jsid)) {
+    Vec2f al, ar;
     //[-100 .. 100]
-    analog_l.x += sf::Joystick::getAxisPosition(jsid, sf::Joystick::X)/100.0f;
-    analog_l.y += sf::Joystick::getAxisPosition(jsid, sf::Joystick::Y)/100.0f;
-    analog_l.x += sf::Joystick::getAxisPosition(jsid, sf::Joystick::PovX)/100.0f;
-    analog_l.y -= sf::Joystick::getAxisPosition(jsid, sf::Joystick::PovY)/100.0f;
-    analog_r.x += sf::Joystick::getAxisPosition(jsid, sf::Joystick::U)/100.0f;
-    analog_r.y += sf::Joystick::getAxisPosition(jsid, sf::Joystick::V)/100.0f;
+    al.x += sf::Joystick::getAxisPosition(jsid, sf::Joystick::X)/100.0f;
+    al.y += sf::Joystick::getAxisPosition(jsid, sf::Joystick::Y)/100.0f;
+    al.x += sf::Joystick::getAxisPosition(jsid, sf::Joystick::PovX)/100.0f;
+    al.y -= sf::Joystick::getAxisPosition(jsid, sf::Joystick::PovY)/100.0f;
+    ar.x += sf::Joystick::getAxisPosition(jsid, sf::Joystick::U)/100.0f;
+    ar.y += sf::Joystick::getAxisPosition(jsid, sf::Joystick::V)/100.0f;
     constexpr float threshold = 0.4f;
-    if (analog_l.y < -threshold) {
+    if (al.y < -threshold) {
       m |= InputButton_Up;
     }
-    if (analog_l.y > threshold) {
+    if (al.y > threshold) {
       m |= InputButton_Down;
     }
-    if (analog_l.x < -threshold) {
+    if (al.x < -threshold) {
       m |= InputButton_Left;
     }
-    if (analog_l.x > threshold) {
+    if (al.x > threshold) {
       m |= InputButton_Right;
     }
     //A:1
@@ -87,6 +88,12 @@ uint32_t Input::update_joystick(uint32_t jsid, Vec2f& analog_l, Vec2f& analog_r)
     //if (sf::Joystick::isButtonPressed(jsid, test)) {
     //  m |= InputButton_Dash;
     //}
+
+    if (m || al.sqr_magnitude() > 0.25f || ar.sqr_magnitude() > 0.25f) {
+      m |= InputButton_UseJoystick;
+    }
+    analog_l += al;
+    analog_r += ar;
   }
   return m;
 }
@@ -107,6 +114,12 @@ float Input::update(float dt, sf::RenderWindow& window)
       if (m & InputButton_Down) analog_l.y += 1.0f;
       if (m & InputButton_Left) analog_l.x -= 1.0f;
       if (m & InputButton_Right) analog_l.x += 1.0f;
+
+      //keybord使用判定
+      if (m || (m_prev_mxy-mxy).sqr_magnitude() > 25.0f) {
+        m |= InputButton_UseKeybord;
+      }
+      m_prev_mxy = mxy;
     }
     if (p.m_joystick_id) {
       m |= Input::update_joystick(p.m_joystick_id.value(), analog_l, analog_r);
@@ -126,6 +139,13 @@ float Input::update(float dt, sf::RenderWindow& window)
     d.m_mpos = mxy;
     d.m_analog_l = analog_l;
     d.m_analog_r = analog_r;
+
+    //keybord or joystic
+    if (p.m_use_joystic) {
+      if (m & InputButton_UseKeybord) p.m_use_joystic = false;
+    }else{
+      if (m & InputButton_UseJoystick) p.m_use_joystic = true;
+    }
   }
 
   m_dt = dt;

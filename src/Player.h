@@ -1,9 +1,10 @@
 ﻿#pragma once
 #include "Entity.h"
+class Reticle;
 
 class Player : public Entity {
 public:
-  explicit Player(const EntityArgs& args, const Entity* reticle, int32_t index);
+  explicit Player(const EntityArgs& args, const Reticle* reticle, int32_t index);
   virtual ~Player() = default;
   void init() override final;
   void update(float dt) override final;
@@ -44,7 +45,7 @@ private:
   float m_capradius = 20.0f;
   uint8_t m_armslv = 0;
   float m_armstime = 0.0f;
-  const Entity* m_reticle = nullptr;
+  const Reticle* m_reticle = nullptr;
   float m_elp = 0.0f;
   uint32_t m_animcnt = 0;
   uint32_t m_animdir = 0;
@@ -56,6 +57,7 @@ private:
   float m_coolt = 0.0f;
   Vec2f m_dashvec = {0.f,1.f};
   Vec2f m_dashvec_old;
+  Vec2f m_chara_dir_old;
   static constexpr float m_dash_limit = 2.2f;
   static constexpr float m_dash_coolt = 4.2f;
   static constexpr float m_dash_followt = 0.9f;

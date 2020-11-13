@@ -4,13 +4,14 @@
 #include "Input.h"
 #include "Camera.h"
 #include "GameSeq.h"
+#include "Reticle.h"
 #include "PlBullet.h"
 #include "Force.h"
 #include "Sound.h"
 
 #include "Player.h"
 
-Player::Player(const EntityArgs& args, const Entity* reticle, int32_t index)
+Player::Player(const EntityArgs& args, const Reticle* reticle, int32_t index)
   : Entity(EntityType::Player, args)
   , m_reticle(reticle)
   , m_index(index)
@@ -27,18 +28,27 @@ void Player::init()
 
 void Player::update(float dt)
 {
+  const auto& [inputp, inputd] = Input::inst().input_pair(m_index);;
+
   //upd anim
   m_animcnt = static_cast<uint32_t>(m_elp/(const_param::FRAME2SEC*10))%4;
   m_elp += dt;
   if (not m_active) return;
-  auto chara_dir = m_reticle->get_pos() - this->get_pos();
+  Vec2f chara_dir = m_chara_dir_old;
+  if (m_reticle && !inputp.m_use_joystic) {
+    chara_dir = m_reticle->get_pos() - this->get_pos();
+  } else if (inputd.m_analog_r.sqr_magnitude() > 0.1f) {
+    chara_dir = inputd.m_analog_r;
+  } else if (inputd.m_analog_l.sqr_magnitude() > 0.1f) {
+    chara_dir = inputd.m_analog_l;
+  }
+  m_chara_dir_old = chara_dir;
   m_animdir = (chara_dir.x > 0) ? 0 : 1;
   m_animdir |= ((chara_dir.y < 0) ? 2 : 0);
   if (this->check_dead()) return;
   this->upd_invincible(dt);
   this->upd_armslv(dt);
 
-  const auto& inputd = Input::inst().input_data(m_index);
   Vec2f v = inputd.m_analog_l;
   auto len = v.magnitude();
   if (len > 0.2f) {
@@ -61,7 +71,7 @@ void Player::update(float dt)
             v = inputd.m_analog_r;
           }
         }
-        else if (inputd.on(InputButton_Dash)) {
+        else if (inputd.on(InputButton_Dash) && m_reticle) {
           v = m_reticle->get_pos() - m_pos;
         }
 
