@@ -25,6 +25,25 @@ void Sound::setup_at_boot()
       FW_ASSERT(0);
     }
   }
+  //volume
+  this->apply_sfx_volume();
+  this->apply_music_volume();
+}
+
+void Sound::set_sfx_volume(float in_vol)
+{
+  m_vol_sfx = in_vol;
+  for (uint16_t i = fw::underlying_cast(SndChannel::SFX0); i < fw::underlying_cast(SndChannel::SFX_MAX);++i) {
+    m_snds[i].setVolume(m_vol_sfx * 100.0f);
+  }
+}
+
+void Sound::set_music_volume(float in_vol)
+{
+  m_vol_music = in_vol;
+  for (uint16_t i = fw::underlying_cast(SndChannel::MUSIC0); i < fw::underlying_cast(SndChannel::MAX); ++i) {
+    m_snds[i].setVolume(m_vol_music * 100.0f);
+  }
 }
 
 void Sound::play(SfxId id, SndChannel ch)

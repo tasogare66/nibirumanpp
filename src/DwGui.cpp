@@ -5,6 +5,7 @@
 #include "ModeGame.h"
 #include "Spawner.h"
 #include "EnemyType.h"
+#include "Sound.h"
 
 #include "DwGui.h"
 
@@ -21,6 +22,7 @@ void DwGui::show_window()
 {
   ImGui::Begin("game");
   this->show_window_internal();
+  this->show_options_window();
   ImGui::End();
 }
 
@@ -64,4 +66,18 @@ void DwGui::show_window_internal()
 	//PlayImpl::singleton().m_enemy_spawner->request_remove_all();
   }
 //  PlayImpl::singleton().spawner_log_disp();
+}
+
+void DwGui::show_options_window()
+{
+  if (ImGui::CollapsingHeader("Options"))
+  {
+    auto& snd = Sound::inst();
+    if (ImGui::SliderFloat("sfx volume", snd.get_sfx_volume_pt(), 0.0f, 1.0f, "vol = %.3f")) {
+      snd.apply_sfx_volume();
+    }
+    if (ImGui::SliderFloat("music volume", snd.get_music_volume_pt(), 0.0f, 1.0f, "vol = %.3f")) {
+      snd.apply_music_volume();
+    }
+  }
 }

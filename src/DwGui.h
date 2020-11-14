@@ -20,6 +20,7 @@ public:
   }
 private:
   void show_window_internal();
+  void show_options_window();
   bool m_screenshot_req = false;
   bool m_disable_spawn_script = false;
   int m_spawn_item_current = 0;
