@@ -12,5 +12,8 @@ Reticle::Reticle(const EntityArgs& args, int32_t index)
 
 void Reticle::update(float dt)
 {
-  m_pos = Input::inst().input_data(m_index).mouse();
+  const auto& [inputp, inputd] = Input::inst().input_pair(m_index);;
+  m_pos = inputd.mouse();
+
+  this->set_visible(not inputp.m_use_joystick);
 }

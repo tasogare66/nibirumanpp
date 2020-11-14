@@ -41,7 +41,7 @@ struct InputData {
 struct InputPlayer {
   bool m_enable_keybord = false;
   std::optional<uint32_t> m_joystick_id;
-  bool m_use_joystic = false; //keybord or joystic
+  bool m_use_joystick = false; //keybord or joystick
   void reset() {
     m_enable_keybord = false;
     m_joystick_id.reset();

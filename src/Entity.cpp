@@ -87,10 +87,12 @@ void Entity::update(float dt)
 
 void Entity::draw(sf::RenderWindow& window)
 {
-  m_spr.setPosition(m_pos);
+  if (m_visible) {
+    m_spr.setPosition(m_pos);
 
-  FW_ASSERT(m_spr_id != m_dummy_spr_id);
-  window.draw(m_spr);
+    FW_ASSERT(m_spr_id != m_dummy_spr_id);
+    window.draw(m_spr);
+  }
 }
 
 void Entity::set_radius(float ir)

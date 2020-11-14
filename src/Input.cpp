@@ -140,11 +140,11 @@ float Input::update(float dt, sf::RenderWindow& window)
     d.m_analog_l = analog_l;
     d.m_analog_r = analog_r;
 
-    //keybord or joystic
-    if (p.m_use_joystic) {
-      if (m & InputButton_UseKeybord) p.m_use_joystic = false;
+    //keybord or joystick
+    if (p.m_use_joystick) {
+      if (m & InputButton_UseKeybord) p.m_use_joystick = false;
     }else{
-      if (m & InputButton_UseJoystick) p.m_use_joystic = true;
+      if (m & InputButton_UseJoystick) p.m_use_joystick = true;
     }
   }
 

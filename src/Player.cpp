@@ -35,7 +35,7 @@ void Player::update(float dt)
   m_elp += dt;
   if (not m_active) return;
   Vec2f chara_dir = m_chara_dir_old;
-  if (m_reticle && !inputp.m_use_joystic) {
+  if (m_reticle && !inputp.m_use_joystick) {
     chara_dir = m_reticle->get_pos() - this->get_pos();
   } else if (inputd.m_analog_r.sqr_magnitude() > 0.1f) {
     chara_dir = inputd.m_analog_r;

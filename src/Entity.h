@@ -104,6 +104,8 @@ public:
   bool check_kill_by_generated_player(std::function<void(int32_t)> cb) const;
   bool check_kill_by_player(std::function<void(int32_t)> cb) const;
   Player* check_kill_by_player_random() const;
+  bool is_visible() const { return m_visible; }
+  void set_visible(bool in_flag) { m_visible = in_flag; }
 
   template<typename T>
   const T* cast_to() const;
@@ -149,4 +151,5 @@ protected:
   sf::Sprite m_spr;
   static constexpr uint32_t m_dummy_spr_id = 1;
   uint32_t m_spr_id = m_dummy_spr_id;
+  bool m_visible = true;
 };
