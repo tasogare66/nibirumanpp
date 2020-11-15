@@ -48,20 +48,51 @@ struct InputPlayer {
   }
 };
 
+union InputKeyData {
+  InputKeyData()
+    : all(0)
+  {
+    m_click_count = std::numeric_limits<decltype(m_click_count)>::max();
+  }
+  struct {
+    bool m_on : 1;
+    bool m_trig : 1;
+    bool m_off : 1;
+    bool m_repeat : 1;
+    bool m_already_repeat : 1;
+    bool m_dclick : 1;
+    uint16_t m_repeat_count;
+    uint8_t m_click_count;
+  };
+  uint32_t all = 0;
+  void update(const bool in_flag);
+};
+//static_assert(sizeof(InputKeyData) == 4);
+
 class Input : public Singleton<Input> {
 public:
   Input() = default;
   ~Input() = default;
+  void update_system();
   float update(float dt, sf::RenderWindow& window);
   void update_assignment(const uint32_t player_num, bool force_flag=false);
   const auto& input_pair(uint32_t id) const { FW_ASSERT(id < m_input_data.size()); return m_input_data[id]; }
   const InputData& input_data(uint32_t id) const { FW_ASSERT(id<m_input_data.size()); return m_input_data[id].second; }
   bool decided() const;
   bool canceled() const;
+#if DEBUG
+  bool dbg_pause() const { return m_pause_key.m_repeat; }
+  bool dbg_pause_cancel() const { return m_pause_cancel.m_trig; }
+  bool dbg_escape() const { return m_esc_key.m_dclick; }
+#endif
 private:
   static uint32_t update_keyborad();
   static Vec2f update_mouse(sf::RenderWindow& window);
   static uint32_t update_joystick(uint32_t id, Vec2f& analog_l, Vec2f& analog_r);
+  //system
+  InputKeyData m_pause_key;
+  InputKeyData m_pause_cancel;
+  InputKeyData m_esc_key;
   //current
   std::array<std::pair<InputPlayer,InputData>, const_param::PLAYER_NUM_MAX> m_input_data;
   float m_dt = 0.0f;

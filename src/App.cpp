@@ -17,7 +17,7 @@ App::App()
   ModeMng::inst().request(ModeType::TITLE);
 }
 
-void App::update(float dt, sf::RenderWindow& window)
+void App::update_app(float dt, sf::RenderWindow& window)
 {
   // update input
   dt = Input::inst().update(dt, window);
@@ -28,6 +28,33 @@ void App::update(float dt, sf::RenderWindow& window)
     PtclLst::inst().update(dt);
   }
   modem.update_post();
+}
+
+bool App::update(float dt, sf::RenderWindow& window)
+{
+  auto& input{ Input::inst() };
+  input.update_system();
+  bool dbg_step = false;
+#if DEBUG //debug pause
+  if (m_dbg_pause) {
+    if (input.dbg_pause_cancel()) {
+      m_dbg_pause = false;
+    } else {
+      dbg_step = input.dbg_pause();
+    }
+  } else if (input.dbg_pause()) {
+    m_dbg_pause = true;
+  }
+#endif
+  if (!m_dbg_pause || dbg_step) {
+    this->update_app(dt, window);
+  }
+
+#if DEBUG
+  return !input.dbg_escape(); //ESCで終了
+#else
+  return true;
+#endif
 }
 
 void App::draw(sf::RenderWindow& window)

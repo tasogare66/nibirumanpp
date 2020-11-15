@@ -98,6 +98,48 @@ uint32_t Input::update_joystick(uint32_t jsid, Vec2f& analog_l, Vec2f& analog_r)
   return m;
 }
 
+void InputKeyData::update(const bool in_flag)
+{
+  m_trig = !m_on && in_flag;
+  m_repeat = m_trig; //repeat |= trig
+  m_off = m_on && !in_flag;
+  m_on = in_flag;
+
+  //repeat
+  if (m_on) {
+    ++m_repeat_count;
+  } else {
+    m_repeat_count = 0;
+    m_already_repeat = false;
+  }
+  if (m_repeat_count > (m_already_repeat ? 4 : 40)) {
+    m_repeat = true;
+    m_already_repeat = true;
+    m_repeat_count = 0;
+  }
+
+  //double click
+  m_dclick = false;
+  auto nxt = m_click_count + 1;
+  if (m_click_count < nxt) m_click_count = nxt;
+  if (m_trig) {
+    if (m_click_count < 15) {
+      m_dclick = true;
+    }
+    m_click_count = 0;
+  }
+}
+void Input::update_system()
+{
+  auto lambda_update_key = [](InputKeyData& kd, sf::Keyboard::Key in_key) {
+    bool flag = sf::Keyboard::isKeyPressed(in_key);
+    kd.update(flag);
+  };
+  lambda_update_key(m_pause_key, sf::Keyboard::P);
+  lambda_update_key(m_pause_cancel, sf::Keyboard::O);
+  lambda_update_key(m_esc_key, sf::Keyboard::Escape);
+}
+
 float Input::update(float dt, sf::RenderWindow& window)
 {
   for (uint32_t i=0;i<m_input_data.size();++i){

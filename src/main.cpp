@@ -40,8 +40,9 @@ int main() {
 
   auto app(std::make_unique<App>());
 
+  bool app_exec = true;
   sf::Clock deltaClock;
-  while (window.isOpen()) {
+  while (window.isOpen() && app_exec) {
     sf::Event event;
     while (window.pollEvent(event)) {
       ImGui::SFML::ProcessEvent(event);
@@ -57,7 +58,7 @@ int main() {
     auto dtsec = dt.asSeconds();
 #endif
     //update app
-    app->update(dtsec, window);
+    app_exec = app->update(dtsec, window);
     //imgui
     ImGui::SFML::Update(window, dt);
 #if DEBUG
