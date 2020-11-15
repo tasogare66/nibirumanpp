@@ -228,17 +228,18 @@ void EneSphe::appear()
 
 void EneSphe::upd_ene(float dt)
 {
+  if (m_rotr > const_param::EPSILON) {
+    auto rad = m_speed * dt / m_rotr * m_rdir;
+    m_mov = m_pos.rotate(rad) - m_pos;
+  }
+
   this->upd_blink(dt);
   if (this->is_blink()) {
     this->spr8x8(m_common_blink_spr);
   } else {
     auto s = static_cast<uint32_t>(m_elapsed / (const_param::FRAME2SEC * 4)) % 2;
-    this->spr8x8(m_spr_ene + s); //FIXME:移動向きでsprite変えていない  
-  }
-
-  if (m_rotr > const_param::EPSILON) {
-    auto rad = m_speed * dt / m_rotr * m_rdir;
-    m_mov = m_pos.rotate(rad) - m_pos;
+    uint32_t animdir = m_mov.x < 0 ? 1 : 0;
+    this->spr8x8(m_spr_ene + s + animdir*2);
   }
 }
 

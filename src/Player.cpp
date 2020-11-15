@@ -26,6 +26,12 @@ void Player::init()
   this->attr_px();
 }
 
+void Player::set_animdir(const Vec2f& in_dir)
+{
+  m_animdir = (in_dir.x > 0) ? 0 : 1;
+  m_animdir |= ((in_dir.y < 0) ? 2 : 0);
+}
+
 void Player::update(float dt)
 {
   const auto& [inputp, inputd] = Input::inst().input_pair(m_index);;
@@ -43,8 +49,7 @@ void Player::update(float dt)
     chara_dir = inputd.m_analog_l;
   }
   m_chara_dir_old = chara_dir;
-  m_animdir = (chara_dir.x > 0) ? 0 : 1;
-  m_animdir |= ((chara_dir.y < 0) ? 2 : 0);
+  this->set_animdir(this->is_dashing() ? m_dashvec : chara_dir);
   if (this->check_dead()) return;
   this->upd_invincible(dt);
   this->upd_armslv(dt);

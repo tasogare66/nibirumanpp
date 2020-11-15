@@ -25,6 +25,7 @@ public:
   void add_armslv();
 
 private:
+  void set_animdir(const Vec2f& in_dir);
   bool is_dash() const { return (m_dashst != 0); }
   bool is_dashing() const { return (m_dashst == 1); }
   float dash_pow() const {
