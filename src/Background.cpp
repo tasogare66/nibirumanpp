@@ -22,8 +22,8 @@ void Background::draw(sf::RenderWindow& window)
 {
   const auto& view = Camera::inst().get_view();
   const auto& vsz = view.getSize();
-  const int nx = static_cast<int>(std::floor(vsz.x / 8.0f))+1;
-  const int ny = static_cast<int>(std::floor(vsz.y / 8.0f))+1;
+  const int nx = static_cast<int>(std::ceil(vsz.x / 8.0f))+1;
+  const int ny = static_cast<int>(std::ceil(vsz.y / 8.0f))+1;
 
   Vec2f topleft = Camera::inst().get_top_left();
   const int sx = static_cast<int>(std::floor(topleft.x / 8.0f));
