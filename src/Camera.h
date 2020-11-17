@@ -22,9 +22,7 @@ private:
   Vec2f upd_shake();
   Vec2f m_inr_center;
   Vec2f m_center;
-  Vec2f m_top_left;
-  Vec2f m_trs;
-  float m_scale = 4.0;
+  float m_view_scale = 1.0f;
   sf::View m_view;
   sf::View m_view_2d;
   float m_shake = 0.0f;

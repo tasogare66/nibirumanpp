@@ -8,8 +8,10 @@ namespace const_param {
     return static_cast<uint32_t>(sec * SEC2FRAME);
   }
   inline const char* const GAME_VER = "v.0.9.0";
-  inline constexpr float SCR_WIDTH = 240.f;
-  inline constexpr float SCR_HEIGHT = 136.f;
+  //inline constexpr float SCR_WIDTH = 240.f;
+  //inline constexpr float SCR_HEIGHT = 136.f;
+  inline constexpr float SCR_WIDTH = 256.f;
+  inline constexpr float SCR_HEIGHT = 144.f;
   inline constexpr float LvRadius = 170.f;
   inline constexpr float LvRadDr2 = LvRadius / 1.4142f;
   inline constexpr float BOUNCE = 0.5f;
