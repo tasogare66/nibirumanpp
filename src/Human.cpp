@@ -58,7 +58,7 @@ void Human::upd_ene(float dt)
 void Human::dead()
 {
   if (auto* player = this->check_kill_by_player_random()) {
-    GameSeq::add_score(player->get_index(), m_score);
+    GameSeq::add_score(m_score);
     GameSeq::inst().reduceDiff(30);
     player->add_armslv();
     new Pop2D(m_pos);

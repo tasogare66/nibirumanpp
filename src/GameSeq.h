@@ -5,11 +5,8 @@ class Player;
 using PlayerScore = uint64_t;
 class SeqPlayer {
 public:
-  SeqPlayer(Player* e)
-    : m_e(e)
+  SeqPlayer()
   {}
-  Player* get_player() { return m_e; }
-  const Player* get_player() const { return m_e; }
   int32_t decriment_life() {
     m_life = std::max(m_life - 1, 0);
     return m_life;
@@ -28,7 +25,6 @@ public:
     m_multime = 0.0f;
   }
 private:
-  Player* m_e = nullptr;
   int32_t m_life = 3;
   PlayerScore m_score = 0;
   float m_multiplier = 1.0f;
@@ -48,15 +44,16 @@ public:
   void add_player(Player* e);
   const SeqPlayer* get_seq_player(uint32_t id) const;
   SeqPlayer* get_seq_player_w(uint32_t id);
+  bool is_exist_seq_player(uint32_t id) const;
   const Player* get_player_for_enemy();
   int32_t decide_target_index() const; //spawn時のtarget(player)の指定,random
   Player* get_player_entity_w(uint32_t player_index) const;
   const Player* get_player_entity(uint32_t player_index) const;
   const std::vector<Player*>& get_player_entities() const;
-  static void add_score(uint32_t player_index, PlayerScore v);
-  static void add_multiplier(uint32_t player_index);
-  static void reset_multiplier(uint32_t player_index);
-  static int32_t decriment_life(uint32_t player_index);
+  static void add_score(PlayerScore v);
+  static void add_multiplier();
+  static void reset_multiplier();
+  static int32_t decriment_life();
   float getDifV(float a, float b);
   void  reduceDiff(int32_t v) { FW_ASSERT(v>0); m_diffsub += std::max(v,0); }
   bool check_game_over() const;

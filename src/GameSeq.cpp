@@ -16,7 +16,7 @@ void GameSeq::reset()
 
 void GameSeq::add_player(Player* e) {
   m_pl_entities.push_back(e);
-  m_seq_pls.emplace_back(e);
+  m_seq_pls.emplace_back();
 }
 
 const SeqPlayer* GameSeq::get_seq_player(uint32_t id) const {
@@ -32,15 +32,18 @@ SeqPlayer* GameSeq::get_seq_player_w(uint32_t id)
   return nullptr;
 }
 
+bool GameSeq::is_exist_seq_player(uint32_t id) const
+{
+  return (id < m_seq_pls.size());
+}
+
 const Player* GameSeq::get_player_for_enemy()
 {
-  if (m_seq_pls.size() <= 0) {
+  if (m_pl_entities.size() <= 0) {
     FW_ASSERT(0);
     return nullptr;
   }
-  auto* seq_pl = this->get_seq_player((m_get_player_cnt++) % m_seq_pls.size());
-  if (seq_pl) return seq_pl->get_player();
-  return nullptr;
+  return this->get_player_entity((m_get_player_cnt++) % m_pl_entities.size());
 }
 
 int32_t GameSeq::decide_target_index() const
@@ -64,31 +67,35 @@ const std::vector<Player*>& GameSeq::get_player_entities() const {
   return m_pl_entities;
 }
 
-void GameSeq::add_score(uint32_t player_index, PlayerScore v)
+void GameSeq::add_score(PlayerScore v)
 {
-  if (auto* player = inst().get_seq_player_w(player_index)) {
-    player->add_score(v);
+  uint32_t player_index = 0;
+  if (auto* seqpl = inst().get_seq_player_w(player_index)) {
+    seqpl->add_score(v);
   }
 }
 
-void GameSeq::add_multiplier(uint32_t player_index)
+void GameSeq::add_multiplier()
 {
-  if (auto* player = inst().get_seq_player_w(player_index)) {
-    player->add_multiplier();
+  uint32_t player_index = 0;
+  if (auto* seqpl = inst().get_seq_player_w(player_index)) {
+    seqpl->add_multiplier();
   }
 }
 
-void GameSeq::reset_multiplier(uint32_t player_index)
+void GameSeq::reset_multiplier()
 {
-  if (auto* player = inst().get_seq_player_w(player_index)) {
-    player->reset_multiplier();
+  uint32_t player_index = 0;
+  if (auto* seqpl = inst().get_seq_player_w(player_index)) {
+    seqpl->reset_multiplier();
   }
 }
 
-int32_t GameSeq::decriment_life(uint32_t player_index)
+int32_t GameSeq::decriment_life()
 {
-  if (auto* player = inst().get_seq_player_w(player_index)) {
-    return player->decriment_life();
+  uint32_t player_index = 0;
+  if (auto* seqpl = inst().get_seq_player_w(player_index)) {
+    return seqpl->decriment_life();
   }
   return 0;
 }
@@ -99,14 +106,19 @@ float GameSeq::getDifV(float a, float b) {
 
 bool GameSeq::check_game_over() const
 {
-  bool ret = true;
-  for (const auto& seq_pl : m_seq_pls) {
-    if (seq_pl.get_life() > 0) {
-      ret = false;
-      break;
-    }
+  uint32_t player_index = 0;
+  if (auto* seqpl = inst().get_seq_player_w(player_index)) {
+    return (seqpl->get_life() <= 0);
   }
-  return ret;;
+  return true; //ない場合game over
+  //bool ret = true;
+  //for (const auto& seq_pl : m_seq_pls) {
+  //  if (seq_pl.get_life() > 0) {
+  //    ret = false;
+  //    break;
+  //  }
+  //}
+  //return ret;;
 }
 
 void GameSeq::update_hiscore()

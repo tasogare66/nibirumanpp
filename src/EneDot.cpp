@@ -56,8 +56,8 @@ void EneDot::hitcb(const Entity* o, const Vec2f& dir, float dist)
     //capture済ならそのplayer
     //そうでないなら各playerに入れる(同フレームでは複数入る)
     auto idx = m_capture_pl ? m_capture_pl->get_index() : player->get_index();
-    GameSeq::add_score(idx, m_score);
-    GameSeq::add_multiplier(idx);
+    GameSeq::add_score(m_score);
+    GameSeq::add_multiplier();
     this->del();
     m_acquired = true;
   }

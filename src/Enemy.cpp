@@ -35,8 +35,8 @@ void Enemy::update(float dt)
 
 void Enemy::dead()
 {
-  auto cbfunc = [this](int32_t player_id) {
-    GameSeq::add_score(player_id, m_score);
+  auto cbfunc = [this](int32_t /*player_id*/) {
+    GameSeq::add_score(m_score);
   };
   if (this->check_kill_by_generated_player(cbfunc)) {
     if (m_flag.check(EntityFlag::HaveDot)) {

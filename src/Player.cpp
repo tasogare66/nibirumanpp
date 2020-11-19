@@ -213,12 +213,12 @@ bool Player::check_dead()
     m_hit_mask.off(HitMask::Enemy);
     if (not this->is_dash()) {
       Camera::inst().req_shake(1.4f);
-      if (GameSeq::decriment_life(m_index) > 0) {
+      if (GameSeq::decriment_life() > 0) {
         new ForceF(m_pos, this->get_product_colli_attr());
       }
       this->reset_dash();
       this->set_invincible();
-      GameSeq::reset_multiplier(m_index);
+      GameSeq::reset_multiplier();
       GameSeq::inst().reduceDiff(300);
       return true;
     }
