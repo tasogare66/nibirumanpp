@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 
 #include "Random.h"
+#include "ObjLst.h"
 
 #include "GameSeq.h"
 
@@ -16,7 +17,14 @@ void GameSeq::reset()
 
 void GameSeq::add_player(Player* e) {
   m_pl_entities.push_back(e);
+}
+
+void GameSeq::setup_game()
+{
   m_seq_pls.emplace_back();
+  if (m_entry_num >= 2) {
+    m_seq_pls[0].setup_for_coop();
+  }
 }
 
 const SeqPlayer* GameSeq::get_seq_player(uint32_t id) const {
@@ -69,7 +77,7 @@ const std::vector<Player*>& GameSeq::get_player_entities() const {
 
 void GameSeq::add_score(PlayerScore v)
 {
-  uint32_t player_index = 0;
+  constexpr uint32_t player_index = 0;
   if (auto* seqpl = inst().get_seq_player_w(player_index)) {
     seqpl->add_score(v);
   }
@@ -77,7 +85,7 @@ void GameSeq::add_score(PlayerScore v)
 
 void GameSeq::add_multiplier()
 {
-  uint32_t player_index = 0;
+  constexpr uint32_t player_index = 0;
   if (auto* seqpl = inst().get_seq_player_w(player_index)) {
     seqpl->add_multiplier();
   }
@@ -85,7 +93,7 @@ void GameSeq::add_multiplier()
 
 void GameSeq::reset_multiplier()
 {
-  uint32_t player_index = 0;
+  constexpr uint32_t player_index = 0;
   if (auto* seqpl = inst().get_seq_player_w(player_index)) {
     seqpl->reset_multiplier();
   }
@@ -93,7 +101,7 @@ void GameSeq::reset_multiplier()
 
 int32_t GameSeq::decriment_life()
 {
-  uint32_t player_index = 0;
+  constexpr uint32_t player_index = 0;
   if (auto* seqpl = inst().get_seq_player_w(player_index)) {
     return seqpl->decriment_life();
   }
@@ -106,7 +114,7 @@ float GameSeq::getDifV(float a, float b) {
 
 bool GameSeq::check_game_over() const
 {
-  uint32_t player_index = 0;
+  constexpr uint32_t player_index = 0;
   if (auto* seqpl = inst().get_seq_player_w(player_index)) {
     return (seqpl->get_life() <= 0);
   }
@@ -119,6 +127,20 @@ bool GameSeq::check_game_over() const
   //  }
   //}
   //return ret;;
+}
+
+void GameSeq::update_info(float dt)
+{
+  //multiplier
+  for (auto& seq_pl : m_seq_pls) {
+    seq_pl.update_info(dt);
+  }
+  //difficulty
+  if (m_ticcnt % 30 == 0) {
+    const auto spawn_ttl = ObjLst::inst().get_spawn_ttl();
+    m_difficulty = std::min(std::max<int32_t>(spawn_ttl - m_diffsub, 0) / 2000.0f, 1.0f);
+  }
+  ++m_ticcnt;
 }
 
 void GameSeq::update_hiscore()

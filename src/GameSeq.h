@@ -24,12 +24,23 @@ public:
     m_multiplier = 1.0;
     m_multime = 0.0f;
   }
+  float get_multiplier() const { return m_multiplier; }
+  float get_multime() const { return m_multime; }
+  void update_info(float dt) {
+    if (m_multime <= 0.0f) {
+      this->reset_multiplier();
+    }
+    m_multime = std::max(m_multime - dt, 0.0f);
+  }
+  void setup_for_coop() {
+    m_life = 4; //lifeを4に
+  }
+  static constexpr float m_multimeLimit = 6.0f;
 private:
   int32_t m_life = 3;
   PlayerScore m_score = 0;
   float m_multiplier = 1.0f;
   float m_multime = 0.0f;
-  static constexpr float m_multimeLimit = 6.0f;
 };
 
 class GameSeq : public Singleton<GameSeq> {
@@ -42,6 +53,7 @@ public:
   //game
   void reset();
   void add_player(Player* e);
+  void setup_game();
   const SeqPlayer* get_seq_player(uint32_t id) const;
   SeqPlayer* get_seq_player_w(uint32_t id);
   bool is_exist_seq_player(uint32_t id) const;
@@ -58,6 +70,7 @@ public:
   void  reduceDiff(int32_t v) { FW_ASSERT(v>0); m_diffsub += std::max(v,0); }
   bool check_game_over() const;
   PlayerScore get_hiscore() const { return m_hiscore; }
+  void update_info(float dt);
   void update_hiscore();
 private:
   uint32_t m_entry_num = 1;

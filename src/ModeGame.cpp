@@ -25,6 +25,7 @@ ModeGame::~ModeGame()
 
 void ModeGame::upd_info(float dt)
 {
+  GameSeq::inst().update_info(dt);
 }
 
 void ModeGame::init()
@@ -43,6 +44,7 @@ void ModeGame::init()
     auto p = new Player({ ptbl[player_index] }, reticle, player_index);
     GameSeq::inst().add_player(p);
   }
+  GameSeq::inst().setup_game();
   //text
   m_text.setFont(Resource::inst().get_base_font());
   //sprite
@@ -106,7 +108,7 @@ void ModeGame::draw1(sf::RenderWindow& window)
     const int32_t dsp_life_num = std::min(sp->get_life(), 10);
     m_spr.setTextureRect(Resource::get_spr_rect(481));
     for (int32_t i = 1; i < dsp_life_num; ++i) {
-      m_spr.setPosition(i*8.f,0.f);
+      m_spr.setPosition(i*8.f, 1.f);
       window.draw(m_spr);
     }
   }
@@ -124,10 +126,21 @@ void ModeGame::draw2(sf::RenderWindow& window)
   constexpr auto txt_chr_size = const_param::TXT_CHR_SIZE;
   m_text.setCharacterSize(txt_chr_size);
   if (const auto* sp = GameSeq::inst().get_seq_player(0)) {
-    snprintf(buf, fw::array_size(buf), "% 10lld", sp->get_score());
+    snprintf(buf, fw::array_size(buf), "%lld", sp->get_score());
     m_text.setString(buf);
-    m_text.setPosition(172.f/4.f, 32.f);
-    window.draw(m_text);
+    auto bound = m_text.getLocalBounds();
+    lambda_draw_text(const_param::WND_WIDTH - 32.f - bound.width, 0.f, 15);
+
+    int col[] = { 6,15,11 };
+    uint8_t c = 1;
+    if (sp->get_multiplier() > 1.0f) {
+      c = std::min(static_cast<int>(std::floor(sp->get_multime() / sp->m_multimeLimit * 3.f)),2);
+    }
+    FW_ASSERT(c<fw::array_size(col));
+    snprintf(buf, fw::array_size(buf), "%5.2fx", sp->get_multiplier());
+    m_text.setString(buf);
+    bound = m_text.getLocalBounds();
+    lambda_draw_text(const_param::WND_WIDTH - 64.f - bound.width, 44.f, col[c]);
   }
 
   if (m_state == State::Entry) {
