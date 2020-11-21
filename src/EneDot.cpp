@@ -20,7 +20,7 @@ EneDot::~EneDot()
 
 void EneDot::init()
 {
-  m_flag.on(EntityFlag::Ally);
+  m_flag.set(EntityFlag::Ally);
   this->attr_ene_dot();
 }
 
@@ -46,7 +46,7 @@ void EneDot::update(float dt)
 
 void EneDot::hitcb(const Entity* o, const Vec2f& dir, float dist)
 {
-  m_hit_mask.on(o->get_colli_attr());
+  m_hit_mask.set(o->get_colli_attr());
 
   auto player = o->cast_to<Player>();
   if (!player) return;

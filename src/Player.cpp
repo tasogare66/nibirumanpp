@@ -16,8 +16,8 @@ Player::Player(const EntityArgs& args, const Reticle* reticle, int32_t index)
   , m_reticle(reticle)
   , m_index(index)
 {
-  m_flag.on(EntityFlag::Ally);
-  m_colli_attr.on(Player::get_player_hit_mask(index));
+  m_flag.set(EntityFlag::Ally);
+  m_colli_attr.set(Player::get_player_hit_mask(index));
   m_product_colli_attr = Player::get_generated_player_hit_mask(index);
 }
 
@@ -63,7 +63,7 @@ void Player::update(float dt)
 
   //dash
   auto can_dash = inputd.on(InputButton_Dash) | inputd.on(InputButton_PadDash);
-  if (this->get_flag().check(EntityFlag::Invincible) && m_invincible_time < 1.0f) can_dash = false; //ignore start invincible
+  if (this->get_flag().test(EntityFlag::Invincible) && m_invincible_time < 1.0f) can_dash = false; //ignore start invincible
   if (m_dashst == 0) {
     if (m_coolt > 0.0f) {
       m_coolt -= dt;
@@ -175,7 +175,7 @@ void Player::update(float dt)
 void Player::draw(sf::RenderWindow& window)
 {
   auto sprid = 400 + m_animdir * 16 + m_animcnt;
-  if (this->get_flag().check(EntityFlag::Invincible) && m_active) {
+  if (this->get_flag().test(EntityFlag::Invincible) && m_active) {
     uint32_t r = static_cast<uint32_t>(m_invincible_time / (const_param::FRAME2SEC * 6));
     if (r % 2 == 0) sprid = 267;
   }
@@ -209,12 +209,14 @@ void Player::draw(sf::RenderWindow& window)
 
 bool Player::check_dead()
 {
-  if (m_hit_mask.check(HitMask::Enemy)) {
-    m_hit_mask.off(HitMask::Enemy);
+  if (m_hit_mask.test(HitMask::Enemy)) {
+    m_hit_mask.reset(HitMask::Enemy);
     if (not this->is_dash()) {
       Camera::inst().req_shake(1.4f);
       if (GameSeq::decriment_life() > 0) {
         new ForceF(m_pos, this->get_product_colli_attr());
+      } else {
+        this->set_gone_state(); //死亡
       }
       this->reset_dash();
       this->set_invincible();
@@ -228,15 +230,15 @@ bool Player::check_dead()
 
 void Player::set_invincible()
 {
-  m_flag.on(EntityFlag::Invincible);
+  this->Entity::set_invincible(true);
   m_invincible_time = 0.0f;
 }
 
 void Player::upd_invincible(float dt)
 {
-  if (m_flag.check(EntityFlag::Invincible)) {
+  if (m_flag.test(EntityFlag::Invincible)) {
     if (m_invincible_time > 3.0f) { //3秒
-      m_flag.off(EntityFlag::Invincible);
+      this->Entity::set_invincible(false);
     }
     m_invincible_time += dt;
   }
@@ -255,4 +257,10 @@ void Player::upd_armslv(float dt)
   } else {
     m_armslv = 0;
   }
+}
+
+void Player::set_gone_state()
+{
+  m_flag.set(EntityFlag::DefaultMask, false);
+  m_is_gone = true;
 }

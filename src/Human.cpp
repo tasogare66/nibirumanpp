@@ -12,7 +12,7 @@
 Human::Human(const EntityArgs& args)
   : Enemy(args, 404)
 {
-  m_flag.on(EntityFlag::Ally);
+  m_flag.set(EntityFlag::Ally);
   m_colli_attr.reset();
   m_score = 1000;
 }
@@ -33,7 +33,7 @@ void Human::appear()
 
 void Human::upd_ene(float dt)
 {
-  if (m_hit_mask.check(HitMask::PlayerAll)) {
+  if (m_hit_mask.test(HitMask::PlayerAll)) {
     this->del();
     return;
   }

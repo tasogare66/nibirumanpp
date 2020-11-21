@@ -17,7 +17,7 @@ ForceF::ForceF(const Vec2f pos, const HitMask colli_attr, float power)
   m_circle.setFillColor(sf::Color(0));
   m_circle.setOutlineThickness(0.5f);
   m_circle.setOutlineColor(const_param::ticcol(6));
-  m_colli_attr.on(colli_attr);
+  m_colli_attr.set(colli_attr);
 }
 
 void ForceF::init()
@@ -48,7 +48,7 @@ void ForceF::hitcb_w(Entity* o, const Vec2f& dir, float d) const
     o->on_hit_mask(m_colli_attr);
     o->sub_health_dmg(static_cast<int32_t>(m_health * o->get_exp_resi()));
   } else {
-    if (not o->get_flag().check(EntityFlag::IgnoreForceAddVel)) {
+    if (o->get_flag().test(EntityFlag::ForceAddVelEnabled)) {
       o->add_vel_force(dir / d * 2.f);
     }
   }
@@ -58,7 +58,7 @@ void ForceF::hitcb_w(Entity* o, const Vec2f& dir, float d) const
 ForceD::ForceD(const Vec2f pos, const HitMask colli_attr)
   : Entity(EntityType::Force, { pos })
 {
-  m_colli_attr.on(colli_attr);
+  m_colli_attr.set(colli_attr);
   m_health = 2;
   m_base_spr = 268;
   this->spr8x8(m_base_spr);

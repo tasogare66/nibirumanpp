@@ -15,7 +15,7 @@ Enemy::Enemy(const EntityArgs& args, uint32_t spr_ene)
   : Entity(EntityType::Enemy, args)
   , m_spr_ene(spr_ene)
 {
-  m_colli_attr.on(HitMask::Enemy);
+  m_colli_attr.set(HitMask::Enemy);
   this->spr8x8(464); //appear
 }
 
@@ -39,13 +39,13 @@ void Enemy::dead()
     GameSeq::add_score(m_score);
   };
   if (this->check_kill_by_generated_player(cbfunc)) {
-    if (m_flag.check(EntityFlag::HaveDot)) {
+    if (m_flag.test(EntityFlag::HaveDot)) {
       new EneDot(m_pos);
       Sound::psfx(SfxId::EneDead, SndChannel::SFX1);
     }
     PtclLst::add(m_pos, 15);
   } else {
-    FW_ASSERT(m_flag.check(EntityFlag::Suicide));
+    FW_ASSERT(m_flag.test(EntityFlag::Suicide));
   }
 }
 
@@ -61,7 +61,7 @@ void Enemy::set_blink()
 EneSnake::EneSnake(const EntityArgs& args)
   : Enemy(args, 274)
 {
-  m_flag.on(EntityFlag::HaveDot);
+  m_flag.set(EntityFlag::HaveDot);
   m_score = 20;
 }
 void EneSnake::appear()
@@ -87,7 +87,7 @@ void EneSnake::upd_ene(float dt)
 EneGrunt::EneGrunt(const EntityArgs& args)
   : Enemy(args,288)
 {
-  m_flag.on(EntityFlag::HaveDot);
+  m_flag.set(EntityFlag::HaveDot);
   m_score = 10;
 }
 void EneGrunt::appear()
@@ -110,7 +110,7 @@ void EneGrunt::upd_ene(float dt)
 EneHulk::EneHulk(const EntityArgs& args)
   : Enemy(args,304)
 {
-  m_flag.on(EntityFlag::HaveDot);
+  m_flag.set(EntityFlag::HaveDot);
   m_health = 30;
   m_exp_resi = 15;
   this->setmvtm();
@@ -156,7 +156,7 @@ void EneHulk::setmvtm()
 EneArrow::EneArrow(const EntityArgs& args, uint32_t spr_ene)
   : Enemy(args,spr_ene)
 {
-  m_flag.on(EntityFlag::HaveDot);
+  m_flag.set(EntityFlag::HaveDot);
   m_dir = args.m_dir;
   const auto l = m_dir.magnitude();
   if (l < const_param::EPSILON) {
@@ -211,7 +211,7 @@ bool EneArrow2::hit_wall(const Vec2f&)
 EneSphe::EneSphe(const EntityArgs& args)
   : Enemy(args, 308)
 {
-  m_flag.on(EntityFlag::HaveDot);
+  m_flag.set(EntityFlag::HaveDot);
   m_health = 2;
   m_exp_resi = 2;
   //self.drw = self.drw_blink
@@ -248,7 +248,7 @@ BossBullet::BossBullet(const EntityArgs& args)
   : Enemy(args, 336)
   , m_speed(50.f)
 {
-  m_flag.on(EntityFlag::IgnoreForceAddVel);
+  m_flag.reset(EntityFlag::ForceAddVelEnabled);
   m_dir = args.m_dir;
   m_dir.normalize();
 }

@@ -33,10 +33,17 @@ enum class EntityFlag : uint32_t {
   Suicide = 1 << 1,
   AttrVerlet = 1 << 2,
   Ally = 1 << 3,
-  Invincible = 1 << 4,
-  HaveDot = 1 << 5,
-  Spawned = 1 << 6,
-  IgnoreForceAddVel = 1 << 7, //forceで力加えない
+  //有効,無効
+  CollisionEnabled = 1 << 4,
+  UpdateEnabled = 1 << 5,
+  ForceAddVelEnabled = 1 << 6, //forceで力加える
+  Visible = 1 << 7,
+
+  Invincible = 1 << 8, //無敵,CollisionEnabledと併用
+  HaveDot = 1 << 9,
+  Spawned = 1 << 10,
+
+  DefaultMask = (CollisionEnabled | UpdateEnabled | ForceAddVelEnabled | Visible), //defaultの設定値
 };
 enum class HitMask : uint32_t {
   Enemy = 1 << 0,
@@ -95,7 +102,7 @@ public:
 
   const FwFlag<EntityFlag>& get_flag() const { return m_flag; }
   const FwFlag<HitMask>& get_colli_attr() const { return  m_colli_attr; }
-  void on_hit_mask(FwFlag<HitMask> mask) { m_hit_mask.on(mask); }
+  void on_hit_mask(FwFlag<HitMask> mask) { m_hit_mask.set(mask); }
 
   void sub_health_dmg(int32_t dmg);
   void sub_health(const Entity* t);
@@ -104,8 +111,12 @@ public:
   bool check_kill_by_generated_player(std::function<void(int32_t)> cb) const;
   bool check_kill_by_player(std::function<void(int32_t)> cb) const;
   Player* check_kill_by_player_random() const;
-  bool is_visible() const { return m_visible; }
-  void set_visible(bool in_flag) { m_visible = in_flag; }
+  bool is_visible() const { return m_flag.test(EntityFlag::Visible); }
+  void set_visible(bool in_flag) { m_flag.set(EntityFlag::Visible, in_flag); }
+  void set_invincible(bool in_flag) { //無敵on/off
+    m_flag.set(EntityFlag::Invincible, in_flag);
+    m_flag.set(EntityFlag::CollisionEnabled, not in_flag);
+  }
 
   template<typename T>
   const T* cast_to() const;
@@ -121,10 +132,10 @@ protected:
   void  set_velocity(const Vec2f& ivel) {
     m_vel = ivel;
   }
-  void del() { m_flag.on(EntityFlag::Del); }
+  void del() { m_flag.set(EntityFlag::Del); }
   void suiside() {
     constexpr auto flg = fw::underlying_cast(EntityFlag::Del) | fw::underlying_cast(EntityFlag::Suicide);
-    m_flag.on(static_cast<EntityFlag>(flg));
+    m_flag.set(static_cast<EntityFlag>(flg));
   }
   void spr8x8(uint32_t id, uint16_t w=1, uint16_t h=1);
 
@@ -151,5 +162,4 @@ protected:
   sf::Sprite m_spr;
   static constexpr uint32_t m_dummy_spr_id = 1;
   uint32_t m_spr_id = m_dummy_spr_id;
-  bool m_visible = true;
 };

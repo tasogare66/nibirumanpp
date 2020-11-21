@@ -23,6 +23,7 @@ public:
 
   auto get_product_colli_attr() const { return m_product_colli_attr; }
   void add_armslv();
+  bool is_gone() const { return m_is_gone; }
 
 private:
   void set_animdir(const Vec2f& in_dir);
@@ -39,6 +40,7 @@ private:
   void set_invincible();
   void upd_invincible(float dt);
   void upd_armslv(float dt);
+  void set_gone_state();
 
   const int32_t m_index; //player index
   int32_t m_shot_repeat = 0;
@@ -51,6 +53,7 @@ private:
   uint32_t m_animcnt = 0;
   uint32_t m_animdir = 0;
   bool m_active = true;
+  bool m_is_gone = false; //lifeなしでtrue
   HitMask m_product_colli_attr; //生成物に設定
   int m_dashst = 0;
   float m_dasht = 0.0f;

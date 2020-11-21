@@ -92,7 +92,7 @@ void del_obj_from_list(std::vector<T*>& lst, std::function<void(Entity*)> func=n
   auto last = lst.end();
   auto result = first;
   for (; first != last; ++first) {
-    if (not (*first)->get_flag().check(EntityFlag::Del)) {
+    if (not (*first)->get_flag().test(EntityFlag::Del)) {
       if (first == result)
         ++result;
       else
@@ -130,8 +130,10 @@ void ObjLst::upd_move(float dt)
   }
   m_spawn_num = 0;
   for (auto o : m_objs) {
-    o->update(dt);
-    if (o->m_flag.check(EntityFlag::Spawned)) ++m_spawn_num;
+    if (o->m_flag.test(EntityFlag::UpdateEnabled)) {
+      o->update(dt);
+    }
+    if (o->m_flag.test(EntityFlag::Spawned)) ++m_spawn_num;
   }
 }
 
@@ -161,10 +163,10 @@ void ObjLst::reciprocal_each(Entity* p1, Entity* p2)
     auto f1f2 = f1 - f2;
     // p1
     p1->m_mov_old += diff * f1f2 * p1->m_inv_mass;
-    p1->m_hit_mask.on(p2->m_colli_attr);
+    p1->m_hit_mask.set(p2->m_colli_attr);
     // p2
     p2->m_mov_old -= diff * f1f2 * p2->m_inv_mass;
-    p2->m_hit_mask.on(p1->m_colli_attr);
+    p2->m_hit_mask.set(p1->m_colli_attr);
   }
 }
 
@@ -172,9 +174,9 @@ void ObjLst::blt_vs_ene(Entity* o, Entity* b)
 {
   //constexpr auto flg = fw::underlying_cast(EntityFlag::Ally) | fw::underlying_cast(EntityFlag::del);
   constexpr auto flg = fw::underlying_cast(EntityFlag::Ally);
-  if (o->m_flag.check(static_cast<EntityFlag>(flg))) return; //playerは除く
+  if (o->m_flag.test(static_cast<EntityFlag>(flg))) return; //playerは除く
   if (intersect_circle_vs_circle(o, b)) {
-    o->m_hit_mask.on(b->m_colli_attr);
+    o->m_hit_mask.set(b->m_colli_attr);
     o->sub_health(b);
     b->del();
   }
@@ -183,7 +185,7 @@ void ObjLst::blt_vs_ene(Entity* o, Entity* b)
 void ObjLst::force_vs_ene(Entity* o, const Entity* f)
 {
   constexpr auto flg = fw::underlying_cast(EntityFlag::Ally);
-  if (o->m_flag.check(static_cast<EntityFlag>(flg))) return; //playerは除く
+  if (o->m_flag.test(static_cast<EntityFlag>(flg))) return; //playerは除く
   // intersect_circle_vs_circle
   auto diff = o->get_pos() - f->get_pos();
   float d = diff.magnitude();
@@ -230,17 +232,18 @@ void ObjLst::upd_reciprocal()
   auto& pls = GameSeq::inst().get_player_entities();
   // player vs ene_bullet
   for (const auto& pl : pls) {
-    if (pl->m_flag.check(EntityFlag::Invincible)) continue;
-    const auto& pl_aabb0 = pl->get_aabb0();
-    const auto pl_radius2 = pl->get_radius() * 2.0f;
-    m_enblt_sha->each(pl_aabb0.x, pl_aabb0.y, pl_radius2, pl_radius2,
-      [&pl](Entity* o) {
-      if (o->m_flag.check(EntityFlag::Del)) return; //delは除く
-      if (intersect_circle_vs_circle(o, pl)) {
-        pl->m_hit_mask.on(o->m_colli_attr);
-        o->m_hit_mask.on(pl->m_colli_attr);
-      }
-    });
+    if (pl->m_flag.test(EntityFlag::CollisionEnabled)) {
+      const auto& pl_aabb0 = pl->get_aabb0();
+      const auto pl_radius2 = pl->get_radius() * 2.0f;
+      m_enblt_sha->each(pl_aabb0.x, pl_aabb0.y, pl_radius2, pl_radius2,
+        [&pl](Entity* o) {
+        if (o->m_flag.test(EntityFlag::Del)) return; //delは除く
+        if (intersect_circle_vs_circle(o, pl)) {
+          pl->m_hit_mask.set(o->m_colli_attr);
+          o->m_hit_mask.set(pl->m_colli_attr);
+        }
+      });
+    }
   }
   // player vs enedot
   for (const auto& pl : pls) {
@@ -259,12 +262,13 @@ void ObjLst::upd_reciprocal()
   }
   // obj同士
   for (auto* obj : m_pxs) {
-    if (obj->m_flag.check(EntityFlag::Invincible)) continue;
-    m_px_sha->each(obj, [&](Entity* o) {
-      if (obj->m_no > o->m_no && (not o->m_flag.check(EntityFlag::Invincible))) {
-        reciprocal_each(obj, o);
-      }
-    });
+    if (obj->m_flag.test(EntityFlag::CollisionEnabled)) {
+      m_px_sha->each(obj, [&](Entity* o) {
+        if (obj->m_no > o->m_no && (o->m_flag.test(EntityFlag::CollisionEnabled))) {
+          reciprocal_each(obj, o);
+        }
+      });
+    }
   }
 }
 

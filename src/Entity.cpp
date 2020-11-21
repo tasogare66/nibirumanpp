@@ -20,6 +20,7 @@ Entity::Entity(EntityType type, const EntityArgs& args)
   , m_aabb0(args.aabb0())
   , m_aabb_size(args.m_radius * 2.f, args.m_radius * 2.f)
   , m_half_extents(args.m_radius, args.m_radius)
+  , m_flag(fw::underlying_cast(EntityFlag::DefaultMask))
 {
   m_spr.setTexture(Resource::inst().get_spr_tex());
   this->spr8x8(m_dummy_spr_id);
@@ -38,9 +39,9 @@ void Entity::set_sha(Shash* set_lst) {
 
 void Entity::attr_verlet()
 {
-  FW_ASSERT(not m_flag.check(EntityFlag::AttrVerlet));
+  FW_ASSERT(not m_flag.test(EntityFlag::AttrVerlet));
   ObjLst::inst().m_verlets.push_back(this);
-  m_flag.on(EntityFlag::AttrVerlet);
+  m_flag.set(EntityFlag::AttrVerlet);
 }
 
 void Entity::attr_px()
@@ -76,8 +77,8 @@ void Entity::attr_forces()
 
 void Entity::attr_spawned()
 {
-  FW_ASSERT(not m_flag.check(EntityFlag::Spawned));
-  m_flag.on(EntityFlag::Spawned);
+  FW_ASSERT(not m_flag.test(EntityFlag::Spawned));
+  m_flag.set(EntityFlag::Spawned);
   ++ObjLst::inst().m_spawn_ttl;
 }
 
@@ -87,7 +88,7 @@ void Entity::update(float dt)
 
 void Entity::draw(sf::RenderWindow& window)
 {
-  if (m_visible) {
+  if (this->is_visible()) {
     m_spr.setPosition(m_pos);
 
     FW_ASSERT(m_spr_id != m_dummy_spr_id);
@@ -202,7 +203,7 @@ void Entity::do_verlet(float dt, float inv_prev_dt, float decel)
 
 void Entity::sub_health_dmg(int32_t dmg)
 {
-  if (m_flag.check(EntityFlag::Del) || dmg <= 0) return;
+  if (m_flag.test(EntityFlag::Del) || dmg <= 0) return;
   m_health -= dmg;
   if (m_health <= 0) {
     this->del();
@@ -229,7 +230,7 @@ bool Entity::check_kill_by_generated_player(std::function<void(int32_t i)> cb) c
 {
   bool kill_by_player = false;
   for (int32_t i = 0; i < Entity_PLAYER_MAX; ++i) {
-    if (m_hit_mask.check(Player::get_generated_player_hit_mask(i))) {
+    if (m_hit_mask.test(Player::get_generated_player_hit_mask(i))) {
       kill_by_player = true;
       cb(i);
     }
@@ -241,7 +242,7 @@ bool Entity::check_kill_by_player(std::function<void(int32_t i)> cb) const
 {
   bool kill_by_player = false;
   for (int32_t i = 0; i < Entity_PLAYER_MAX; ++i) {
-    if (m_hit_mask.check(Player::get_player_hit_mask(i))) {
+    if (m_hit_mask.test(Player::get_player_hit_mask(i))) {
       kill_by_player = true;
       cb(i);
     }
@@ -251,7 +252,7 @@ bool Entity::check_kill_by_player(std::function<void(int32_t i)> cb) const
 
 Player* Entity::check_kill_by_player_random() const
 {
-  if (!m_hit_mask.check(HitMask::PlayerAll)) return nullptr;
+  if (!m_hit_mask.test(HitMask::PlayerAll)) return nullptr;
 
   int32_t hit[Entity_PLAYER_MAX] = {};
   int32_t pt = 0;
