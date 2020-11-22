@@ -126,9 +126,17 @@ void ModeGame::draw2(sf::RenderWindow& window)
   constexpr auto txt_chr_size = const_param::TXT_CHR_SIZE;
   m_text.setCharacterSize(txt_chr_size);
   if (const auto* sp = GameSeq::inst().get_seq_player(0)) {
+    const auto disp_score = sp->get_score();
+    int digit_num = disp_score<=0 ? 1 : static_cast<int>(std::log10(disp_score)+1); //桁数
+    for (int i = 0; i < digit_num;++i) {
+      buf[i] = '0';
+    }
+    buf[digit_num] = 0; //終端
+    m_text.setString(buf);
+    auto bound = m_text.getLocalBounds(); //0埋めてサイズ出す
+
     snprintf(buf, fw::array_size(buf), "%lld", sp->get_score());
     m_text.setString(buf);
-    auto bound = m_text.getLocalBounds();
     lambda_draw_text(const_param::WND_WIDTH - 32.f - bound.width, 0.f, 15);
 
     int col[] = { 6,15,11 };

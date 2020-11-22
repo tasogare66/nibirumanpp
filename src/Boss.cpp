@@ -87,6 +87,7 @@ BossBaby::BossBaby(const EntityArgs& args)
 {
   this->set_radius(16);
   this->set_mass(5);
+  m_score = 5000;
   m_health_max = 500;
   m_health = m_health_max;
   //spr

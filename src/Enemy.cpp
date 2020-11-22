@@ -111,6 +111,7 @@ EneHulk::EneHulk(const EntityArgs& args)
   : Enemy(args,304)
 {
   m_flag.set(EntityFlag::HaveDot);
+  m_score = 300;
   m_health = 30;
   m_exp_resi = 15;
   this->setmvtm();
@@ -157,6 +158,7 @@ EneArrow::EneArrow(const EntityArgs& args, uint32_t spr_ene)
   : Enemy(args,spr_ene)
 {
   m_flag.set(EntityFlag::HaveDot);
+  m_score = 30;
   m_dir = args.m_dir;
   const auto l = m_dir.magnitude();
   if (l < const_param::EPSILON) {
@@ -212,6 +214,7 @@ EneSphe::EneSphe(const EntityArgs& args)
   : Enemy(args, 308)
 {
   m_flag.set(EntityFlag::HaveDot);
+  m_score = 40;
   m_health = 2;
   m_exp_resi = 2;
   //self.drw = self.drw_blink
@@ -249,6 +252,7 @@ BossBullet::BossBullet(const EntityArgs& args)
   , m_speed(50.f)
 {
   m_flag.reset(EntityFlag::ForceAddVelEnabled);
+  m_score = 1;
   m_dir = args.m_dir;
   m_dir.normalize();
 }
