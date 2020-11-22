@@ -9,6 +9,7 @@
 void GameSeq::reset()
 {
   m_pl_entities.clear();
+  m_alive_pl_ids.clear();
   m_seq_pls.clear();
   m_get_player_cnt = 0;
   m_difficulty = 0.0f;
@@ -18,6 +19,7 @@ void GameSeq::reset()
 
 void GameSeq::add_player(Player* e) {
   m_pl_entities.push_back(e);
+  m_alive_pl_ids.push_back(e->get_index());
 }
 
 void GameSeq::setup_game()
@@ -48,17 +50,21 @@ bool GameSeq::is_exist_seq_player(uint32_t id) const
 
 const Player* GameSeq::get_player_for_enemy()
 {
-  if (m_pl_entities.size() <= 0) {
+  //生きているplayerから
+  if (m_alive_pl_ids.size() <= 0) {
     FW_ASSERT(0);
     return nullptr;
   }
-  return this->get_player_entity((m_get_player_cnt++) % m_pl_entities.size());
+  auto pid = m_alive_pl_ids[ (m_get_player_cnt++) % m_alive_pl_ids.size() ];
+  return this->get_player_entity(pid);
 }
 
 int32_t GameSeq::decide_target_index() const
 {
-  FW_ASSERT(!m_pl_entities.empty());
-  return rng::rand_int(static_cast<int32_t>(m_pl_entities.size())-1,rng::Type::GAME);
+  //生きているplayerから
+  FW_ASSERT(!m_alive_pl_ids.empty());
+  auto rnd = rng::rand_int(static_cast<int32_t>(m_alive_pl_ids.size()) - 1, rng::Type::GAME);
+  return m_alive_pl_ids[rnd];
 }
 
 Player* GameSeq::get_player_entity_w(uint32_t player_index) const
@@ -110,7 +116,16 @@ int32_t GameSeq::decriment_life()
 }
 
 float GameSeq::getDifV(float a, float b) {
-  return a;
+  return fw::lerp(a, b, m_difficulty);
+}
+
+void GameSeq::update_alive_pl() {
+  if (m_alive_pl_ids.size() > 1) { //最後のplayerは残す
+    m_alive_pl_ids.erase(std::remove_if(m_alive_pl_ids.begin(), m_alive_pl_ids.end(), [this](const auto& pid)->bool {
+      const auto* p = this->get_player_entity(pid);
+      return p->is_gone();
+    }), m_alive_pl_ids.end());
+  }
 }
 
 bool GameSeq::check_game_over() const

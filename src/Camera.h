@@ -7,7 +7,7 @@ class Camera : public Singleton<Camera> {
 public:
   Camera() = default;
   ~Camera() = default;
-  void upd(const std::vector<Player*>&);
+  void upd();
   const sf::View& update_view();
   const sf::View& get_view() const { return m_view; }
   const sf::View& get_view_2d() const { return m_view_2d; }

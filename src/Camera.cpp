@@ -3,16 +3,20 @@
 #include "ConstParam.h"
 #include "Random.h"
 #include "Player.h"
+#include "GameSeq.h"
 
 #include "Camera.h"
 
-void Camera::upd(const std::vector<Player*>& pls)
+void Camera::upd()
 {
   Vec2f p;
   Vec2f min(FLT_MAX,FLT_MAX);
   Vec2f max(-FLT_MAX,-FLT_MAX);
-  if (pls.size() > 0) {
-    for (const auto& pl:pls) {
+  const auto& gameseq = GameSeq::inst();
+  const auto& pl_ids = gameseq.get_alive_player_ids();
+  if (pl_ids.size() > 0) {
+    for (const auto& pid : pl_ids) {
+      const auto& pl = gameseq.get_player_entity(pid);
       const auto& ppos = pl->get_pos();
       p += ppos;
       min.x = std::min(min.x,ppos.x);
@@ -20,7 +24,7 @@ void Camera::upd(const std::vector<Player*>& pls)
       max.x = std::max(max.x, ppos.x);
       max.y = std::max(max.y, ppos.y);
     }
-    p *= (1.0f/ pls.size());
+    p *= (1.0f/ pl_ids.size());
   }
   Vec2f margin(70.f, 70.0f);
   Vec2f size = max - min + margin;

@@ -62,12 +62,14 @@ public:
   Player* get_player_entity_w(uint32_t player_index) const;
   const Player* get_player_entity(uint32_t player_index) const;
   const std::vector<Player*>& get_player_entities() const;
+  const std::vector<uint32_t>& get_alive_player_ids() const { return m_alive_pl_ids; }
   static void add_score(PlayerScore v);
   static void add_multiplier();
   static void reset_multiplier();
   static int32_t decriment_life();
   float getDifV(float a, float b);
   void  reduceDiff(int32_t v) { FW_ASSERT(v>0); m_diffsub += std::max(v,0); }
+  void update_alive_pl();
   bool check_game_over() const;
   PlayerScore get_hiscore() const { return m_hiscore; }
   void update_info(float dt);
@@ -77,6 +79,7 @@ private:
   PlayerScore m_hiscore = 5000;
   //game
   std::vector<Player*> m_pl_entities;
+  std::vector<uint32_t> m_alive_pl_ids;
   std::vector<SeqPlayer> m_seq_pls;
   uint32_t m_get_player_cnt = 0;
   float m_difficulty = 0.0f;

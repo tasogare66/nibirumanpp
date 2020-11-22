@@ -67,10 +67,12 @@ bool ModeGame::ctrl(float dt)
   }
   if (m_state == State::Play) {
     auto func = [this,dt]() {
-      if (GameSeq::inst().check_game_over()) {
+      auto& gamseq = GameSeq::inst();
+      gamseq.update_alive_pl(); //生存playerの更新
+      if (gamseq.check_game_over()) {
         m_state = State::Over;
         //Input: term()
-        GameSeq::inst().update_hiscore();
+        gamseq.update_hiscore();
         return;
       }
       m_spawner.exec(dt);
@@ -94,7 +96,7 @@ bool ModeGame::ctrl(float dt)
 
 void ModeGame::ctrl_post()
 {
-  Camera::inst().upd(GameSeq::inst().get_player_entities());
+  Camera::inst().upd();
 }
 
 void ModeGame::draw0(sf::RenderWindow& window)
