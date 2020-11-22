@@ -72,8 +72,12 @@ void Player::update(float dt)
       if (can_dash) {
         Vec2f v;
         if (inputd.on(InputButton_PadDash)) {
-          if (inputd.m_analog_r.magnitude() >= m_analog_threshold) {
+          if (inputd.m_analog_l.magnitude() >= m_analog_threshold) {
+            v = inputd.m_analog_l;
+          }else if (inputd.m_analog_r.magnitude() >= m_analog_threshold) {
             v = inputd.m_analog_r;
+          } else {
+            v = m_chara_dir_old;
           }
         }
         else if (inputd.on(InputButton_Dash) && m_reticle) {
