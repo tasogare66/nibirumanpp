@@ -8,7 +8,7 @@ public:
   SeqPlayer()
   {}
   int32_t decriment_life() {
-    m_life = std::max(m_life - 1, 0);
+    m_life = std::max(m_life - 1, -1);
     return m_life;
   }
   int32_t get_life() const { return m_life; }

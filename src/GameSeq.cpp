@@ -2,6 +2,7 @@
 
 #include "Random.h"
 #include "ObjLst.h"
+#include "Player.h"
 
 #include "GameSeq.h"
 
@@ -105,7 +106,7 @@ int32_t GameSeq::decriment_life()
   if (auto* seqpl = inst().get_seq_player_w(player_index)) {
     return seqpl->decriment_life();
   }
-  return 0;
+  return -1;
 }
 
 float GameSeq::getDifV(float a, float b) {
@@ -114,19 +115,12 @@ float GameSeq::getDifV(float a, float b) {
 
 bool GameSeq::check_game_over() const
 {
-  constexpr uint32_t player_index = 0;
-  if (auto* seqpl = inst().get_seq_player_w(player_index)) {
-    return (seqpl->get_life() <= 0);
+  //全playerが死亡だと終わり
+  bool ret = true;
+  for (const auto* pl : m_pl_entities) {
+    ret &= pl->is_gone();
   }
-  return true; //ない場合game over
-  //bool ret = true;
-  //for (const auto& seq_pl : m_seq_pls) {
-  //  if (seq_pl.get_life() > 0) {
-  //    ret = false;
-  //    break;
-  //  }
-  //}
-  //return ret;;
+  return ret;
 }
 
 void GameSeq::update_info(float dt)

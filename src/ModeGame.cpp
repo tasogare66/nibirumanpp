@@ -107,7 +107,7 @@ void ModeGame::draw1(sf::RenderWindow& window)
   if (const auto* sp = GameSeq::inst().get_seq_player(0)) {
     const int32_t dsp_life_num = std::min(sp->get_life(), 10);
     m_spr.setTextureRect(Resource::get_spr_rect(481));
-    for (int32_t i = 1; i < dsp_life_num; ++i) {
+    for (int32_t i = 0; i < dsp_life_num; ++i) {
       m_spr.setPosition(i*8.f, 1.f);
       window.draw(m_spr);
     }

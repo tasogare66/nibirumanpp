@@ -213,7 +213,7 @@ bool Player::check_dead()
     m_hit_mask.reset(HitMask::Enemy);
     if (not this->is_dash()) {
       Camera::inst().req_shake(1.4f);
-      if (GameSeq::decriment_life() > 0) {
+      if (GameSeq::decriment_life() >= 0) {
         new ForceF(m_pos, this->get_product_colli_attr());
       } else {
         this->set_gone_state(); //死亡
