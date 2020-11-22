@@ -29,10 +29,12 @@ void Camera::upd()
   Vec2f margin(70.f, 70.0f);
   Vec2f size = max - min + margin;
   float scl = 1.0f;
+  constexpr float sclmax = 2.3f;
   scl = std::max(scl, size.x/const_param::SCR_WIDTH);
   scl = std::max(scl, size.y / const_param::SCR_HEIGHT);
-  m_inr_center.x = std::clamp(fw::lerp(m_inr_center.x, p.x, 0.05f), -80.f, 80.f);
-  m_inr_center.y = std::clamp(fw::lerp(m_inr_center.y, p.y, 0.05f), -140.f, 130.f);
+  scl = std::min(scl, sclmax);
+  m_inr_center.x = std::clamp(fw::lerp(m_inr_center.x, p.x, 0.08f), -80.f, 80.f);
+  m_inr_center.y = std::clamp(fw::lerp(m_inr_center.y, p.y, 0.08f), -136.f, 136.f);
   m_center = m_inr_center + this->upd_shake();
   m_view_scale = fw::lerp(m_view_scale, scl, 0.1f);
 
