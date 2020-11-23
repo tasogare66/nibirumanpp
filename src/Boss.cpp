@@ -70,6 +70,21 @@ Vec2f Boss::get_dir(Vec2f tgt) {
   return dir;
 }
 
+void Boss::set_circle_radius(float radius)
+{
+  m_circle.setRadius(radius);
+  m_circle.setFillColor(sf::Color(0));
+  m_circle.setOutlineThickness(0.5f);
+  m_circle.setOutlineColor(const_param::ticcol(9));
+}
+
+void Boss::draw_circle(sf::RenderWindow& window)
+{
+  float radius = m_circle.getRadius();
+  m_circle.setOrigin(-m_pos.x + radius, -m_pos.y + radius);
+  window.draw(m_circle);
+}
+
 void Boss::update(float dt)
 {
   this->set_bossrf();
@@ -114,6 +129,7 @@ void Boss::draw_info2(sf::RenderWindow& window, sf::Text& text) const
   }
 }
 
+
 //level_0
 BossBaby::BossBaby(const EntityArgs& args)
   : Boss(args, 328)
@@ -126,10 +142,7 @@ BossBaby::BossBaby(const EntityArgs& args)
   //spr
   m_spr_body.setTexture(Resource::inst().get_spr_tex());
   //circle
-  m_circle.setRadius(m_radius);
-  m_circle.setFillColor(sf::Color(0));
-  m_circle.setOutlineThickness(0.5f);
-  m_circle.setOutlineColor(const_param::ticcol(9));
+  this->set_circle_radius(m_radius);
   //script
   m_script = scr::create_lua_boss_sequence(std::string_view("update_baby"), this);
   m_script->reset_thread();
@@ -167,8 +180,7 @@ void BossBaby::upd_ene(float dt)
 void BossBaby::draw(sf::RenderWindow& window)
 {
   if (m_appear_flag) return;
-  //local p = self.pos + cam
-  //local p2 = p - Vec2.new(self.radius, self.radius)
+
   if (this->is_blink()) {
     this->spr8x8(332, 4, 4);
     this->Enemy::draw(window);
@@ -181,9 +193,8 @@ void BossBaby::draw(sf::RenderWindow& window)
     m_spr.setPosition(p2);
     window.draw(m_spr);
   }
-
-  m_circle.setOrigin(-m_pos.x + m_radius, -m_pos.y + m_radius);
-  window.draw(m_circle);
+  //circle
+  this->draw_circle(window);
 }
 
 void BossBaby::dead()
@@ -227,4 +238,49 @@ void BossBaby::arms0(float t, int32_t num, float ofs)
     }
     m_arms_timer = fmod(m_arms_timer,t);
   }
+}
+
+
+//level_1
+BossCells::BossCells(const EntityArgs& args)
+  : Boss(args, 328)
+{
+  this->set_radius(16);
+  this->set_mass(5);
+  //m_score = 5000;
+  m_health_max = 500;
+  m_health = m_health_max;
+  //circle
+  this->set_circle_radius(m_radius);
+}
+
+void BossCells::appear()
+{
+  this->attr_px();
+}
+
+void BossCells::update(float dt)
+{
+  Boss::update(dt);
+  this->upd_blink(dt);
+}
+
+void BossCells::upd_ene(float dt)
+{
+  this->upd_ene_base(dt);
+}
+
+void BossCells::draw(sf::RenderWindow& window)
+{
+  //circle
+  this->draw_circle(window);
+}
+
+void BossCells::dead()
+{
+  Boss::dead_base();
+}
+
+void BossCells::use_arms(int type, const LuaIntf::LuaRef& tbl)
+{
 }

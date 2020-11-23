@@ -24,8 +24,11 @@ protected:
   void set_bossrf();
   void remove_bossrf();
   Vec2f get_dir(Vec2f tgt);
+  void set_circle_radius(float radius);
+  void draw_circle(sf::RenderWindow& window);
   int32_t m_health_max=1;
   float m_dt=1.0f/60.0f;
+  sf::CircleShape m_circle;
 };
 
 class BossBaby final : public Boss {
@@ -43,9 +46,23 @@ private:
   void arms0(float t, int32_t num=10, float ofs=0.0f);
 
   scr::ILuaScript* m_script=nullptr;
-  sf::CircleShape m_circle;
   sf::Sprite m_spr_body;
   float m_arms_timer = 0.0f;
   Vec2f m_dspofs;
   uint32_t m_animcnt=0;
+};
+
+class BossCells final : public Boss {
+public:
+  BossCells(const EntityArgs& args);
+  virtual ~BossCells() = default;
+  void appear();
+  void update(float dt) override;
+  void upd_ene(float dt) override;
+  void draw(sf::RenderWindow& window) override;
+  void dead() override;
+
+  void use_arms(int type, const LuaIntf::LuaRef& tbl) override;
+private:
+ 
 };
