@@ -106,6 +106,8 @@ void ModeGame::draw0(sf::RenderWindow& window)
 
 void ModeGame::draw1(sf::RenderWindow& window)
 {
+  if (m_boss) m_boss->draw_info1(window);
+
   if (const auto* sp = GameSeq::inst().get_seq_player(0)) {
     const int32_t dsp_life_num = std::min(sp->get_life(), 10);
     m_spr.setTextureRect(Resource::get_spr_rect(481));
@@ -118,7 +120,7 @@ void ModeGame::draw1(sf::RenderWindow& window)
 
 void ModeGame::draw2(sf::RenderWindow& window)
 {
-  if (m_boss) m_boss->draw_info(window);
+  if (m_boss) m_boss->draw_info2(window, m_text);
 
   auto lambda_draw_text = [this,&window](float ix, float iy, int32_t icol) {
     gmutil::draw_text(window, m_text, ix, iy, icol);

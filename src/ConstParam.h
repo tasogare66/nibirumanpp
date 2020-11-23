@@ -17,6 +17,7 @@ namespace const_param {
   inline constexpr float BOUNCE = 0.5f;
   inline constexpr float WND_WIDTH = 1280.f;
   inline constexpr float WND_HEIGHT = 720.f;
+  inline constexpr float SCR_SCALE = WND_WIDTH / SCR_WIDTH; //5.0f
   inline constexpr uint32_t TXT_CHR_SIZE = 32+24;
   inline constexpr uint32_t PLAYER_NUM_MAX = 2;
   static const std::array<sf::Color, 16> TIC_PAL = {

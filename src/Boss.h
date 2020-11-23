@@ -14,7 +14,8 @@ public:
   virtual void update(float dt) override;
   virtual void move_to(float px, float py, float spd);
   virtual void use_arms(int type, const LuaIntf::LuaRef& tbl) {}
-  virtual void draw_info(sf::RenderWindow&) const {}
+  virtual void draw_info1(sf::RenderWindow&) const;
+  virtual void draw_info2(sf::RenderWindow&, sf::Text& text) const;
   static bool is_exist_boss();
 protected:
   void update_dt(float dt) { m_dt = dt; }

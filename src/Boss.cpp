@@ -81,6 +81,39 @@ void Boss::move_to(float px,float py,float spd)
   m_mov += this->get_dir({ px,py }) * spd * m_dt;
 }
 
+void Boss::draw_info1(sf::RenderWindow& window) const
+{
+  float hr = static_cast<float>(m_health) / m_health_max;
+  const float len{ 150.f }, len2{ 150.f * hr };
+  float sx = (const_param::SCR_WIDTH - len) / 2.f;
+  constexpr float y = 125.f;
+  sf::RectangleShape line0(Vec2f(len,1));
+  line0.setFillColor(const_param::ticcol(3));
+  sf::RectangleShape line1(Vec2f(len2, 1));
+  line1.setFillColor(const_param::ticcol(11));
+  for (int i = 1; i <= 3; ++i) {
+    line0.setPosition(sx, y+i);
+    window.draw(line0);
+    line1.setPosition(sx, y+i);
+    window.draw(line1);
+    sx += 1.0f;
+  }
+}
+
+void Boss::draw_info2(sf::RenderWindow& window, sf::Text& text) const
+{
+  if (m_appear_flag) {
+    text.setString("WARNING");
+    constexpr float scl = const_param::SCR_SCALE;
+    float y = 50.0f*scl;
+    float x = gmutil::calc_text_center_x(text);
+    float ofsx = rng::range_int(-6, 6)*scl;
+    float ofsy = rng::range_int(-6, 6)*scl;
+    gmutil::draw_text(window, text, x+ofsx, y+ofsy, rng::range_int(1,15));
+    gmutil::draw_text(window, text, x, y, 6);
+  }
+}
+
 //level_0
 BossBaby::BossBaby(const EntityArgs& args)
   : Boss(args, 328)

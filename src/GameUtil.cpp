@@ -11,9 +11,12 @@ namespace gmutil {
     text.setPosition(ix, iy);
     window.draw(text);
   }
+  float calc_text_center_x(const sf::Text& text) {
+    const auto& bound = text.getLocalBounds();
+    return (const_param::WND_WIDTH - bound.width) / 2.0f;
+  }
   float draw_text_center(sf::RenderWindow& window, sf::Text& text, float iy, int32_t icol) {
-    auto bound = text.getLocalBounds();
-    float x = (const_param::WND_WIDTH - bound.width) / 2.0f;
+    float x = calc_text_center_x(text);
     draw_text(window, text, x, iy, icol);
     return x;
   }
