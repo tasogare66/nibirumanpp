@@ -121,6 +121,9 @@ public:
   template<typename T>
   const T* cast_to() const;
 
+  //親子関係の設定
+  static void set_hierarchy(Entity* parent, Entity* child);
+
 protected:
   friend class ObjLst;
 
@@ -162,4 +165,7 @@ protected:
   sf::Sprite m_spr;
   static constexpr uint32_t m_dummy_spr_id = 1;
   uint32_t m_spr_id = m_dummy_spr_id;
+  Entity* m_root = nullptr;
+  Entity* m_parent = nullptr;
+  std::vector<Entity*> m_children;
 };

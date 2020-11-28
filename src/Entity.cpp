@@ -21,6 +21,7 @@ Entity::Entity(EntityType type, const EntityArgs& args)
   , m_aabb_size(args.m_radius * 2.f, args.m_radius * 2.f)
   , m_half_extents(args.m_radius, args.m_radius)
   , m_flag(fw::underlying_cast(EntityFlag::DefaultMask))
+  , m_root(this)
 {
   m_spr.setTexture(Resource::inst().get_spr_tex());
   this->spr8x8(m_dummy_spr_id);
@@ -278,4 +279,13 @@ const Player* Entity::cast_to<Player>() const
 {
   if (m_type == EntityType::Player) return static_cast<const Player*>(this);
   return nullptr;
+}
+
+void Entity::set_hierarchy(Entity* parent, Entity* child)
+{
+  //parent
+  parent->m_children.push_back(child);
+  //child
+  child->m_root = parent->m_root;
+  child->m_parent = parent;
 }

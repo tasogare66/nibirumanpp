@@ -22,8 +22,30 @@
 
 #include "Boss.h"
 
-Boss::Boss(const EntityArgs& args, uint32_t spr_ene)
+BossParts::BossParts(const EntityArgs& args, uint32_t spr_ene)
   : Enemy(args, spr_ene)
+{
+}
+
+void BossParts::set_circle_radius(float radius)
+{
+  m_circle.setRadius(radius);
+  m_circle.setFillColor(sf::Color(0));
+  m_circle.setOutlineThickness(0.5f);
+  m_circle.setOutlineColor(const_param::ticcol(9));
+}
+
+void BossParts::draw_circle(sf::RenderWindow& window)
+{
+  float radius = m_circle.getRadius();
+  m_circle.setOrigin(-m_pos.x + radius, -m_pos.y + radius);
+  window.draw(m_circle);
+}
+
+
+//root
+Boss::Boss(const EntityArgs& args, uint32_t spr_ene)
+  : BossParts(args, spr_ene)
 {
 }
 
@@ -68,21 +90,6 @@ Vec2f Boss::get_dir(Vec2f tgt) {
     return dir / len;
   }
   return dir;
-}
-
-void Boss::set_circle_radius(float radius)
-{
-  m_circle.setRadius(radius);
-  m_circle.setFillColor(sf::Color(0));
-  m_circle.setOutlineThickness(0.5f);
-  m_circle.setOutlineColor(const_param::ticcol(9));
-}
-
-void Boss::draw_circle(sf::RenderWindow& window)
-{
-  float radius = m_circle.getRadius();
-  m_circle.setOrigin(-m_pos.x + radius, -m_pos.y + radius);
-  window.draw(m_circle);
 }
 
 void Boss::update(float dt)
@@ -242,7 +249,30 @@ void BossBaby::arms0(float t, int32_t num, float ofs)
 
 
 //level_1
-BossCells::BossCells(const EntityArgs& args)
+class WormChild final : public BossParts {
+public:
+  WormChild(const EntityArgs& args)
+    : BossParts(args)
+  {
+    this->set_radius(10);
+    this->set_mass(4);
+    m_health = std::numeric_limits<int32_t>::max();
+    //circle
+    this->set_circle_radius(m_radius);
+  }
+  virtual ~WormChild() = default;
+  void draw(sf::RenderWindow& window) override final {
+    this->draw_circle(window);
+  }
+private:
+  void appear() {
+    this->attr_px();
+  }
+  void upd_ene(float dt) override {
+  }
+};
+
+BossWorm::BossWorm(const EntityArgs& args)
   : Boss(args, 328)
 {
   this->set_radius(16);
@@ -252,35 +282,41 @@ BossCells::BossCells(const EntityArgs& args)
   m_health = m_health_max;
   //circle
   this->set_circle_radius(m_radius);
+
+  //child
+  for (size_t i = 0; i < 10; ++i) {
+    auto p = args.m_pos + Vec2f(1.f*i,0.f);
+    new WormChild(p);
+  }
 }
 
-void BossCells::appear()
+void BossWorm::appear()
 {
   this->attr_px();
 }
 
-void BossCells::update(float dt)
+void BossWorm::update(float dt)
 {
   Boss::update(dt);
   this->upd_blink(dt);
 }
 
-void BossCells::upd_ene(float dt)
+void BossWorm::upd_ene(float dt)
 {
   this->upd_ene_base(dt);
 }
 
-void BossCells::draw(sf::RenderWindow& window)
+void BossWorm::draw(sf::RenderWindow& window)
 {
   //circle
   this->draw_circle(window);
 }
 
-void BossCells::dead()
+void BossWorm::dead()
 {
   Boss::dead_base();
 }
 
-void BossCells::use_arms(int type, const LuaIntf::LuaRef& tbl)
+void BossWorm::use_arms(int type, const LuaIntf::LuaRef& tbl)
 {
 }

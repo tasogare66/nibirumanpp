@@ -7,7 +7,17 @@ namespace scr {
 class ILuaScript;
 }
 
-class Boss : public Enemy {
+class BossParts : public Enemy {
+public:
+  BossParts(const EntityArgs& args, uint32_t spr_ene = 0);
+  virtual ~BossParts() = default;
+protected:
+  void set_circle_radius(float radius);
+  void draw_circle(sf::RenderWindow& window);
+  sf::CircleShape m_circle;
+};
+
+class Boss : public BossParts {
 public:
   Boss(const EntityArgs& args, uint32_t spr_ene=0);
   virtual ~Boss();
@@ -24,11 +34,8 @@ protected:
   void set_bossrf();
   void remove_bossrf();
   Vec2f get_dir(Vec2f tgt);
-  void set_circle_radius(float radius);
-  void draw_circle(sf::RenderWindow& window);
   int32_t m_health_max=1;
   float m_dt=1.0f/60.0f;
-  sf::CircleShape m_circle;
 };
 
 class BossBaby final : public Boss {
@@ -52,10 +59,10 @@ private:
   uint32_t m_animcnt=0;
 };
 
-class BossCells final : public Boss {
+class BossWorm final : public Boss {
 public:
-  BossCells(const EntityArgs& args);
-  virtual ~BossCells() = default;
+  BossWorm(const EntityArgs& args);
+  virtual ~BossWorm() = default;
   void appear();
   void update(float dt) override;
   void upd_ene(float dt) override;
