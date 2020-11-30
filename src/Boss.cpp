@@ -284,10 +284,16 @@ BossWorm::BossWorm(const EntityArgs& args)
   this->set_circle_radius(m_radius);
 
   //child
-  for (size_t i = 0; i < 10; ++i) {
-    auto p = args.m_pos + Vec2f(1.f*i,0.f);
-    new WormChild(p);
+  Entity* parent = this;
+  for (size_t i = 1; i <= 5; ++i) {
+    auto p = args.m_pos + Vec2f(-30.f*i,0.f);
+    auto child = new WormChild(p);
+    Entity::set_hierarchy(parent, child);
+    parent = child;
   }
+  //ik
+  m_ik.awake(this);
+  m_ik.get_root_chain()->set_target_enabled(false);
 }
 
 void BossWorm::appear()
@@ -304,6 +310,8 @@ void BossWorm::update(float dt)
 void BossWorm::upd_ene(float dt)
 {
   this->upd_ene_base(dt);
+  if (m_effector) m_effector->apply_effector();
+  m_ik.update();
 }
 
 void BossWorm::draw(sf::RenderWindow& window)

@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "FABRIK.h"
 #include "Enemy.h"
 namespace LuaIntf {
 class LuaRef;
@@ -71,5 +72,5 @@ public:
 
   void use_arms(int type, const LuaIntf::LuaRef& tbl) override;
 private:
- 
+  fabrik::IK m_ik;
 };

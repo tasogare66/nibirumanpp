@@ -4,6 +4,9 @@
 #include "FwFlag.h"
 class Shash;
 class Player;
+namespace fabrik {
+  class Effector;
+}
 
 enum class EntityType : uint32_t {
   None=0,
@@ -123,6 +126,15 @@ public:
 
   //親子関係の設定
   static void set_hierarchy(Entity* parent, Entity* child);
+  size_t get_child_count() const { return m_children.size(); }
+  Entity* get_child_w(size_t idx) {
+    if (idx < m_children.size()) return m_children[idx];
+    FW_ASSERT(0);
+    return nullptr;
+  }
+  const auto& get_children() const { return m_children; }
+  auto& get_children_w() { return m_children; }
+  fabrik::Effector* fetch_effector();
 
 protected:
   friend class ObjLst;
@@ -168,4 +180,5 @@ protected:
   Entity* m_root = nullptr;
   Entity* m_parent = nullptr;
   std::vector<Entity*> m_children;
+  std::unique_ptr<fabrik::Effector> m_effector;
 };

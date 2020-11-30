@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Random.h"
 #include "GameSeq.h"
+#include "FABRIK.h"
 
 #include "Entity.h"
 
@@ -288,4 +289,12 @@ void Entity::set_hierarchy(Entity* parent, Entity* child)
   //child
   child->m_root = parent->m_root;
   child->m_parent = parent;
+}
+
+fabrik::Effector* Entity::fetch_effector()
+{
+  if (!m_effector) {
+    m_effector = std::make_unique<fabrik::Effector>(this);
+  }
+  return m_effector.get();
 }
