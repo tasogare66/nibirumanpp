@@ -55,7 +55,7 @@ namespace fabrik{
   protected:
     void solve();
     Chain* m_root_chain=nullptr;
-    std::vector<Chain*> m_chains;
+    std::vector<std::unique_ptr<Chain>> m_chains;
     std::vector<Chain*> m_end_chains;
   };
 }

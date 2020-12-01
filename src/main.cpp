@@ -31,6 +31,9 @@ void take_screenshot(const sf::RenderWindow& window)
 }
 
 int main() {
+  //メモリリーク検出
+  _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
   sf::RenderWindow window(sf::VideoMode(static_cast<uint32_t>(const_param::WND_WIDTH), static_cast<uint32_t>(const_param::WND_HEIGHT)), "nibiruman2080");
   window.setFramerateLimit(60);
   ImGui::SFML::Init(window);

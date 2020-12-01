@@ -114,7 +114,7 @@ namespace fabrik {
   void IK::solve()
   {
     // We must iterate by layer in the first stage, working from target(s) to root
-    for (auto chain :m_chains) {
+    for (auto& chain :m_chains) {
       chain->forward();
     }
     // Provided our hierarchy, the second stage doesn't directly require an iterator
@@ -127,7 +127,7 @@ namespace fabrik {
 
     // Inversely sort by layer, greater-first
     std::sort(m_chains.begin(), m_chains.end(),
-      [](const Chain* x, const Chain* y) { return x->get_layer() > y->get_layer(); });
+      [](const auto& x, const auto& y) { return x->get_layer() > y->get_layer(); });
   }
 
   Chain* IK::create_system(Entity* transform, Chain* parent, int32_t layer)
@@ -159,9 +159,8 @@ namespace fabrik {
       transform = transform->get_child_w(0);
     }
 
-    Chain* chain = new Chain(layer, parent, effectors);
-
-    m_chains.push_back(chain);
+    m_chains.emplace_back(std::make_unique<Chain>(layer, parent, effectors));
+    Chain* chain = m_chains.back().get();
 
     if (transform->get_child_count() <= 0)
     {
