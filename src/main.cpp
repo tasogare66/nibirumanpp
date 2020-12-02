@@ -74,11 +74,12 @@ int main() {
       app->draw(window);
       ImGui::SFML::Render(window);
     }
+#if DEBUG
     //capture
     if (DwGui::inst().check_screenshot_req()) {
       take_screenshot(window);
     }
-
+#endif
     window.display();
   }
 

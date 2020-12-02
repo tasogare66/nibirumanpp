@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Singleton.h"
 
+#if DEBUG
 class DwGui : public Singleton<DwGui> {
 public:
   DwGui() = default;
@@ -26,3 +27,4 @@ private:
   int m_spawn_item_current = 0;
   bool m_spawn_item_req = false;
 };
+#endif

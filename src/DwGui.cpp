@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 
+#if DEBUG
 #include "imgui.h"
 #include "ModeMng.h"
 #include "ModeGame.h"
@@ -82,3 +83,4 @@ void DwGui::show_options_window()
     }
   }
 }
+#endif
