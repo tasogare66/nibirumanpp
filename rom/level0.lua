@@ -67,7 +67,7 @@ Spawner.spiral_co = function(self,args)
   local radius = 160
   for i=0, 110 do
     radius = radius - 1.5
-    local m = matrix_roty(15*i)
+    local m = matrix_roty_deg(15*i)
     local v = matrix { {-radius},{2},{1}, }
     local pos = m*v
     ene_spawn(args.t,pos[1][1],pos[2][1])
@@ -97,7 +97,7 @@ Spawner.line_co = function(self,args)
   -- step_wait:1体あたりの待ち,default:0
   -- end_wait:全登録あとの待ち
   -- stid:開始のid, 0,1,-8
-  local m = matrix_roty(args.rot)
+  local m = matrix_roty_deg(args.rot)
   local stid=args.stid or 1
   local end_wait=args.end_wait or 0
   local step_wait=args.step_wait or 0
@@ -121,7 +121,7 @@ end
 
 Spawner.line_intercept_co = function(self,args)
   local end_wait=args.end_wait or 0
-  local m = matrix_roty(args.rot)
+  local m = matrix_roty_deg(args.rot)
   local y = args.y
   local width=9
   local r=GAME.LvRadius-8
@@ -147,7 +147,7 @@ Spawner.square_co = function(self,args)
 end
 
 function Spawner:line_onr_co(args)
-  local m=matrix_roty(args.rot)
+  local m=matrix_roty_deg(args.rot)
   local w=9
   for i=args.sti,args.edi do
     local v = matrix{{i*w},{0},{1}}

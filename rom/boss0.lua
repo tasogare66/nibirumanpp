@@ -22,6 +22,7 @@ end
 --
 -- 外から呼ばれる、更新関数
 --
+-- baby
 function update_baby()
   repeat
 
@@ -46,6 +47,26 @@ function update_baby()
       local ofs=boss.elapsed//FRAME2SEC*2
       boss.use_arms(0,{t=0.16,num=35,ofs=ofs})
     end)
+
+  until false -- ずっと続ける
+  return 1  -- c++へは、コルーチンが終了したら1を返す
+end
+
+-- worm
+function update_worm()
+  local radius = 120
+  local deg = 0
+  repeat
+    upd_for_second(10000, function()
+      deg = math.fmod(deg+0.3,360)
+      local rad=math.rad(deg)
+      local r = radius+math.sin(rad*6)*25
+      local m = matrix_roty(rad)
+      local v = matrix { {-r},{0},{1}, }
+      local pos = m*v
+      boss.move_to(pos[1][1],pos[2][1],200)
+    end)
+
 
   until false -- ずっと続ける
   return 1  -- c++へは、コルーチンが終了したら1を返す

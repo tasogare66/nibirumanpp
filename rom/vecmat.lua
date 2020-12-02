@@ -416,17 +416,21 @@ matrix.symbol = symbol
 -- utility
 FRAME2SEC=1/60
 
-function matrix_roty(deg)
-	-- identity matrix with size 4x4
-	local m = matrix (3,"I")
-	local rad = math.rad(deg)
-	local c = math.cos(rad)
-	local s = math.sin(rad)
-	m[1][1] = c
-	m[1][2] = -s
-	m[2][1] = s
-	m[2][2] = c
-	return m
+function matrix_roty(rad)
+  -- identity matrix with size 4x4
+  local m = matrix (3,"I")
+  local c = math.cos(rad)
+  local s = math.sin(rad)
+  m[1][1] = c
+  m[1][2] = -s
+  m[2][1] = s
+  m[2][2] = c
+  return m
+end
+
+function matrix_roty_deg(deg)
+  local rad = math.rad(deg)
+  return matrix_roty(rad)
 end
 
 function randf_range(l,r)

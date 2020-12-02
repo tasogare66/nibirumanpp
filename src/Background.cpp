@@ -3,6 +3,8 @@
 #include "Camera.h"
 #include "Resource.h"
 #include "ConstParam.h"
+#include "GameUtil.h"
+
 #include "Background.h"
 
 Background::Background()
@@ -46,6 +48,9 @@ void Background::draw(sf::RenderWindow& window)
 
   //circle
   window.draw(m_stg_circle);
+#if DEBUG
+  gmutil::draw_circle(window, {0.f,0.f}, 100.f);
+#endif
 }
 
 uint8_t Background::get_map(int32_t x, int32_t y) const

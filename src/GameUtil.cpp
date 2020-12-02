@@ -21,6 +21,17 @@ namespace gmutil {
     return x;
   }
 
+  void draw_circle(sf::RenderWindow& window, Vec2f center, float radius)
+  {
+    sf::CircleShape shape;
+    shape.setRadius(radius);
+    center = -center + Vec2f(radius,radius);
+    shape.setOrigin(center);
+    shape.setFillColor(sf::Color(0));
+    shape.setOutlineThickness(0.5f);
+    window.draw(shape);
+  }
+
   void random_circle(int32_t num, float st_r, float ed_r, std::function<void(Vec2f)> func) {
     float r0 = st_r / ed_r;
     for (int32_t i = 0; i < num; ++i) {

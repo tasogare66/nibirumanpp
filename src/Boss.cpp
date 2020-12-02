@@ -98,9 +98,25 @@ void Boss::update(float dt)
   Enemy::update(dt);
 }
 
+void Boss::upd_ene_base(float dt)
+{
+  if (m_script) {
+    m_script->exec(dt);
+  }
+  m_elapsed += dt;
+}
+
 void Boss::move_to(float px,float py,float spd)
 {
-  m_mov += this->get_dir({ px,py }) * spd * m_dt;
+  //m_mov += this->get_dir({ px,py }) * spd * m_dt;
+  Vec2f tgt(px,py);
+  auto dir = tgt - m_pos;
+  auto len = dir.magnitude();
+  if (len > const_param::EPSILON) {
+    dir /= len;
+  }
+  len = std::min(len,spd*m_dt);
+  m_mov +=  dir*len;
 }
 
 void Boss::draw_info1(sf::RenderWindow& window) const
@@ -151,7 +167,7 @@ BossBaby::BossBaby(const EntityArgs& args)
   //circle
   this->set_circle_radius(m_radius);
   //script
-  m_script = scr::create_lua_boss_sequence(std::string_view("update_baby"), this);
+  m_script.reset(scr::create_lua_boss_sequence(std::string_view("update_baby"), this));
   m_script->reset_thread();
 }
 
@@ -178,9 +194,6 @@ void BossBaby::update(float dt)
 void BossBaby::upd_ene(float dt)
 {
   m_arms_timer += dt;
-  if (m_script) {
-    m_script->exec(dt);
-  }
   this->upd_ene_base(dt);
 }
 
@@ -294,6 +307,9 @@ BossWorm::BossWorm(const EntityArgs& args)
   //ik
   m_ik.awake(this);
   m_ik.get_root_chain()->set_target_enabled(false);
+  //script
+  m_script.reset(scr::create_lua_boss_sequence(std::string_view("update_worm"), this));
+  m_script->reset_thread();
 }
 
 void BossWorm::appear()

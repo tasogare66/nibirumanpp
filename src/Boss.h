@@ -30,13 +30,14 @@ public:
   static bool is_exist_boss();
 protected:
   void update_dt(float dt) { m_dt = dt; }
-  void upd_ene_base(float dt) { m_elapsed += dt; }
+  void upd_ene_base(float dt);
   void dead_base();
   void set_bossrf();
   void remove_bossrf();
   Vec2f get_dir(Vec2f tgt);
   int32_t m_health_max=1;
   float m_dt=1.0f/60.0f;
+  std::unique_ptr<scr::ILuaScript> m_script;
 };
 
 class BossBaby final : public Boss {
@@ -53,7 +54,6 @@ public:
 private:
   void arms0(float t, int32_t num=10, float ofs=0.0f);
 
-  scr::ILuaScript* m_script=nullptr;
   sf::Sprite m_spr_body;
   float m_arms_timer = 0.0f;
   Vec2f m_dspofs;

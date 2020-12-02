@@ -6,6 +6,7 @@
 #include "Spawner.h"
 #include "EnemyType.h"
 #include "Sound.h"
+#include "ObjLst.h"
 
 #include "DwGui.h"
 
@@ -63,7 +64,7 @@ void DwGui::show_window_internal()
   ImGui::SameLine();
   if (ImGui::Button("RemoveEnemy")) {
     // 敵の全削除
-	//PlayImpl::singleton().m_enemy_spawner->request_remove_all();
+    ObjLst::inst().del_all_enemies();
   }
 //  PlayImpl::singleton().spawner_log_disp();
 }

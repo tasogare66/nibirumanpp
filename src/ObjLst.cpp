@@ -282,3 +282,14 @@ void ObjLst::draw(sf::RenderWindow& window)
     (*o)->draw(window);
   }
 }
+
+#if DEBUG
+void ObjLst::del_all_enemies()
+{
+  for (auto o : m_objs) {
+    if (o->m_type == EntityType::Enemy) {
+      o->suiside(); //delマーク付ける
+    }
+  }
+}
+#endif

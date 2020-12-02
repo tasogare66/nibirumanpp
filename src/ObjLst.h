@@ -14,6 +14,9 @@ public:
   void draw(sf::RenderWindow& window);
   uint32_t get_spawn_num() const { return m_spawn_num; }
   uint32_t get_spawn_ttl() const { return m_spawn_ttl; }
+#if DEBUG
+  void del_all_enemies();
+#endif
 private:
   void upd_add();
   void upd_del();
