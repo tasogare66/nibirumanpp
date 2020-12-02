@@ -37,14 +37,15 @@ enum class EntityFlag : uint32_t {
   AttrVerlet = 1 << 2,
   Ally = 1 << 3,
   //有効,無効
-  CollisionEnabled = 1 << 4,
-  UpdateEnabled = 1 << 5,
-  ForceAddVelEnabled = 1 << 6, //forceで力加える
-  Visible = 1 << 7,
+  UpdateEnabled = 1 << 4,
+  ForceAddVelEnabled = 1 << 5, //forceで力加える
+  Visible = 1 << 6,
+  CollisionEnabled = 1 << 7,
+  IgnoreCollisionSameRoot = 1 << 8, //同rootだとcollisionとらない
 
-  Invincible = 1 << 8, //無敵,CollisionEnabledと併用
-  HaveDot = 1 << 9,
-  Spawned = 1 << 10,
+  Invincible = 1 << 9, //無敵,CollisionEnabledと併用
+  HaveDot = 1 << 10,
+  Spawned = 1 << 11,
 
   DefaultMask = (CollisionEnabled | UpdateEnabled | ForceAddVelEnabled | Visible), //defaultの設定値
 };

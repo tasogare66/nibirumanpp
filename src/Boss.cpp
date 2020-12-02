@@ -270,6 +270,7 @@ public:
     this->set_radius(10);
     this->set_mass(4);
     m_health = std::numeric_limits<int32_t>::max();
+    m_flag.set(EntityFlag::IgnoreCollisionSameRoot);
     //circle
     this->set_circle_radius(m_radius);
   }
@@ -293,13 +294,14 @@ BossWorm::BossWorm(const EntityArgs& args)
   //m_score = 5000;
   m_health_max = 500;
   m_health = m_health_max;
+  m_flag.set(EntityFlag::IgnoreCollisionSameRoot);
   //circle
   this->set_circle_radius(m_radius);
 
   //child
   Entity* parent = this;
-  for (size_t i = 1; i <= 5; ++i) {
-    auto p = args.m_pos + Vec2f(-30.f*i,0.f);
+  for (size_t i = 1; i <= 16; ++i) {
+    auto p = args.m_pos + Vec2f(-18.f*i,0.f);
     auto child = new WormChild(p);
     Entity::set_hierarchy(parent, child);
     parent = child;

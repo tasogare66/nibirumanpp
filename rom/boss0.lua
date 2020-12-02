@@ -58,7 +58,7 @@ function update_worm()
   local deg = 0
   repeat
     upd_for_second(10000, function()
-      deg = math.fmod(deg+0.3,360)
+      deg = math.fmod(deg+0.4,360)
       local rad=math.rad(deg)
       local r = radius+math.sin(rad*6)*25
       local m = matrix_roty(rad)
