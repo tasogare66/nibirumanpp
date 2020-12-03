@@ -268,7 +268,7 @@ public:
     : BossParts(args)
   {
     this->set_radius(10);
-    this->set_mass(4);
+    this->set_mass(3);
     m_health = std::numeric_limits<int32_t>::max();
     m_flag.set(EntityFlag::IgnoreCollisionSameRoot);
     //circle

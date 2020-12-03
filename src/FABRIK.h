@@ -24,6 +24,7 @@ namespace fabrik{
     void forward();
     void backward();
     void backward_multi();
+    void apply_effectors();
 
     Effector* get_base_effector() {
       return m_effectors[0];
@@ -52,6 +53,7 @@ namespace fabrik{
     void awake(Entity* entity);
     Chain* create_system(Entity* transform, Chain* parent = nullptr, int32_t layer = 0);
     Chain* get_root_chain() { return m_root_chain; }
+    void apply_all_effectors();
   protected:
     void solve();
     Chain* m_root_chain=nullptr;

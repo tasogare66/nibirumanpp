@@ -28,7 +28,7 @@ namespace fabrik {
 
   void Effector::apply_entity()
   {
-    m_entity->set_position(m_position);
+    m_entity->set_mov( m_entity->calc_mov(m_position) );
   }
 
   Chain::Chain(int32_t layer, Chain* parent, std::vector<Effector*>& effectors)
@@ -107,8 +107,16 @@ namespace fabrik {
     }
   }
 
+  void Chain::apply_effectors()
+  {
+    for (auto* eff: m_effectors) {
+      eff->apply_effector();
+    }
+  }
+
   void IK::update()
   {
+    this->apply_all_effectors();
     this->solve();
   }
   void IK::solve()
@@ -119,6 +127,12 @@ namespace fabrik {
     }
     // Provided our hierarchy, the second stage doesn't directly require an iterator
     m_root_chain->backward_multi();
+  }
+  void IK::apply_all_effectors()
+  {
+    for (auto& chain : m_chains) {
+      chain->apply_effectors();
+    }
   }
 
   void IK::awake(Entity* root)

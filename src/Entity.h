@@ -90,6 +90,9 @@ public:
   Vec2f get_pos() const { return m_pos; }
   Vec2f get_estimate_pos() const { return m_pos + m_mov; }
   void updateEstimateAABB();
+  Vec2f calc_mov(const Vec2f& pos) const { return (pos-m_pos); }
+  void add_mov(const Vec2f& v) { m_mov += v; }
+  void set_mov(const Vec2f& v) { m_mov = v; }
   void add_vel_force(const Vec2f& v) {
     m_old_pos -= v;
   }
