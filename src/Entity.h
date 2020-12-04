@@ -90,6 +90,8 @@ public:
   Vec2f get_pos() const { return m_pos; }
   Vec2f get_estimate_pos() const { return m_pos + m_mov; }
   void updateEstimateAABB();
+  void set_dir(const Vec2f& idir) { m_dir = idir; }
+  Vec2f get_dir() const { return m_dir; }
   Vec2f calc_mov(const Vec2f& pos) const { return (pos-m_pos); }
   void add_mov(const Vec2f& v) { m_mov += v; }
   void set_mov(const Vec2f& v) { m_mov = v; }
@@ -139,6 +141,8 @@ public:
   const auto& get_children() const { return m_children; }
   auto& get_children_w() { return m_children; }
   fabrik::Effector* fetch_effector();
+  void exec_lower(std::function<void(Entity*)> func); //dfs
+  void exec_or_lower(std::function<void(Entity*)> func); //自分も実行
 
 protected:
   friend class ObjLst;
@@ -160,6 +164,7 @@ protected:
 
   EntityType m_type=EntityType::None;
   Vec2f m_pos;
+  Vec2f m_dir; //向き
   Vec2f m_old_pos;
   Vec2f m_vel;
   float m_radius;

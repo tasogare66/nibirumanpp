@@ -28,7 +28,9 @@ namespace fabrik {
 
   void Effector::apply_entity()
   {
-    m_entity->set_mov( m_entity->calc_mov(m_position) );
+    auto mov = m_entity->calc_mov(m_position);
+    m_entity->set_mov(mov);
+    m_entity->set_dir(mov);
   }
 
   Chain::Chain(int32_t layer, Chain* parent, std::vector<Effector*>& effectors)

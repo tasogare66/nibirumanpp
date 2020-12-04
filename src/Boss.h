@@ -72,5 +72,8 @@ public:
 
   void use_arms(int type, const LuaIntf::LuaRef& tbl) override;
 private:
+  void arms0(float t);
+
   fabrik::IK m_ik;
+  float m_arms_timer = 0.0f;
 };

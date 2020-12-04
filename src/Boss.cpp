@@ -117,6 +117,7 @@ void Boss::move_to(float px,float py,float spd)
   }
   len = std::min(len,spd*m_dt);
   m_mov +=  dir*len;
+  m_dir = dir; //向きも設定
 }
 
 void Boss::draw_info1(sf::RenderWindow& window) const
@@ -327,7 +328,9 @@ void BossWorm::update(float dt)
 
 void BossWorm::upd_ene(float dt)
 {
+  m_arms_timer += dt;
   this->upd_ene_base(dt);
+  //ik
   if (m_effector) m_effector->apply_effector();
   m_ik.update();
 }
@@ -345,4 +348,30 @@ void BossWorm::dead()
 
 void BossWorm::use_arms(int type, const LuaIntf::LuaRef& tbl)
 {
+  switch (type) {
+  case 0:
+  {
+    float t = tbl["t"].value<float>();
+    this->arms0(t);
+  }
+  break;
+  default:
+    FW_ASSERT(0);
+    break;
+  }
+}
+
+void BossWorm::arms0(float t)
+{
+  if (m_arms_timer > t) {
+    this->exec_or_lower([this](Entity* e) {
+      auto dir(e->get_dir());
+      if (dir.sqr_magnitude() <= const_param::EPSILON) return;
+      auto f = dir.rotate(static_cast<float>(M_PI)/2.f);
+      new BossBullet(EntityArgs(e->get_pos()+f*e->get_radius(), f));
+      f = dir.rotate(static_cast<float>(-M_PI)/2.f);
+      new BossBullet(EntityArgs(e->get_pos()+f*e->get_radius(), f));
+    });
+    m_arms_timer = fmod(m_arms_timer, t);
+  }
 }

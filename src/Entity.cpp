@@ -14,6 +14,7 @@
 Entity::Entity(EntityType type, const EntityArgs& args)
   : m_type(type)
   , m_pos(args.m_pos)
+  , m_dir(args.m_dir)
   , m_old_pos(args.m_pos)
   , m_radius(args.m_radius)
   , m_mass(args.m_mass)
@@ -297,4 +298,20 @@ fabrik::Effector* Entity::fetch_effector()
     m_effector = std::make_unique<fabrik::Effector>(this);
   }
   return m_effector.get();
+}
+
+void Entity::exec_lower(std::function<void(Entity*)> func)
+{
+  for (auto* e:m_children) {
+    func(e);
+    e->exec_lower(func);
+  }
+}
+
+void Entity::exec_or_lower(std::function<void(Entity*)> func)
+{
+  func(this);
+  for (auto* e : m_children) {
+    e->exec_or_lower(func);
+  }
 }

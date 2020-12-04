@@ -65,7 +65,6 @@ protected:
   void upd_ene(float dt) override;
   bool hit_wall(const Vec2f& dir) override;
   void apply_angle();
-  Vec2f m_dir;
   float m_speed;
 };
 
@@ -99,6 +98,5 @@ protected:
   void update(float dt) override;
   void upd_ene(float) override {}
   bool hit_wall(const Vec2f& dir) override;
-  Vec2f m_dir;
   float m_speed;
 };

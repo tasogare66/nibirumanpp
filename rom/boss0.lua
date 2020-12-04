@@ -65,6 +65,7 @@ function update_worm()
       local v = matrix { {-r},{0},{1}, }
       local pos = m*v
       boss.move_to(pos[1][1],pos[2][1],200)
+      boss.use_arms(0,{t=0.8})
     end)
 
 
