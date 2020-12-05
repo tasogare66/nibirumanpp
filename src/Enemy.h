@@ -69,12 +69,23 @@ protected:
 };
 
 //arrow2,反射が違う
-class EneArrow2 : public EneArrow {
+class EneArrow2 final : public EneArrow {
 public:
   EneArrow2(const EntityArgs& args);
   ~EneArrow2() = default;
 protected:
   bool hit_wall(const Vec2f& dir) override;
+};
+
+//life timeがある
+class BossArrow final : public EneArrow {
+public:
+  BossArrow(const EntityArgs& args);
+  ~BossArrow() = default;
+protected:
+  void init() override;
+  void update(float dt) override;
+  float m_lifetime=8.0f;
 };
 
 class EneSphe : public Enemy {

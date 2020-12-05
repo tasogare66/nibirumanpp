@@ -96,6 +96,10 @@ void Boss::update(float dt)
 {
   this->set_bossrf();
   Enemy::update(dt);
+  if (m_appear_flag) {
+    PtclLst::add_sqr(m_pos, 2, m_radius + 6.0f);
+    if (const_param::framecnt(m_elapsed) % 20 == 0) Sound::psfx(SfxId::BossAp, SndChannel::SFX3);
+  }
 }
 
 void Boss::upd_ene_base(float dt)
@@ -185,10 +189,6 @@ void BossBaby::update(float dt)
   m_animcnt = static_cast<uint32_t>(m_elapsed/const_param::FRAME2SEC*20)%2;
   if (static_cast<uint32_t>(m_elapsed/(const_param::FRAME2SEC*14))%2==0) { //random offset
     m_dspofs.set(rng::range(-2.f, 2.f), rng::range(-2.f, 2.f));
-  }
-  if (m_appear_flag) {
-    PtclLst::add_sqr(m_pos, 2, m_radius+6.0f);
-    if (const_param::framecnt(m_elapsed)%20==0) Sound::psfx(SfxId::BossAp, SndChannel::SFX3);
   }
 }
 
@@ -368,9 +368,9 @@ void BossWorm::arms0(float t)
       auto dir(e->get_dir());
       if (dir.sqr_magnitude() <= const_param::EPSILON) return;
       auto f = dir.rotate(static_cast<float>(M_PI)/2.f);
-      new BossBullet(EntityArgs(e->get_pos()+f*e->get_radius(), f));
+      new BossArrow(EntityArgs(e->get_pos()+f*e->get_radius(), f));
       f = dir.rotate(static_cast<float>(-M_PI)/2.f);
-      new BossBullet(EntityArgs(e->get_pos()+f*e->get_radius(), f));
+      new BossArrow(EntityArgs(e->get_pos()+f*e->get_radius(), f));
     });
     m_arms_timer = fmod(m_arms_timer, t);
   }

@@ -209,6 +209,25 @@ bool EneArrow2::hit_wall(const Vec2f&)
   return false;
 }
 
+//boss arrow
+BossArrow::BossArrow(const EntityArgs& args)
+  : EneArrow(args,384)
+{}
+
+void BossArrow::init()
+{
+  this->appear();
+}
+
+void BossArrow::update(float dt)
+{
+  this->upd_ene(dt);
+  m_lifetime -= dt;
+  if (m_lifetime < 0) {
+    this->suiside();
+  }
+}
+
 //enemy sphe
 EneSphe::EneSphe(const EntityArgs& args)
   : Enemy(args, 308)
