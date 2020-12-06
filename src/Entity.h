@@ -2,6 +2,7 @@
 #include <functional>
 #include "Vec2.h"
 #include "FwFlag.h"
+#include "EntityData.h"
 class Shash;
 class Player;
 namespace fabrik {
@@ -23,10 +24,15 @@ struct EntityArgs {
   float m_radius = 3; //default
   float m_mass = 1; //default
   float m_param0 = 0.0f; //misc param
+  EntityDataId m_edid = EntityDataId::None;
   EntityArgs() = default;
-  EntityArgs(const Vec2f& pos, const Vec2f& dir = { 1.f, 0.f })
-    : m_pos(pos)
+  EntityArgs(EntityDataId edid, const Vec2f& pos, const Vec2f& dir = { 1.f, 0.f })
+    : m_edid(edid)
+    , m_pos(pos)
     , m_dir(dir)
+  {}
+  EntityArgs(const Vec2f& pos, const Vec2f& dir = { 1.f, 0.f })
+    : EntityArgs(EntityDataId::None, pos, dir)
   {}
   Vec2f aabb0() const { return m_pos - Vec2f(m_radius,m_radius); }
 };
@@ -147,6 +153,7 @@ public:
 protected:
   friend class ObjLst;
 
+  void set_entity_data(EntityDataId edid);
   void set_sha(Shash* set_lst);
   void attr_verlet();
   Vec2f calc_velocity() const {

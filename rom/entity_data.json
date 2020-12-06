@@ -1,0 +1,14 @@
+{
+    "datas":[
+        {
+            "name":"EneArrow",
+            "score":30,
+            "have_dot":true
+        },
+        {
+            "name":"BossArrow",
+            "score":1,
+            "have_dot":false
+        }
+    ]
+}

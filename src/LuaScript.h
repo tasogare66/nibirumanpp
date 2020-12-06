@@ -14,7 +14,8 @@ namespace scr
     virtual void exec(float) = 0;
   };
 
-  void spawn_base(EnemyType type, const EntityArgs& entity_args);
+  //一部entity_args更新する
+  void spawn_base(EnemyType type, EntityArgs& entity_args);
 
   // 敵生成用
   ILuaScript* create_lua_enemy_spawner();

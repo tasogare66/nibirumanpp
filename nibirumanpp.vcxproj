@@ -58,7 +58,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>DEBUG;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)\..\SFML-2.5.1\include;external\imgui;external\imgui-sfml;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\SFML-2.5.1\include;external;external\imgui;external\imgui-sfml;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
@@ -119,6 +119,7 @@
     <ClCompile Include="src\EneDot.cpp" />
     <ClCompile Include="src\Enemy.cpp" />
     <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\EntityData.cpp" />
     <ClCompile Include="src\FABRIK.cpp" />
     <ClCompile Include="src\Force.cpp" />
     <ClCompile Include="src\FwUtil.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="src\Enemy.h" />
     <ClInclude Include="src\EnemyType.h" />
     <ClInclude Include="src\Entity.h" />
+    <ClInclude Include="src\EntityData.h" />
     <ClInclude Include="src\FABRIK.h" />
     <ClInclude Include="src\Force.h" />
     <ClInclude Include="src\FwUtil.h" />

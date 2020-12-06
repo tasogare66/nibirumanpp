@@ -40,7 +40,7 @@ void DwGui::show_window_internal()
   {
     const char* items[] = {
 #undef ENEMY_TYPE_DECL
-#define ENEMY_TYPE_DECL(_id,_cls)	#_id,
+#define ENEMY_TYPE_DECL(_id,_cls,_edid)	#_id,
 
 #include "EnemyType.h"
 

@@ -368,9 +368,9 @@ void BossWorm::arms0(float t)
       auto dir(e->get_dir());
       if (dir.sqr_magnitude() <= const_param::EPSILON) return;
       auto f = dir.rotate(static_cast<float>(M_PI)/2.f);
-      new BossArrow(EntityArgs(e->get_pos()+f*e->get_radius(), f));
+      new BossArrow(EntityArgs(EntityDataId::BossArrow, e->get_pos()+f*e->get_radius(), f));
       f = dir.rotate(static_cast<float>(-M_PI)/2.f);
-      new BossArrow(EntityArgs(e->get_pos()+f*e->get_radius(), f));
+      new BossArrow(EntityArgs(EntityDataId::BossArrow, e->get_pos()+f*e->get_radius(), f));
     });
     m_arms_timer = fmod(m_arms_timer, t);
   }

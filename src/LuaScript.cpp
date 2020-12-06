@@ -179,11 +179,11 @@ namespace scr
     const char* m_co_str; // コルーチン実行関数
   };
 
-  void spawn_base(EnemyType type, const EntityArgs& entity_args) {
+  void spawn_base(EnemyType type, EntityArgs& entity_args) {
     Enemy* ent = nullptr;
     switch (type) {
 #undef ENEMY_TYPE_DECL
-#define ENEMY_TYPE_DECL(_id,_cls)	case EnemyType::_id: ent = new _cls(entity_args); break;
+#define ENEMY_TYPE_DECL(_id,_cls,_edid)	case EnemyType::_id: entity_args.m_edid = _edid; ent = new _cls(entity_args); break;
 
 #include "EnemyType.h"
 
@@ -240,7 +240,7 @@ namespace scr
 
       LuaBinding(m_ctx.state()).beginModule("EnemyType")
 #undef ENEMY_TYPE_DECL
-#define ENEMY_TYPE_DECL(_id,_cls)	.addConstant(#_id, EnemyType::_id)
+#define ENEMY_TYPE_DECL(_id,_cls,_edid)	.addConstant(#_id, EnemyType::_id)
 
 #include "EnemyType.h"
 

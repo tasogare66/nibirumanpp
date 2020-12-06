@@ -157,8 +157,6 @@ void EneHulk::setmvtm()
 EneArrow::EneArrow(const EntityArgs& args, uint32_t spr_ene)
   : Enemy(args,spr_ene)
 {
-  m_flag.set(EntityFlag::HaveDot);
-  m_score = 30;
   m_dir = args.m_dir;
   const auto l = m_dir.magnitude();
   if (l < const_param::EPSILON) {
