@@ -322,7 +322,7 @@ namespace scr
       //  m_boss->set_angular_velocity(in_deg);
       //})
         .addFunction("add_vel_force", [this](float in_x, float in_y) { m_boss->add_vel_force(Vec2f(in_x, in_y)); })
-        .addFunction("move_to", [this](float px, float py, float spd) { m_boss->move_to(px,py,spd); })
+        .addFunction("move_to", [this](float px, float py, float spd) { return m_boss->move_to(px,py,spd); })
         // 武器の使用
         .addFunction("use_arms", [this](int id, const LuaRef tbl) { m_boss->use_arms(id, tbl); }, LUA_ARGS(int, const LuaRef))
         .addProperty("elapsed", [this]() { return m_boss->get_elapsed(); })

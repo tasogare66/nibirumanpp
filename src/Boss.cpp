@@ -110,18 +110,19 @@ void Boss::upd_ene_base(float dt)
   m_elapsed += dt;
 }
 
-void Boss::move_to(float px,float py,float spd)
+float Boss::move_to(float px,float py,float spd)
 {
   //m_mov += this->get_dir({ px,py }) * spd * m_dt;
   Vec2f tgt(px,py);
   auto dir = tgt - m_pos;
-  auto len = dir.magnitude();
-  if (len > const_param::EPSILON) {
-    dir /= len;
+  auto dist = dir.magnitude();
+  if (dist > const_param::EPSILON) {
+    dir /= dist;
   }
-  len = std::min(len,spd*m_dt);
+  float len = std::min(dist,spd*m_dt);
   m_mov +=  dir*len;
   m_dir = dir; //向きも設定
+  return std::max(dist - len,0.0f);
 }
 
 void Boss::draw_info1(sf::RenderWindow& window) const
@@ -349,10 +350,11 @@ void BossWorm::dead()
 void BossWorm::use_arms(int type, const LuaIntf::LuaRef& tbl)
 {
   switch (type) {
-  case 0:
+  case 0: //bullet
+  case 1: //arrow
   {
     float t = tbl["t"].value<float>();
-    this->arms0(t);
+    this->arms0(t, type==1);
   }
   break;
   default:
@@ -361,16 +363,25 @@ void BossWorm::use_arms(int type, const LuaIntf::LuaRef& tbl)
   }
 }
 
-void BossWorm::arms0(float t)
+void BossWorm::create_bullet(const Vec2f& pos, const Vec2f& dir, bool is_arrow)
+{
+  if (is_arrow) {
+    new BossArrow(EntityArgs(EntityDataId::BossArrow, pos, dir));
+  } else {
+    new BossBullet(EntityArgs(pos, dir));
+  }
+}
+
+void BossWorm::arms0(float t, bool is_arrow)
 {
   if (m_arms_timer > t) {
-    this->exec_or_lower([this](Entity* e) {
+    this->exec_or_lower([this,is_arrow](Entity* e) {
       auto dir(e->get_dir());
       if (dir.sqr_magnitude() <= const_param::EPSILON) return;
       auto f = dir.rotate(static_cast<float>(M_PI)/2.f);
-      new BossArrow(EntityArgs(EntityDataId::BossArrow, e->get_pos()+f*e->get_radius(), f));
+      BossWorm::create_bullet(e->get_pos() + f * e->get_radius(), f, is_arrow);
       f = dir.rotate(static_cast<float>(-M_PI)/2.f);
-      new BossArrow(EntityArgs(EntityDataId::BossArrow, e->get_pos()+f*e->get_radius(), f));
+      BossWorm::create_bullet(e->get_pos() + f * e->get_radius(), f, is_arrow);
     });
     m_arms_timer = fmod(m_arms_timer, t);
   }

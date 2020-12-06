@@ -23,7 +23,7 @@ public:
   Boss(const EntityArgs& args, uint32_t spr_ene=0);
   virtual ~Boss();
   virtual void update(float dt) override;
-  virtual void move_to(float px, float py, float spd);
+  virtual float move_to(float px, float py, float spd);
   virtual void use_arms(int type, const LuaIntf::LuaRef& tbl) {}
   virtual void draw_info1(sf::RenderWindow&) const;
   virtual void draw_info2(sf::RenderWindow&, sf::Text& text) const;
@@ -72,7 +72,8 @@ public:
 
   void use_arms(int type, const LuaIntf::LuaRef& tbl) override;
 private:
-  void arms0(float t);
+  static void create_bullet(const Vec2f& pos, const Vec2f& dir, bool is_arrow);
+  void arms0(float t, bool is_arrow);
 
   fabrik::IK m_ik;
   float m_arms_timer = 0.0f;

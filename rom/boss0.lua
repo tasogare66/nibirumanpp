@@ -7,7 +7,11 @@ local yield=coroutine.yield
 function upd_for_second(sec,func)
   while sec > 0 do
     yield(0) --続ける
-    if(func)then func() end
+    if(func)then
+       if func() then --true返したら終了
+        sec=0
+      end
+    end
     sec = sec - GAME.dt
   end
 end
@@ -55,19 +59,46 @@ end
 -- worm
 function update_worm()
   local radius = 120
+  local radius_s = 180
   local deg = 0
+  local sign=1
+  local add_deg = function(v)
+    deg = math.fmod(deg+v,360)
+    return math.rad(deg) --radian返す
+  end
+  local move_to_opposite = function()
+    local oprad=add_deg(180)
+    upd_for_second(10, function()
+      local m = matrix_roty(oprad)
+      local v = matrix { {-radius},{0},{1}, }
+      local pos = m*v
+      return boss.move_to(pos[1][1],pos[2][1],60)<1
+    end)
+  end
+
   repeat
-    upd_for_second(10000, function()
-      deg = math.fmod(deg+0.4,360)
-      local rad=math.rad(deg)
-      local r = radius+math.sin(rad*6)*25
+    sign = (randi(1)==1) and 1 or -1
+    upd_for_second(20, function()
+      local rad=add_deg(0.4*sign)
+      local r = radius+math.sin(rad*6)*30
       local m = matrix_roty(rad)
       local v = matrix { {-r},{0},{1}, }
       local pos = m*v
-      boss.move_to(pos[1][1],pos[2][1],200)
-      boss.use_arms(0,{t=0.8})
+      boss.move_to(pos[1][1],pos[2][1],100)
+      boss.use_arms(0,{t=1.0})
     end)
-
+    move_to_opposite() --反対へ
+    --
+    sign = (randi(1)==1) and 1 or -1
+    upd_for_second(15, function()
+      local rad=add_deg(0.7*sign)
+      local m = matrix_roty(rad)
+      local v = matrix { {-150},{0},{1}, }
+      local pos = m*v
+      boss.move_to(pos[1][1],pos[2][1],200)
+      boss.use_arms(1,{t=0.8})
+    end)
+    move_to_opposite() --反対へ
 
   until false -- ずっと続ける
   return 1  -- c++へは、コルーチンが終了したら1を返す
