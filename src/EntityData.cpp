@@ -32,6 +32,8 @@ void EntityDataMng::setup_at_boot()
     lambda_write_dst("have_dot", dst.m_have_dot);
     lambda_write_dst("health", dst.m_health);
     lambda_write_dst("score", dst.m_score);
+    lambda_write_dst("radius", dst.m_radius);
+    lambda_write_dst("mass", dst.m_mass);
   }
 }
 

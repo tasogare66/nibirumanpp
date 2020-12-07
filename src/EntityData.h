@@ -16,6 +16,8 @@ public:
   std::optional<bool> m_have_dot;
   std::optional<int32_t> m_health;
   std::optional<uint32_t> m_score;
+  std::optional<float> m_radius;
+  std::optional<float> m_mass;
 };
 
 class EntityDataMng : public Singleton<EntityDataMng> {

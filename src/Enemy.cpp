@@ -209,7 +209,7 @@ bool EneArrow2::hit_wall(const Vec2f&)
 
 //boss arrow
 BossArrow::BossArrow(const EntityArgs& args)
-  : EneArrow(args,384)
+  : EneArrow(args,339)
 {}
 
 void BossArrow::init()
@@ -219,7 +219,11 @@ void BossArrow::init()
 
 void BossArrow::update(float dt)
 {
-  this->upd_ene(dt);
+  m_mov = m_dir * m_speed * dt;
+  auto s = static_cast<uint32_t>(m_elapsed / (const_param::FRAME2SEC * 8)) % 3;
+  this->spr8x8(m_spr_ene + s);
+  m_elapsed += dt;
+
   m_lifetime -= dt;
   if (m_lifetime < 0) {
     this->suiside();

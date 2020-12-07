@@ -8,7 +8,8 @@
         {
             "name":"BossArrow",
             "score":1,
-            "have_dot":false
+            "have_dot":false,
+            "radius":2
         }
     ]
 }
