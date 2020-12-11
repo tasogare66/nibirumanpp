@@ -11,7 +11,5 @@ public:
   bool hit_wall(const Vec2f& dir) override;
 private:
   float m_elp = 0.0f;
-  Vec2f m_dir;
-  float m_ang = 0.0f;
   const Player* m_owner = nullptr;
 };

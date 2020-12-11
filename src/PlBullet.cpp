@@ -5,13 +5,11 @@
 #include "PlBullet.h"
 
 PlBullet::PlBullet(const Vec2f pos, const Vec2f dir, const Player* owner)
-  : Entity(EntityType::PlBullet, { pos })
-  , m_dir(dir*150.f)
+  : Entity(EntityType::PlBullet, { pos, dir*150.f })
   , m_owner(owner)
 {
   this->spr8x8(496);
-  m_ang = std::atan2(m_dir.y, m_dir.x);
-  m_spr.setRotation(fw::rad2deg(m_ang));
+  this->apply_angle();
   m_colli_attr.set(m_owner->get_product_colli_attr());
 }
 

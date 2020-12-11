@@ -140,6 +140,18 @@ void Entity::updateEstimateAABB() {
   m_aabb0 = m_pos + m_mov - m_half_extents;
 }
 
+float Entity::apply_angle(sf::Sprite& spr, float ofs_degree)
+{
+  auto ang = std::atan2(m_dir.y, m_dir.x);
+  spr.setRotation(fw::rad2deg(ang+ofs_degree));
+  return ang;
+}
+
+float Entity::apply_angle(float ofs_degree)
+{
+  return this->apply_angle(m_spr, ofs_degree);
+}
+
 void Entity::lim_vel_force(float l) {
   auto v = this->calc_velocity();
   auto len = v.magnitude();

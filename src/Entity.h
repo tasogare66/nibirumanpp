@@ -98,6 +98,8 @@ public:
   void updateEstimateAABB();
   void set_dir(const Vec2f& idir) { m_dir = idir; }
   Vec2f get_dir() const { return m_dir; }
+  float apply_angle(sf::Sprite& spr, float ofs_degree=0.0f);
+  float apply_angle(float ofs_degree=0.0f);
   Vec2f calc_mov(const Vec2f& pos) const { return (pos-m_pos); }
   void add_mov(const Vec2f& v) { m_mov += v; }
   void set_mov(const Vec2f& v) { m_mov = v; }

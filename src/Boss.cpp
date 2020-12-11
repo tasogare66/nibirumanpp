@@ -337,6 +337,10 @@ void BossWorm::upd_ene(float dt)
   //ik
   if (m_effector) m_effector->apply_effector();
   m_ik.update();
+  //set sprite rotation
+  this->exec_or_lower([this](Entity* e) {
+    e->apply_angle(90.f);
+  });
 }
 
 void BossWorm::draw(sf::RenderWindow& window)

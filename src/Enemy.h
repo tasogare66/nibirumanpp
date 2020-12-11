@@ -64,7 +64,6 @@ protected:
   void appear() override;
   void upd_ene(float dt) override;
   bool hit_wall(const Vec2f& dir) override;
-  void apply_angle();
   float m_speed;
 };
 

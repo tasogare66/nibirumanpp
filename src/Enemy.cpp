@@ -189,12 +189,6 @@ bool EneArrow::hit_wall(const Vec2f& dir)
   return false;
 }
 
-void EneArrow::apply_angle()
-{
-  auto ang = std::atan2(m_dir.y, m_dir.x);
-  m_spr.setRotation(fw::rad2deg(ang));
-}
-
 //enemy arrow2
 EneArrow2::EneArrow2(const EntityArgs& args)
   : EneArrow(args, 384)
