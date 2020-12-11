@@ -209,7 +209,7 @@ bool EneArrow2::hit_wall(const Vec2f&)
 
 //boss arrow
 BossArrow::BossArrow(const EntityArgs& args)
-  : EneArrow(args,339)
+  : EneArrow(args,352)
 {}
 
 void BossArrow::init()

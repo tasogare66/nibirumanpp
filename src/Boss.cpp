@@ -267,7 +267,7 @@ void BossBaby::arms0(float t, int32_t num, float ofs)
 class WormChild final : public BossParts {
 public:
   WormChild(const EntityArgs& args)
-    : BossParts(args)
+    : BossParts(args,460)
   {
     this->set_radius(10);
     this->set_mass(3);
@@ -278,6 +278,8 @@ public:
   }
   virtual ~WormChild() = default;
   void draw(sf::RenderWindow& window) override final {
+    this->spr8x8(m_spr_ene, 3, 3);
+    this->Enemy::draw(window);
     this->draw_circle(window);
   }
 private:
@@ -285,11 +287,12 @@ private:
     this->attr_px();
   }
   void upd_ene(float dt) override {
+    this->upd_blink(dt);
   }
 };
 
 BossWorm::BossWorm(const EntityArgs& args)
-  : Boss(args, 328)
+  : Boss(args, 456)
 {
   this->set_radius(16);
   this->set_mass(5);
@@ -338,6 +341,12 @@ void BossWorm::upd_ene(float dt)
 
 void BossWorm::draw(sf::RenderWindow& window)
 {
+  if (this->is_blink()) {
+    this->spr8x8(332, 4, 4);
+  } else {
+    this->spr8x8(m_spr_ene, 4, 4);
+  }
+  this->Enemy::draw(window);
   //circle
   this->draw_circle(window);
 }
