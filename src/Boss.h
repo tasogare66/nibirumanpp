@@ -12,10 +12,18 @@ class BossParts : public Enemy {
 public:
   BossParts(const EntityArgs& args, uint32_t spr_ene = 0);
   virtual ~BossParts() = default;
+  void set_delay_del(float time=-1.0f);
 protected:
+  void dead_dot_base(int32_t num, float radius);
+  void dead_efc_base();
   void set_circle_radius(float radius);
   void draw_circle(sf::RenderWindow& window);
+  //遅らせてdel設定
+  void upd_delay_del(float dt);
+  void apply_delay_del();
+
   sf::CircleShape m_circle;
+  std::optional<float> m_delay_del_time;
 };
 
 class Boss : public BossParts {
@@ -68,6 +76,7 @@ public:
   void update(float dt) override;
   void upd_ene(float dt) override;
   void draw(sf::RenderWindow& window) override;
+  void set_del() override;
   void dead() override;
 
   void use_arms(int type, const LuaIntf::LuaRef& tbl) override;

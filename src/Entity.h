@@ -87,8 +87,9 @@ public:
   virtual bool hit_wall(const Vec2f&) { return false; } //trueの場合repulse行わない
   virtual void hitcb(const Entity*, const Vec2f&, float) {}
   virtual void hitcb_w(Entity*, const Vec2f&, float) const {}
-  virtual void dead() {}
   virtual void set_blink() {}
+  virtual void set_del() {}
+  virtual void dead() {}
 
   void set_radius(float ir);
   void set_mass(float imass);
@@ -148,6 +149,7 @@ public:
   }
   const auto& get_children() const { return m_children; }
   auto& get_children_w() { return m_children; }
+  auto get_hierarchy_level() const { return m_hierarchy_level; }
   fabrik::Effector* fetch_effector();
   void exec_lower(std::function<void(Entity*)> func); //dfs
   void exec_or_lower(std::function<void(Entity*)> func); //自分も実行
@@ -198,5 +200,6 @@ protected:
   Entity* m_root = nullptr;
   Entity* m_parent = nullptr;
   std::vector<Entity*> m_children;
+  uint16_t m_hierarchy_level = 0; //rootが0,childはparent+1
   std::unique_ptr<fabrik::Effector> m_effector;
 };

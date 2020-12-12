@@ -235,6 +235,7 @@ void Entity::sub_health_dmg(int32_t dmg)
   m_health -= dmg;
   if (m_health <= 0) {
     this->del();
+    this->set_del();
   } else {
     this->set_blink();
   }
@@ -315,6 +316,7 @@ void Entity::set_hierarchy(Entity* parent, Entity* child)
   //child
   child->m_root = parent->m_root;
   child->m_parent = parent;
+  child->m_hierarchy_level = parent->m_hierarchy_level + 1;
 }
 
 fabrik::Effector* Entity::fetch_effector()

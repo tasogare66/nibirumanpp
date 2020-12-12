@@ -27,6 +27,18 @@ BossParts::BossParts(const EntityArgs& args, uint32_t spr_ene)
 {
 }
 
+void BossParts::dead_dot_base(int32_t num, float radius)
+{
+  gmutil::random_circle(num, 0.0f, radius, [this](Vec2f p) { new EneDot(m_pos + p); });
+}
+
+void BossParts::dead_efc_base()
+{
+  gmutil::random_circle(4, 0.0f, m_radius, [this](Vec2f p) { PtclLst::add(m_pos + p, 6); });
+  gmutil::random_circle(6, 3.0f, m_radius * 2, [this](Vec2f p) { PtclLst::add(m_pos + p, 15); });
+  Sound::psfx(SfxId::Force, SndChannel::SFX3);
+}
+
 void BossParts::set_circle_radius(float radius)
 {
   m_circle.setRadius(radius);
@@ -40,6 +52,27 @@ void BossParts::draw_circle(sf::RenderWindow& window)
   float radius = m_circle.getRadius();
   m_circle.setOrigin(-m_pos.x + radius, -m_pos.y + radius);
   window.draw(m_circle);
+}
+
+void BossParts::set_delay_del(float time)
+{
+  m_delay_del_time = std::make_optional(time);
+  this->apply_delay_del();
+}
+
+void BossParts::upd_delay_del(float dt)
+{
+  if (m_delay_del_time) {
+    m_delay_del_time.value() -= dt;
+    this->apply_delay_del();
+  }
+}
+
+void BossParts::apply_delay_del()
+{
+  if (m_delay_del_time && m_delay_del_time.value() < 0.0f) {
+    this->del();
+  }
 }
 
 
@@ -58,7 +91,6 @@ void Boss::dead_base()
 {
   Camera::inst().req_shake(2.0f);
   Enemy::dead();
-  Sound::psfx(SfxId::Force, SndChannel::SFX3);
 }
 
 //ModeGameに登録
@@ -222,9 +254,8 @@ void BossBaby::draw(sf::RenderWindow& window)
 void BossBaby::dead()
 {
   auto num = 300;
-  gmutil::random_circle(num, 0.0f, 70.0f, [this](Vec2f p) { new EneDot(m_pos+p); });
-  gmutil::random_circle(4, 0.0f, m_radius, [this](Vec2f p) { PtclLst::add(m_pos+p, 6); });
-  gmutil::random_circle(6, 3.0f, m_radius*2, [this](Vec2f p) { PtclLst::add(m_pos + p, 15); });
+  this->dead_dot_base(num, 70.0f);
+  this->dead_efc_base();
   Boss::dead_base();
   //GAME.boss = nil
 }
@@ -288,6 +319,12 @@ private:
   }
   void upd_ene(float dt) override {
     this->upd_blink(dt);
+    this->upd_delay_del(dt);
+  }
+  void dead() override {
+    auto num = 20;
+    this->dead_dot_base(num, m_radius * 3.f);
+    this->dead_efc_base();
   }
 };
 
@@ -355,8 +392,19 @@ void BossWorm::draw(sf::RenderWindow& window)
   this->draw_circle(window);
 }
 
+void BossWorm::set_del()
+{
+  this->exec_lower([this](Entity* e) {
+    auto parts = static_cast<BossParts*>(e);
+    parts->set_delay_del( parts->get_hierarchy_level()*0.06f);
+  });
+}
+
 void BossWorm::dead()
 {
+  auto num = 20;
+  this->dead_dot_base(num, m_radius*3.f);
+  this->dead_efc_base();
   Boss::dead_base();
 }
 
