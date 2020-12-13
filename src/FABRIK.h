@@ -8,7 +8,7 @@ namespace fabrik{
     virtual ~Effector() = default;
     Effector* constructor(Effector* parent = nullptr);
     void apply_effector(); //entity->effector
-    void apply_entity(); //effector->entity
+    void apply_entity(const Effector* parent); //effector->entity
   protected:
     friend class Chain;
     Vec2f m_position;

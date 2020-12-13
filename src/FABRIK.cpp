@@ -26,11 +26,12 @@ namespace fabrik {
     m_position = m_entity->get_pos();
   }
 
-  void Effector::apply_entity()
+  void Effector::apply_entity(const Effector* parent)
   {
     auto mov = m_entity->calc_mov(m_position);
     m_entity->set_mov(mov);
-    m_entity->set_dir(mov);
+    auto dir = (parent->m_position - this->m_position).normalize_lax();
+    m_entity->set_dir(dir);
   }
 
   Chain::Chain(int32_t layer, Chain* parent, std::vector<Effector*>& effectors)
@@ -101,7 +102,7 @@ namespace fabrik {
     {
       //m_effectors[i].transform.localPosition = effectors[i - 1].transform.InverseTransformPoint(effectors[i].position);
       //m_effectors[i].transform.localRotation = Quaternion.LookRotation(effectors[i - 1].transform.InverseTransformDirection(effectors[i].direction));
-      m_effectors[i]->apply_entity();
+      m_effectors[i]->apply_entity( m_effectors[i-1] );
     }
 
     for (auto child : m_children) {
