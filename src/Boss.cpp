@@ -351,6 +351,11 @@ BossWorm::BossWorm(const EntityArgs& args)
   //ik
   m_ik.awake(this);
   m_ik.get_root_chain()->set_target_enabled(false);
+  //初期位置
+  this->exec_lower([this](Entity* e) {
+    auto ofs = gmutil::random_circle(1.0f, 16.0f);
+    e->reset_position(m_pos+ofs);
+  });
   //script
   m_script.reset(scr::create_lua_boss_sequence(std::string_view("update_worm"), this));
   m_script->reset_thread();

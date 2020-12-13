@@ -34,6 +34,14 @@ public:
     *this *= static_cast<T>(1.0 / len);
     return *this;
   }
+  Vec2& normalize_lax() { //assertしない
+    const auto len = this->magnitude();
+    if (len == 0) {
+      return *this;
+    }
+    *this *= static_cast<T>(1.0 / len);
+    return *this;
+  }
 
   Vec2& set_rotate(float rad) {
     auto c = std::cos(rad);

@@ -32,12 +32,21 @@ namespace gmutil {
     window.draw(shape);
   }
 
+  Vec2f random_circle_base(float r0, float ed_r) {
+    float r = std::sqrt(rng::range(r0, 1)) * ed_r;
+    float theta = rng::range(static_cast<float>(-M_PI), static_cast<float>(M_PI));
+    return (Vec2f(r * std::cos(theta), r * std::sin(theta)));
+  }
+
+  Vec2f random_circle(float st_r, float ed_r) {
+    float r0 = st_r / ed_r;
+    return random_circle_base(r0, ed_r);
+  }
+
   void random_circle(int32_t num, float st_r, float ed_r, std::function<void(Vec2f)> func) {
     float r0 = st_r / ed_r;
     for (int32_t i = 0; i < num; ++i) {
-      float r = std::sqrt(rng::range(r0, 1)) * ed_r;
-      float theta = rng::range(static_cast<float>(-M_PI), static_cast<float>(M_PI));
-      func(Vec2f(r * std::cos(theta), r * std::sin(theta)));
+      func( random_circle_base(r0, ed_r) );
     }
   }
 }

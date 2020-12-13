@@ -65,7 +65,7 @@ namespace fabrik {
 
     for (uint32_t i = m_end_effector; i > 0; i--)
     {
-      m_effectors[i]->m_direction = (m_effectors[i - 1]->m_position - m_effectors[i]->m_position).normalize();
+      m_effectors[i]->m_direction = (m_effectors[i - 1]->m_position - m_effectors[i]->m_position).normalize_lax();
       m_effectors[i - 1]->m_position = m_effectors[i]->m_position + m_effectors[i]->m_direction * m_effectors[i]->m_distance;
     }
 
@@ -76,13 +76,13 @@ namespace fabrik {
     }
 
     m_effectors[0]->m_position = root_position;
-
   }
+
   void Chain::backward()
   {
     for (int32_t i = 0; i < m_end_effector; ++i)
     {
-      m_effectors[i]->m_direction = (m_effectors[i + 1]->m_position - m_effectors[i]->m_position).normalize();
+      m_effectors[i]->m_direction = (m_effectors[i + 1]->m_position - m_effectors[i]->m_position).normalize_lax();
       m_effectors[i + 1]->m_position = m_effectors[i]->m_position + m_effectors[i]->m_direction * m_effectors[i + 1]->m_distance;
     }
 

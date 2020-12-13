@@ -135,6 +135,12 @@ void Entity::set_position(const Vec2f& ipos) {
   }
 }
 
+void Entity::reset_position(const Vec2f& ipos)
+{
+  this->set_position(ipos);
+  m_old_pos = ipos;
+}
+
 void Entity::updateEstimateAABB() {
   //movも含めて更新
   m_aabb0 = m_pos + m_mov - m_half_extents;
