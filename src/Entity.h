@@ -191,7 +191,7 @@ protected:
   FwFlag<EntityFlag> m_flag;
   uint32_t m_no = 0;
   int32_t m_health = 1;
-  float m_exp_resi = 1.0f;
+  float m_exp_resi = 1.0f; //爆発耐性,大きいとdamage倍率がかかる
   uint32_t m_score = 0;
   FwFlag<HitMask> m_hit_mask; //HitMask
   FwFlag<HitMask> m_colli_attr; //hit時通知するattribute

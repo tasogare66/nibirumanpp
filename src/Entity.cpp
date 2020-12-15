@@ -44,6 +44,7 @@ void Entity::set_entity_data(EntityDataId edid)
     if (ed.m_have_dot) m_flag.set(EntityFlag::HaveDot, ed.m_have_dot.value());
     if (ed.m_radius) this->set_radius(ed.m_radius.value());
     if (ed.m_mass) this->set_mass(ed.m_mass.value());
+    if (ed.m_exp_resi) m_exp_resi = ed.m_exp_resi.value();
   }
 }
 

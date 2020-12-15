@@ -10,6 +10,15 @@
             "score":1,
             "have_dot":false,
             "radius":2
+        },
+        {
+            "name":"BossUrchin",
+            "health":700,
+            "score":8000,
+            "have_dot":false,
+            "radius":16,
+            "mass":5,
+            "exp_resi":2
         }
     ]
 }

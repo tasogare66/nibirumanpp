@@ -5,6 +5,7 @@
 enum class EntityDataId : uint16_t {
   EneArrow,
   BossArrow,
+  BossUrchin,
 
   Max,
   None = 0xffff
@@ -18,6 +19,7 @@ public:
   std::optional<uint32_t> m_score;
   std::optional<float> m_radius;
   std::optional<float> m_mass;
+  std::optional<float> m_exp_resi;
 };
 
 class EntityDataMng : public Singleton<EntityDataMng> {
