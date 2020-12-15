@@ -88,7 +88,7 @@ public:
   virtual void hitcb(const Entity*, const Vec2f&, float) {}
   virtual void hitcb_w(Entity*, const Vec2f&, float) const {}
   virtual void set_blink() {}
-  virtual void set_del() {}
+  virtual void set_sub_dmg(bool is_del, int32_t dmg) {}
   virtual void dead() {}
 
   void set_radius(float ir);

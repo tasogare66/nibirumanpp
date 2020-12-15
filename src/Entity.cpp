@@ -241,10 +241,10 @@ void Entity::sub_health_dmg(int32_t dmg)
   m_health -= dmg;
   if (m_health <= 0) {
     this->del();
-    this->set_del();
   } else {
     this->set_blink();
   }
+  this->set_sub_dmg(m_flag.test(EntityFlag::Del), dmg);
 }
 
 void Entity::sub_health(const Entity* t) {

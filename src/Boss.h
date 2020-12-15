@@ -13,6 +13,8 @@ public:
   BossParts(const EntityArgs& args, uint32_t spr_ene = 0);
   virtual ~BossParts() = default;
   void set_delay_del(float time=-1.0f);
+  bool is_damaged() const { return m_flags.m_damaged; }
+  void set_damaged_flag(bool in_flag) { m_flags.m_damaged = in_flag; }
 protected:
   void dead_dot_base(int32_t num, float radius);
   void dead_efc_base();
@@ -24,6 +26,12 @@ protected:
 
   sf::CircleShape m_circle;
   std::optional<float> m_delay_del_time;
+  union Flag {
+    struct {
+      bool m_damaged : 1;
+    };
+    uint32_t all = 0;
+  } m_flags;
 };
 
 class Boss : public BossParts {
@@ -76,7 +84,7 @@ public:
   void update(float dt) override;
   void upd_ene(float dt) override;
   void draw(sf::RenderWindow& window) override;
-  void set_del() override;
+  void set_sub_dmg(bool is_del, int32_t dmg) override;
   void dead() override;
 
   void use_arms(int type, const LuaIntf::LuaRef& tbl) override;

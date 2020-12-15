@@ -302,14 +302,21 @@ public:
   {
     this->set_radius(10);
     this->set_mass(3);
-    m_health = std::numeric_limits<int32_t>::max();
+    m_health = m_health_max;
     m_flag.set(EntityFlag::IgnoreCollisionSameRoot);
     //circle
     this->set_circle_radius(m_radius);
   }
   virtual ~WormChild() = default;
   void draw(sf::RenderWindow& window) override final {
+    if (m_appear_flag) return;
+
     this->spr8x8(m_spr_ene, 3, 3);
+    if (this->is_damaged()) {
+      m_spr.setColor(sf::Color(0x708090FF));
+    } else {
+      m_spr.setColor(sf::Color(0xFFFFFFFF));
+    }
     this->Enemy::draw(window);
     this->draw_circle(window);
   }
@@ -317,7 +324,22 @@ private:
   void appear() {
     this->attr_px();
   }
+  void set_damaged_time() {
+    m_damaged_time = 8.0f; //8sec
+  }
+  void set_damaged() {
+    this->set_damaged_flag(true);
+    this->set_damaged_time();
+  }
+  void clear_damaged() {
+    this->set_damaged_flag(false);
+    m_damaged_time = 0.0f;
+    m_health = m_health_max;
+  }
+  void upd_damaged(float dt);
+  void set_sub_dmg(bool is_del, int32_t dmg) override;
   void upd_ene(float dt) override {
+    this->upd_damaged(dt);
     this->upd_blink(dt);
     this->upd_delay_del(dt);
   }
@@ -326,7 +348,28 @@ private:
     this->dead_dot_base(num, m_radius * 3.f);
     this->dead_efc_base();
   }
+  const int32_t m_health_max = std::numeric_limits<int32_t>::max();
+  float m_damaged_time = 0.0f;
 };
+void WormChild::upd_damaged(float dt)
+{
+  m_damaged_time -= dt;
+  if (m_damaged_time < 0.0f) {
+    this->clear_damaged();
+  }
+}
+void WormChild::set_sub_dmg(bool, int32_t)
+{
+  if (not this->is_damaged()) {
+    auto val = m_health_max - m_health;
+    if (val >= 20) {
+      this->set_damaged();
+      PtclLst::add_sqr(m_pos, 10, m_radius + 3.0f);
+      Sound::psfx(SfxId::EneDead, SndChannel::SFX1);
+    }
+    this->set_damaged_time();
+  }
+}
 
 BossWorm::BossWorm(const EntityArgs& args)
   : Boss(args, 456)
@@ -387,6 +430,8 @@ void BossWorm::upd_ene(float dt)
 
 void BossWorm::draw(sf::RenderWindow& window)
 {
+  if (m_appear_flag) return;
+
   if (this->is_blink()) {
     this->spr8x8(332, 4, 4);
   } else {
@@ -397,12 +442,14 @@ void BossWorm::draw(sf::RenderWindow& window)
   this->draw_circle(window);
 }
 
-void BossWorm::set_del()
+void BossWorm::set_sub_dmg(bool is_del, int32_t)
 {
-  this->exec_lower([this](Entity* e) {
-    auto parts = static_cast<BossParts*>(e);
-    parts->set_delay_del( parts->get_hierarchy_level()*0.06f);
-  });
+  if (is_del) {
+    this->exec_lower([this](Entity* e) {
+      auto parts = static_cast<BossParts*>(e);
+      parts->set_delay_del(parts->get_hierarchy_level() * 0.06f);
+    });
+  }
 }
 
 void BossWorm::dead()
@@ -442,6 +489,10 @@ void BossWorm::arms0(float t, bool is_arrow)
 {
   if (m_arms_timer > t) {
     this->exec_or_lower([this,is_arrow](Entity* e) {
+      //damage中のpartsは打たない
+      const auto* boss_parts = static_cast<BossParts*>(e);
+      if (boss_parts->is_damaged()) return;
+
       auto dir(e->get_dir());
       if (dir.sqr_magnitude() <= const_param::EPSILON) return;
       auto f = dir.rotate(static_cast<float>(M_PI)/2.f);
