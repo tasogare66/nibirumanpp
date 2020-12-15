@@ -318,7 +318,7 @@ public:
       m_spr.setColor(sf::Color(0xFFFFFFFF));
     }
     this->Enemy::draw(window);
-    this->draw_circle(window);
+    //this->draw_circle(window);
   }
 private:
   void appear() {
@@ -439,7 +439,7 @@ void BossWorm::draw(sf::RenderWindow& window)
   }
   this->Enemy::draw(window);
   //circle
-  this->draw_circle(window);
+  //this->draw_circle(window);
 }
 
 void BossWorm::set_sub_dmg(bool is_del, int32_t)

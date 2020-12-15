@@ -149,7 +149,7 @@ void Entity::updateEstimateAABB() {
 float Entity::apply_angle(sf::Sprite& spr, float ofs_degree)
 {
   auto ang = std::atan2(m_dir.y, m_dir.x);
-  spr.setRotation(fw::rad2deg(ang+ofs_degree));
+  spr.setRotation(fw::rad2deg(ang)+ofs_degree);
   return ang;
 }
 
