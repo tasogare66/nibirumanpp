@@ -23,5 +23,6 @@ ENEMY_TYPE_DECL(SPHE, EneSphe, EntityDataId::None)
 ENEMY_TYPE_DECL(HUMAN, Human, EntityDataId::None)
 ENEMY_TYPE_DECL(BOSS_BABY, BossBaby, EntityDataId::None)
 ENEMY_TYPE_DECL(BOSS_WORM, BossWorm, EntityDataId::None)
+ENEMY_TYPE_DECL(BOSS_URCHIN, BossUrchin, EntityDataId::None)
 
 #endif // ENEMY_TYPE_DECL

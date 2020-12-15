@@ -274,5 +274,8 @@
     <ClInclude Include="src\EntityData.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="src\BossUrchin_cpp.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -503,3 +503,5 @@ void BossWorm::arms0(float t, bool is_arrow)
     m_arms_timer = fmod(m_arms_timer, t);
   }
 }
+
+#include "BossUrchin_cpp.h"

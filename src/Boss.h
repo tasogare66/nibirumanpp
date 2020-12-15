@@ -13,8 +13,8 @@ public:
   BossParts(const EntityArgs& args, uint32_t spr_ene = 0);
   virtual ~BossParts() = default;
   void set_delay_del(float time=-1.0f);
-  bool is_damaged() const { return m_flags.m_damaged; }
-  void set_damaged_flag(bool in_flag) { m_flags.m_damaged = in_flag; }
+  bool is_damaged() const { return m_boss_flag.m_damaged; }
+  void set_damaged_flag(bool in_flag) { m_boss_flag.m_damaged = in_flag; }
 protected:
   void dead_dot_base(int32_t num, float radius);
   void dead_efc_base();
@@ -31,7 +31,7 @@ protected:
       bool m_damaged : 1;
     };
     uint32_t all = 0;
-  } m_flags;
+  } m_boss_flag;
 };
 
 class Boss : public BossParts {
@@ -80,7 +80,7 @@ class BossWorm final : public Boss {
 public:
   BossWorm(const EntityArgs& args);
   virtual ~BossWorm() = default;
-  void appear();
+  void appear() override;
   void update(float dt) override;
   void upd_ene(float dt) override;
   void draw(sf::RenderWindow& window) override;
@@ -94,4 +94,15 @@ private:
 
   fabrik::IK m_ik;
   float m_arms_timer = 0.0f;
+};
+
+class BossUrchin final : public Boss {
+public:
+  BossUrchin(const EntityArgs& args);
+  virtual ~BossUrchin() = default;
+  void appear() override;
+  void update(float dt) override;
+  void upd_ene(float dt) override;
+  void draw(sf::RenderWindow& window) override;
+private:
 };
