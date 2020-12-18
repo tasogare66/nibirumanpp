@@ -8,6 +8,7 @@
 #include "PtclLst.h"
 #include "Sound.h"
 #include "EntityData.h"
+#include "SaveData.h"
 
 #include "App.h"
 
@@ -16,6 +17,7 @@ App::App()
   Resource::inst().setup_at_boot();
   EntityDataMng::inst().setup_at_boot();
   Sound::inst().setup_at_boot();
+  SaveDataMng::inst().setup_at_boot(); //最後に
   ModeMng::inst().request(ModeType::TITLE);
 }
 

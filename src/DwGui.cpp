@@ -8,6 +8,7 @@
 #include "EnemyType.h"
 #include "Sound.h"
 #include "ObjLst.h"
+#include "SaveData.h"
 
 #include "DwGui.h"
 
@@ -75,11 +76,17 @@ void DwGui::show_options_window()
   if (ImGui::CollapsingHeader("Options"))
   {
     auto& snd = Sound::inst();
+    auto& save_data = SaveDataMng::inst().get_data_w();
     if (ImGui::SliderFloat("sfx volume", snd.get_sfx_volume_pt(), 0.0f, 1.0f, "vol = %.3f")) {
       snd.apply_sfx_volume();
+      save_data.set_vol_sfx(snd.get_sfx_volume());
     }
     if (ImGui::SliderFloat("music volume", snd.get_music_volume_pt(), 0.0f, 1.0f, "vol = %.3f")) {
       snd.apply_music_volume();
+      save_data.set_vol_music(snd.get_music_volume());
+    }
+    if (ImGui::Button("Save")) {
+      SaveDataMng::inst().write_save_data();
     }
   }
 }

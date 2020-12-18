@@ -140,6 +140,7 @@
     <ClCompile Include="src\Random.cpp" />
     <ClCompile Include="src\Resource.cpp" />
     <ClCompile Include="src\Reticle.cpp" />
+    <ClCompile Include="src\SaveData.cpp" />
     <ClCompile Include="src\Sound.cpp" />
     <ClCompile Include="src\Shash.cpp" />
     <ClCompile Include="src\Spawner.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="src\Random.h" />
     <ClInclude Include="src\Resource.h" />
     <ClInclude Include="src\Reticle.h" />
+    <ClInclude Include="src\SaveData.h" />
     <ClInclude Include="src\Sound.h" />
     <ClInclude Include="src\Shash.h" />
     <ClInclude Include="src\Singleton.h" />
