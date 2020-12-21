@@ -98,6 +98,10 @@ private:
 
 class BossUrchin final : public Boss {
 public:
+  class Node {
+  public:
+    Vec2f m_p;
+  };
   BossUrchin(const EntityArgs& args);
   virtual ~BossUrchin() = default;
   void appear() override;
@@ -105,4 +109,8 @@ public:
   void upd_ene(float dt) override;
   void draw(sf::RenderWindow& window) override;
 private:
+  void upd_nodes(float dt);
+  static constexpr int32_t m_legs_num = 10;
+  static constexpr int32_t m_node_num = 50;
+  std::array<std::array<Node, m_node_num>, m_legs_num> m_all_nodes;
 };
