@@ -113,4 +113,5 @@ private:
   static constexpr int32_t m_legs_num = 10;
   static constexpr int32_t m_node_num = 50;
   std::array<std::array<Node, m_node_num>, m_legs_num> m_all_nodes;
+  float m_legs_rot = 0.0f;
 };

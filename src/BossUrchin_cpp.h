@@ -25,6 +25,8 @@ void BossUrchin::upd_ene(float dt)
 {
   this->upd_ene_base(dt);
   //upd legs
+  m_legs_rot += fw::deg2rad(60.f)*dt;
+  m_legs_rot = atan2(sin(m_legs_rot), cos(m_legs_rot));
   this->upd_nodes(dt);
 }
 
@@ -46,11 +48,15 @@ void BossUrchin::upd_nodes(float dt)
 
   Vec2f vP = m_pos;
   for (int32_t i = 0; i < m_legs_num; ++i) {
-    float aT = i * pi2 / m_legs_num;
-    float apv = aT, l = lb;
-    Vec2f vDT(std::cos(aT), std::sin(aT)), vpv = vP;
+    float aT = i * pi2 / m_legs_num + m_legs_rot;
+    float apv = aT;
+    float l = lb;
+    Vec2f vDT(std::cos(aT), std::sin(aT));
 
-    for (int32_t j = 0; j < m_node_num; ++j)
+    Vec2f vpv = vP+vDT*m_radius;
+    m_all_nodes[i][0].m_p = vpv;
+
+    for (int32_t j = 1; j < m_node_num; ++j)
     {
       auto& n{m_all_nodes[i][j]};
       auto& vC = n.m_p;
@@ -58,7 +64,7 @@ void BossUrchin::upd_nodes(float dt)
       Vec2f vAB = vab * InvLength(vab, 1.f);
       float aS = atan2(vAB.y, vAB.x);
       float cl = std::clamp(lambda_NA(aS - apv), -pi, pi);
-      aS = apv + std::clamp(cl - cl * .1f, -pi, pi);
+      aS = apv + std::clamp(cl - cl * .2f, -pi, pi);
       Vec2f vD(std::cos(aS), std::sin(aS));
       vC = vpv + vD * l;
 
@@ -77,11 +83,10 @@ void BossUrchin::draw(sf::RenderWindow& window)
   this->draw_circle(window);
 
   std::vector<sf::Vertex> vertices;
-  Vec2f vP = m_pos;
   for (int32_t i = 0; i < m_legs_num; ++i) {
-    Vec2f vpv = vP;
+    Vec2f vpv = m_all_nodes[i][0].m_p;
 
-    for (int32_t j = 0; j < m_node_num; ++j)
+    for (int32_t j = 1; j < m_node_num; ++j)
     {
       const auto& n{ m_all_nodes[i][j] };
       auto& vC = n.m_p;
