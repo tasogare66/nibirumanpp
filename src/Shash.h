@@ -6,14 +6,16 @@
 class Entity;
 
 struct ShaEntity {
-  ShaEntity(float l,float t, float r, float b, Entity* e=nullptr)
+  ShaEntity(float l,float t, float r, float b, Entity* e=nullptr, const Entity* root=nullptr)
     : m_left(l), m_top(t)
     , m_right(r), m_bottom(b)
     , m_e(e)
+    , m_root(root)
   {}
   float m_left, m_top;
   float m_right, m_bottom;
   Entity* m_e;
+  const Entity* const m_root;
 };
 
 class Shash {
@@ -22,7 +24,7 @@ public:
 
   Shash(uint32_t cellsize);
   ~Shash() = default;
-  void add(Entity* obj, float x, float y, float w, float h);
+  void add(Entity* obj, float x, float y, float w, float h, const Entity* root);
   void remove(Entity* obj);
   void update(Entity* obj, float x, float y, float w=0.0f, float h=0.0f);
   void clear();

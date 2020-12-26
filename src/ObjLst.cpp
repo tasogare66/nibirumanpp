@@ -265,7 +265,7 @@ void ObjLst::upd_reciprocal()
     if (obj->m_flag.test(EntityFlag::CollisionEnabled)) {
       m_px_sha->each(obj, [&](Entity* o) {
         if (obj->m_no > o->m_no && (o->m_flag.test(EntityFlag::CollisionEnabled))) {
-          if (o->m_flag.test(EntityFlag::IgnoreCollisionSameRoot) && o->m_root == obj->m_root) return;
+          //if (o->m_flag.test(EntityFlag::IgnoreCollisionSameRoot) && o->m_root == obj->m_root) return;
           reciprocal_each(obj, o);
         }
       });

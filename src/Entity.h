@@ -105,6 +105,7 @@ public:
   Vec2f calc_mov(const Vec2f& pos) const { return (pos-m_pos); }
   void add_mov(const Vec2f& v) { m_mov += v; }
   void set_mov(const Vec2f& v) { m_mov = v; }
+  void set_calc_mov(const Vec2f& pos) { m_mov = this->calc_mov(pos); }
   void add_vel_force(const Vec2f& v) {
     m_old_pos -= v;
   }

@@ -39,12 +39,12 @@ void Shash::remove_entity_from_cell(int64_t idx, ShaEntity* e)
   it->second.erase(e);
 }
 
-void Shash::add(Entity* obj, float x, float y, float w, float h)
+void Shash::add(Entity* obj, float x, float y, float w, float h, const Entity* root)
 {
   // Create entity.The table is used as an array as this offers a noticable
   // performance increase on LuaJIT; the indices are as follows :
   // [1] = left, [2] = top, [3] = right, [4] = bottom, [5] = object
-  ShaEntity e = { x, y, x + w, y + h, obj };
+  ShaEntity e = { x, y, x + w, y + h, obj, root };
   // Add to main entities table
   auto p = m_entities.emplace(obj, e);
   //self.numentities = self.numentities + 1
@@ -107,9 +107,13 @@ void Shash::clear() {
   m_entities.clear();
 }
 
-static bool overlaps(const ShaEntity& e1, const ShaEntity& e2) {
+static inline bool overlaps(const ShaEntity& e1, const ShaEntity& e2) {
   //return e1[3] > e2[1] and e1[1] < e2[3] and e1[4] > e2[2] and e1[2] < e2[4]
   return e1.m_right > e2.m_left && e1.m_left < e2.m_right&& e1.m_bottom > e2.m_top && e1.m_top < e2.m_bottom;
+}
+
+static inline bool is_other_root(const ShaEntity& e1, const ShaEntity& e2) {
+  return (!e1.m_root || (e1.m_root != e2.m_root));
 }
 
 void Shash::each_overlapping_in_cell(int64_t idx, ShaEntity& e, std::set<const ShaEntity*>& sets, HitCallbackFunc& hcb)
@@ -118,7 +122,7 @@ void Shash::each_overlapping_in_cell(int64_t idx, ShaEntity& e, std::set<const S
   if (it == m_cells.end()) return;
   for (auto& p : it->second) {
     auto v = p.first;
-    if (&e != v && overlaps(e, *v) && sets.count(v) <= 0) {
+    if (&e != v && is_other_root(e, *v) && overlaps(e, *v) && sets.count(v) <= 0) {
       hcb(v->m_e);
       sets.insert(v);
     }

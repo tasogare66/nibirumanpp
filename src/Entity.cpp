@@ -51,7 +51,8 @@ void Entity::set_entity_data(EntityDataId edid)
 void Entity::set_sha(Shash* set_lst) {
   FW_ASSERT(!m_sha);
   m_sha = set_lst;
-  m_sha->add(this, m_aabb0.x, m_aabb0.y, m_aabb_size.x, m_aabb_size.y);
+  const auto rte = m_flag.test(EntityFlag::IgnoreCollisionSameRoot) ? m_root : nullptr; //root
+  m_sha->add(this, m_aabb0.x, m_aabb0.y, m_aabb_size.x, m_aabb_size.y, rte);
 }
 
 void Entity::attr_verlet()
