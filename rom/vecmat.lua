@@ -448,6 +448,7 @@ function get_tgt_pos(id)
   return GAME.get_target_position(id) --px,py
 end
 
+function lerp(a,b,t) return a*(1-t) + b*t end
 
 function table.clone(org)
   local copy={}

@@ -45,7 +45,7 @@ BossUrchin::BossUrchin(const EntityArgs& args)
   //this->upd_nodes(true); //reset position
 
   //script
-  m_script.reset(scr::create_lua_boss_sequence(std::string_view("update_baby"), this));
+  m_script.reset(scr::create_lua_boss_sequence(std::string_view("update_urchin"), this));
   m_script->reset_thread();
 }
 
@@ -64,9 +64,13 @@ void BossUrchin::update(float dt)
 void BossUrchin::upd_ene(float dt)
 {
   this->upd_ene_base(dt);
+
+  m_stiffness.update(dt);
+
   //upd legs
   m_legs_rot += fw::deg2rad(60.f)*dt;
   m_legs_rot = atan2(sin(m_legs_rot), cos(m_legs_rot));
+
   this->upd_nodes();
 }
 
@@ -93,7 +97,7 @@ void BossUrchin::upd_nodes(bool is_reset)
     }
   };
 
-  Vec2f vP = m_pos;
+  Vec2f vP = this->get_estimate_pos();
   for (int32_t i = 0; i < m_legs_num; ++i) {
     float aT = i * pi2 / m_legs_num + m_legs_rot;
     float apv = aT;
@@ -104,6 +108,7 @@ void BossUrchin::upd_nodes(bool is_reset)
     m_all_nodes[i][0].m_p = vpv; //entity->m_pos -> pos
     lambda_apply_entity(m_all_nodes[i][0]); //pos -> entity->m_mov
 
+    const float stiffness = get_stiffness();
     for (int32_t j = 1; j < m_node_num; ++j)
     {
       auto& n{m_all_nodes[i][j]};
@@ -113,7 +118,7 @@ void BossUrchin::upd_nodes(bool is_reset)
       Vec2f vAB = vab * InvLength(vab, 1.f);
       float aS = atan2(vAB.y, vAB.x);
       float cl = std::clamp(lambda_NA(aS - apv), -pi, pi);
-      aS = apv + std::clamp(cl - cl * .2f, -pi, pi);
+      aS = apv + std::clamp(cl - cl * stiffness, -pi, pi);
       Vec2f vD(std::cos(aS), std::sin(aS));
       vC = vpv + vD * l;
 

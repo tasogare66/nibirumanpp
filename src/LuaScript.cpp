@@ -326,6 +326,8 @@ namespace scr
         // 武器の使用
         .addFunction("use_arms", [this](int id, const LuaRef tbl) { m_boss->use_arms(id, tbl); }, LUA_ARGS(int, const LuaRef))
         .addProperty("elapsed", [this]() { return m_boss->get_elapsed(); })
+        // stiffness設定
+        .addFunction("set_stiffness", [this](float v) { m_boss->set_stiffness(v,1.0f); })
       //  .addProperty("dt", [this]() { return m_dt; })
         .endModule();
     }
