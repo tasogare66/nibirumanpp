@@ -121,11 +121,13 @@ function update_urchin()
     end)
 
     boss.set_stiffness(0.9);
+    boss.set_rot_speed(30,10);
     upd_for_second(30, function()
       boss.move_to(0,0,15)
       boss.use_arms(0, {t=0.2})
     end)
     boss.set_stiffness(0.2);
+    boss.set_rot_speed(0,3);
 
     for i=1, 3 do
       local dir = get_dir(Vec2.new(get_tgt_pos()))

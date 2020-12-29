@@ -328,6 +328,7 @@ namespace scr
         .addProperty("elapsed", [this]() { return m_boss->get_elapsed(); })
         // stiffness設定
         .addFunction("set_stiffness", [this](float v) { m_boss->set_stiffness(v,1.0f); })
+        .addFunction("set_rot_speed", [this](float v, float t) { m_boss->set_rot_speed(v, t); })
       //  .addProperty("dt", [this]() { return m_dt; })
         .endModule();
     }

@@ -43,6 +43,7 @@ public:
   virtual float move_to(float px, float py, float spd);
   virtual void use_arms(int type, const LuaIntf::LuaRef& tbl) {}
   virtual void set_stiffness(float,float) {}
+  virtual void set_rot_speed(float, float) {}
 
   virtual void draw_info1(sf::RenderWindow&) const;
   virtual void draw_info2(sf::RenderWindow&, sf::Text& text) const;
@@ -157,11 +158,15 @@ public:
   void draw(sf::RenderWindow& window) override;
   void set_stiffness(float v, float t) override { m_stiffness.request(v,t); }
   float get_stiffness() const { return m_stiffness.get(); }
+  void set_rot_speed(float v, float t) override { m_rot_speed.request(v, t); }
+  float get_rot_speed() const { return m_rot_speed.get(); } //degree
 private:
   void upd_nodes(bool is_reset=false);
   static constexpr int32_t m_legs_num = 10;
   static constexpr int32_t m_node_num = 20;
+  static constexpr float m_node_radisu = 4.0f;
   std::array<std::array<Node, m_node_num>, m_legs_num> m_all_nodes;
   float m_legs_rot = 0.0f;
   EaseParam m_stiffness{0.2f};
+  EaseParam m_rot_speed{0.0f};
 };

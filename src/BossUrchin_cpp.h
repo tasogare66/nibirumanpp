@@ -36,7 +36,9 @@ BossUrchin::BossUrchin(const EntityArgs& args)
     Entity* parent = this;
     for(int j=0;j<m_node_num;++j){
       auto p = args.m_pos;
-      auto child = new UrchinNode(p);
+      EntityArgs args(p);
+      args.m_radius = m_node_radisu;
+      auto child = new UrchinNode(args);
       m_all_nodes[i][j].m_e = child;
       Entity::set_hierarchy(parent, child);
       parent = child;
@@ -66,9 +68,10 @@ void BossUrchin::upd_ene(float dt)
   this->upd_ene_base(dt);
 
   m_stiffness.update(dt);
+  m_rot_speed.update(dt);
 
   //upd legs
-  m_legs_rot += fw::deg2rad(60.f)*dt;
+  m_legs_rot += fw::deg2rad(this->get_rot_speed())*dt;
   m_legs_rot = atan2(sin(m_legs_rot), cos(m_legs_rot));
 
   this->upd_nodes();
@@ -82,7 +85,7 @@ static inline float InvLength(const Vec2f& lhs, float fail_value) {
 
 void BossUrchin::upd_nodes(bool is_reset)
 {
-  constexpr float lb = 10.f;
+  constexpr float lb = m_node_radisu*2.0f;
   constexpr float pi = static_cast<float>(M_PI);
   constexpr float pi2 = 2.f * pi;
 
@@ -104,7 +107,7 @@ void BossUrchin::upd_nodes(bool is_reset)
     float l = lb;
     Vec2f vDT(std::cos(aT), std::sin(aT));
 
-    Vec2f vpv = vP+vDT*m_radius;
+    Vec2f vpv = vP+vDT*(m_radius+m_node_radisu*0.5f);
     m_all_nodes[i][0].m_p = vpv; //entity->m_pos -> pos
     lambda_apply_entity(m_all_nodes[i][0]); //pos -> entity->m_mov
 
@@ -126,7 +129,7 @@ void BossUrchin::upd_nodes(bool is_reset)
 
       apv = aS;
       vpv = vC;
-      l *= i & 1 ? .9f : .85f;
+      //l *= i & 1 ? .9f : .85f;
     }
   }
 }
