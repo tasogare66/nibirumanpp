@@ -54,9 +54,10 @@ protected:
   void dead_base();
   void set_bossrf();
   void remove_bossrf();
-  Vec2f get_dir(Vec2f tgt);
+  Vec2f calc_dir(Vec2f tgt);
   int32_t m_health_max=1;
   float m_dt=1.0f/60.0f;
+  float m_arms_timer = 0.0f;
   std::unique_ptr<scr::ILuaScript> m_script;
 };
 
@@ -75,7 +76,6 @@ private:
   void arms0(float t, int32_t num=10, float ofs=0.0f);
 
   sf::Sprite m_spr_body;
-  float m_arms_timer = 0.0f;
   Vec2f m_dspofs;
   uint32_t m_animcnt=0;
 };
@@ -97,7 +97,6 @@ private:
   void arms0(float t, bool is_arrow);
 
   fabrik::IK m_ik;
-  float m_arms_timer = 0.0f;
 };
 
 struct EaseParam {
@@ -160,10 +159,13 @@ public:
   float get_stiffness() const { return m_stiffness.get(); }
   void set_rot_speed(float v, float t) override { m_rot_speed.request(v, t); }
   float get_rot_speed() const { return m_rot_speed.get(); } //degree
+
+  void use_arms(int type, const LuaIntf::LuaRef& tbl) override;
 private:
   void upd_nodes(bool is_reset=false);
+  void arms0(float t);
   static constexpr int32_t m_legs_num = 10;
-  static constexpr int32_t m_node_num = 20;
+  static constexpr int32_t m_node_num = 19;
   static constexpr float m_node_radisu = 4.0f;
   std::array<std::array<Node, m_node_num>, m_legs_num> m_all_nodes;
   float m_legs_rot = 0.0f;

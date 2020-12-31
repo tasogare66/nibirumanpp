@@ -115,7 +115,7 @@ bool Boss::is_exist_boss() {
   return false;
 }
 
-Vec2f Boss::get_dir(Vec2f tgt) {
+Vec2f Boss::calc_dir(Vec2f tgt) {
   auto dir = tgt - m_pos;
   auto len = dir.magnitude();
   if (len > const_param::EPSILON) {
@@ -144,7 +144,7 @@ void Boss::upd_ene_base(float dt)
 
 float Boss::move_to(float px,float py,float spd)
 {
-  //m_mov += this->get_dir({ px,py }) * spd * m_dt;
+  //m_mov += this->calc_dir({ px,py }) * spd * m_dt;
   Vec2f tgt(px,py);
   auto dir = tgt - m_pos;
   auto dist = dir.magnitude();

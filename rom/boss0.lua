@@ -121,10 +121,10 @@ function update_urchin()
     end)
 
     boss.set_stiffness(0.9);
-    boss.set_rot_speed(30,10);
+    boss.set_rot_speed(27,10);
     upd_for_second(30, function()
       boss.move_to(0,0,15)
-      boss.use_arms(0, {t=0.2})
+      boss.use_arms(0, {t=0.4})
     end)
     boss.set_stiffness(0.2);
     boss.set_rot_speed(0,3);
@@ -132,7 +132,7 @@ function update_urchin()
     for i=1, 3 do
       local dir = get_dir(Vec2.new(get_tgt_pos()))
       upd_for_second(1)
-      boss.add_vel_force(dir.x*5,dir.y*5)
+      boss.add_vel_force(dir.x*(4-i),dir.y*(4-i))
     end
  
   until false -- ずっと続ける
