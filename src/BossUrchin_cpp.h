@@ -1,7 +1,7 @@
 ﻿class UrchinNode final : public BossParts {
 public:
   UrchinNode(const EntityArgs& args)
-    : BossParts(args,460)
+    : BossParts(args,327)
   {
     m_health = m_health_max;
     m_flag.set(EntityFlag::IgnoreCollisionSameRoot);
@@ -11,7 +11,10 @@ public:
   virtual ~UrchinNode() = default;
   void draw(sf::RenderWindow& window) override final{
     if (m_appear_flag) return;
-    this->draw_circle(window);
+
+    this->spr8x8(m_spr_ene);
+    this->Enemy::draw(window);
+    //this->draw_circle(window);
   }
 private:
   void appear() {
@@ -24,7 +27,7 @@ private:
 };
 
 BossUrchin::BossUrchin(const EntityArgs& args)
-  : Boss(args, 456)
+  : Boss(args, 340)
 {
   m_health_max = m_health;
   m_flag.set(EntityFlag::IgnoreCollisionSameRoot);
@@ -98,12 +101,12 @@ void BossUrchin::upd_nodes(bool is_reset)
     } else {
       n.m_e->set_calc_mov(n.m_p);
     }
-    auto dir = (parent->get_pos() - n.m_p).normalize_lax();
+    auto dir = (n.m_p - parent->get_estimate_pos()).normalize_lax();
     n.m_e->set_dir(dir);
+    n.m_e->apply_angle(90.0);
   };
 
   Vec2f vP = this->get_estimate_pos();
-  const Entity* eP = this;
   for (int32_t i = 0; i < m_legs_num; ++i) {
     float aT = i * pi2 / m_legs_num + m_legs_rot;
     float apv = aT;
@@ -129,7 +132,7 @@ void BossUrchin::upd_nodes(bool is_reset)
       Vec2f vD(std::cos(aS), std::sin(aS));
       vC = vpv + vD * l;
 
-      lambda_apply_entity(n, eP); //pos -> entity->m_mov
+      lambda_apply_entity(n, parent_entity); //pos -> entity->m_mov
 
       apv = aS;
       vpv = vC;
@@ -143,9 +146,15 @@ void BossUrchin::draw(sf::RenderWindow& window)
 {
   if (m_appear_flag) return;
 
+  if (this->is_blink()) {
+    this->spr8x8(332, 4, 4);
+  } else {
+    this->spr8x8(m_spr_ene, 4, 4);
+  }
+  this->Enemy::draw(window);
   //circle
-  this->draw_circle(window);
-#if DEBUG
+  //this->draw_circle(window);
+#if DEBUG&0
   std::vector<sf::Vertex> vertices;
   for (int32_t i = 0; i < m_legs_num; ++i) {
     Vec2f vpv = m_all_nodes[i][0].m_p;
@@ -191,7 +200,7 @@ void BossUrchin::arms0(float t)
       const auto* e = node.m_e;
       auto dir(e->get_dir());
       if (dir.sqr_magnitude() <= const_param::EPSILON) continue;
-      new BossArrow(EntityArgs(EntityDataId::BossArrow, e->get_pos(), -dir));
+      new BossArrow(EntityArgs(EntityDataId::BossArrow, e->get_pos(), dir));
     }
     m_arms_timer = fmod(m_arms_timer, t);
   }
