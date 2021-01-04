@@ -35,13 +35,14 @@ void EntityDataMng::setup_at_boot()
     lambda_write_dst("radius", dst.m_radius);
     lambda_write_dst("mass", dst.m_mass);
     lambda_write_dst("exp_resi", dst.m_exp_resi);
+    dst.m_valid = true;
   }
 }
 
 const EntityData& EntityDataMng::get(EntityDataId id)
 {
   static EntityData dummy;
-  if (id == EntityDataId::None) dummy;
+  if (id == EntityDataId::None) return dummy;
   FW_ASSERT(id<EntityDataId::Max);
   return m_datas[fw::underlying_cast(id)];
 }

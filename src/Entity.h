@@ -159,7 +159,7 @@ public:
 protected:
   friend class ObjLst;
 
-  void set_entity_data(EntityDataId edid);
+  void set_entity_data(const EntityData& ed);
   void set_sha(Shash* set_lst);
   void attr_verlet();
   Vec2f calc_velocity() const {
@@ -204,4 +204,5 @@ protected:
   std::vector<Entity*> m_children;
   uint16_t m_hierarchy_level = 0; //rootが0,childはparent+1
   std::unique_ptr<fabrik::Effector> m_effector;
+  const EntityData& m_entity_data;
 };

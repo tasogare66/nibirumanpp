@@ -1,6 +1,16 @@
 {
     "datas":[
         {
+            "name":"EneSnake",
+            "score":20,
+            "have_dot":true
+        },
+        {
+            "name":"EneUrchin",
+            "score":2,
+            "have_dot":false
+        },
+        {
             "name":"EneArrow",
             "score":30,
             "have_dot":true

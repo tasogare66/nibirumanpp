@@ -24,8 +24,9 @@ Entity::Entity(EntityType type, const EntityArgs& args)
   , m_half_extents(args.m_radius, args.m_radius)
   , m_flag(fw::underlying_cast(EntityFlag::DefaultMask))
   , m_root(this)
+  , m_entity_data(EntityDataMng::inst().get(args.m_edid))
 {
-  this->set_entity_data(args.m_edid);
+  this->set_entity_data(m_entity_data);
   m_spr.setTexture(Resource::inst().get_spr_tex());
   this->spr8x8(m_dummy_spr_id);
   m_no = ObjLst::inst().request(this);
@@ -35,10 +36,9 @@ Entity::~Entity()
 {
 }
 
-void Entity::set_entity_data(EntityDataId edid)
+void Entity::set_entity_data(const EntityData& ed)
 {
-  if (edid != EntityDataId::None) {
-    auto& ed{ EntityDataMng::inst().get(edid) };
+  if (ed.is_valid()) {
     if (ed.m_health) m_health = ed.m_health.value();
     if (ed.m_score) m_score = ed.m_score.value();
     if (ed.m_have_dot) m_flag.set(EntityFlag::HaveDot, ed.m_have_dot.value());

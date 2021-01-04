@@ -3,6 +3,8 @@
 #include "Singleton.h"
 
 enum class EntityDataId : uint16_t {
+  EneSnake,
+  EneUrchin,
   EneArrow,
   BossArrow,
   BossUrchin,
@@ -13,6 +15,7 @@ enum class EntityDataId : uint16_t {
 
 class EntityData {
 public:
+  bool m_valid = false;
   std::string m_name;
   std::optional<bool> m_have_dot;
   std::optional<int32_t> m_health;
@@ -20,6 +23,7 @@ public:
   std::optional<float> m_radius;
   std::optional<float> m_mass;
   std::optional<float> m_exp_resi;
+  bool is_valid() const { return m_valid; }
 };
 
 class EntityDataMng : public Singleton<EntityDataMng> {

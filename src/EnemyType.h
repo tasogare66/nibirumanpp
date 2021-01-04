@@ -14,7 +14,8 @@ enum class EnemyType {
 
 #ifdef ENEMY_TYPE_DECL
 
-ENEMY_TYPE_DECL(SNAKE, EneSnake, EntityDataId::None)
+ENEMY_TYPE_DECL(SNAKE, EneSnake, EntityDataId::EneSnake)
+ENEMY_TYPE_DECL(URCHIN, EneSnake, EntityDataId::EneUrchin)
 ENEMY_TYPE_DECL(GRUNT, EneGrunt, EntityDataId::None)
 ENEMY_TYPE_DECL(HULK, EneHulk, EntityDataId::None)
 ENEMY_TYPE_DECL(ARROW, EneArrow, EntityDataId::EneArrow)

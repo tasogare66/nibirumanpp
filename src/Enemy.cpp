@@ -61,8 +61,6 @@ void Enemy::set_blink()
 EneSnake::EneSnake(const EntityArgs& args)
   : Enemy(args, 274)
 {
-  m_flag.set(EntityFlag::HaveDot);
-  m_score = 20;
 }
 void EneSnake::appear()
 {
