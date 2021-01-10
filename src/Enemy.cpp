@@ -16,16 +16,29 @@ Enemy::Enemy(const EntityArgs& args, uint32_t spr_ene)
   , m_spr_ene(spr_ene)
 {
   m_colli_attr.set(HitMask::Enemy);
-  this->spr8x8(464); //appear
+
+  if (args.m_appear_sec>=0.0f) { //args優先
+    m_appear_sec = args.m_appear_sec;
+  } else if (m_entity_data.m_appear_sec) {
+    m_appear_sec = m_entity_data.m_appear_sec.value();
+  }
+}
+
+void Enemy::init()
+{
+  if (m_appear_sec <= 0.0f) {
+    this->end_appear_state();
+  } else {
+    this->spr8x8(464); //appear
+  }
 }
 
 void Enemy::update(float dt)
 {
   if (m_appear_flag) {
     this->spr8x8(464 + static_cast<uint32_t>(m_elapsed / 0.166f) % 4);
-    if (m_elapsed >= 2.f) {
-      this->appear();
-      m_appear_flag = false;
+    if (m_elapsed >= m_appear_sec) {
+      this->end_appear_state();
     }
   } else {
     this->upd_ene(dt);

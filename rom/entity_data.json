@@ -8,7 +8,8 @@
         {
             "name":"EneUrchin",
             "score":2,
-            "have_dot":false
+            "have_dot":false,
+            "appear_sec":0
         },
         {
             "name":"EneArrow",

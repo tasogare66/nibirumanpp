@@ -5,7 +5,6 @@ class Human : public Enemy {
 public:
   explicit Human(const EntityArgs& args);
   virtual ~Human();
-  void init() override;
   void dead() override;
 protected:
   void appear() override final;

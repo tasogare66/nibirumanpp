@@ -21,10 +21,6 @@ Human::~Human()
 {
 }
 
-void Human::init()
-{
-}
-
 void Human::appear()
 {
   this->attr_px();

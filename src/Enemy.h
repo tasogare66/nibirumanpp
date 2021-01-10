@@ -6,6 +6,7 @@ class Enemy :public Entity {
 public:
   Enemy(const EntityArgs& args, uint32_t spr_ene=0);
   virtual ~Enemy() = default;
+  virtual void init() override;
   virtual void update(float dt) override;
   virtual void dead() override;
   float get_elapsed() const { return m_elapsed; }
@@ -15,7 +16,12 @@ protected:
   virtual void set_blink() override;
   void upd_blink(float dt) { if (m_blink > 0.f) { m_blink -= dt; } }
   bool is_blink() const { return (m_blink >= m_blinktm / 2.f); }
+  void end_appear_state() {
+    this->appear();
+    m_appear_flag = false;
+  }
   bool m_appear_flag = true;
+  float m_appear_sec = 2.0f; //出現の時間
   float m_elapsed = 0.0f;
   float m_blink = 0.0f;
   static constexpr float m_blinktm = 0.08f;

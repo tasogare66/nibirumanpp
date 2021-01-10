@@ -21,6 +21,7 @@ enum class EntityType : uint32_t {
 struct EntityArgs {
   Vec2f m_pos;
   Vec2f m_dir{ 1.f,0.f };
+  float m_appear_sec = -1.0f; //default,負値だと指定なし,0だと即出現
   float m_radius = 3; //default
   float m_mass = 1; //default
   float m_param0 = 0.0f; //misc param

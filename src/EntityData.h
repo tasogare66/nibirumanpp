@@ -23,6 +23,7 @@ public:
   std::optional<float> m_radius;
   std::optional<float> m_mass;
   std::optional<float> m_exp_resi;
+  std::optional<float> m_appear_sec;
   bool is_valid() const { return m_valid; }
 };
 
