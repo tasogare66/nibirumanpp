@@ -177,13 +177,14 @@ void BossUrchin::draw(sf::RenderWindow& window)
 
 void BossUrchin::use_arms(int type, const LuaIntf::LuaRef& tbl)
 {
+  float t = tbl["t"].value<float>();
   switch (type) {
-  case 0: //bullet
-  {
-    float t = tbl["t"].value<float>();
+  case 0: //bullet,arrow
     this->arms0(t);
-  }
-  break;
+    break;
+  case 1: //bullet
+    this->arms1(t);
+    break;
   default:
     FW_ASSERT(0);
     break;
@@ -201,6 +202,22 @@ void BossUrchin::arms0(float t)
       auto dir(e->get_dir());
       if (dir.sqr_magnitude() <= const_param::EPSILON) continue;
       new BossArrow(EntityArgs(EntityDataId::BossArrow, e->get_pos(), dir));
+    }
+    m_arms_timer = fmod(m_arms_timer, t);
+  }
+}
+void BossUrchin::arms1(float t)
+{
+  if (m_arms_timer > t) {
+    float ofsdir = fw::PI * 2.0f / static_cast<float>(m_legs_num);
+    for (int32_t i = 0; i < m_legs_num; ++i) {
+      Vec2f d(1.0f, 0.0f);
+      d.set_rotate(ofsdir * i + ofsdir * 0.5f + m_legs_rot);
+      Vec2f p = this->get_pos() + d * (m_radius);
+      //EntityArgs args(p);
+      //scr::spawn(EnemyType::URCHIN, args);
+      //new BossArrow(EntityArgs(EntityDataId::BossArrow, e->get_pos(), dir));
+      new BossBullet(EntityArgs(p, d));
     }
     m_arms_timer = fmod(m_arms_timer, t);
   }

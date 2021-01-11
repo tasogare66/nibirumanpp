@@ -1,6 +1,7 @@
 ﻿#pragma once
 enum class EnemyType;
 struct EntityArgs;
+class Enemy;
 class Boss;
 
 namespace scr
@@ -15,7 +16,8 @@ namespace scr
   };
 
   //一部entity_args更新する
-  void spawn_base(EnemyType type, EntityArgs& entity_args);
+  //scriptからの敵生成は spawn_via_scr
+  Enemy* spawn(EnemyType type, EntityArgs& entity_args);
 
   // 敵生成用
   ILuaScript* create_lua_enemy_spawner();

@@ -19,6 +19,7 @@
 #include "Sound.h"
 #include "ModeMng.h"
 #include "ModeGame.h"
+#include "EnemyType.h"
 
 #include "Boss.h"
 

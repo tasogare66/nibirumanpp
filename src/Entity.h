@@ -174,6 +174,12 @@ protected:
     constexpr auto flg = fw::underlying_cast(EntityFlag::Del) | fw::underlying_cast(EntityFlag::Suicide);
     m_flag.set(static_cast<EntityFlag>(flg));
   }
+  enum SprFlag {
+    SPRFLAG_NON=0,
+    SPRFLAG_FLIP_X=1<<0,
+    SPRFLAG_FLIP_Y=1<<1,
+  };
+  void spr8x8detail(uint32_t id, uint16_t w=1, uint16_t h=1, SprFlag flag=SPRFLAG_NON);
   void spr8x8(uint32_t id, uint16_t w=1, uint16_t h=1);
 
   EntityType m_type=EntityType::None;

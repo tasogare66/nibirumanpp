@@ -253,14 +253,27 @@ void Entity::sub_health(const Entity* t) {
   this->sub_health_dmg(t->m_health);
 }
 
-void Entity::spr8x8(uint32_t id, uint16_t w, uint16_t h)
+void Entity::spr8x8detail(uint32_t id, uint16_t w, uint16_t h, SprFlag flag)
 {
   auto rect = Resource::get_spr_rect(id);
   rect.width *= w;
   rect.height *= h;
+  m_spr.setOrigin(static_cast<float>(rect.width) / 2.0f, static_cast<float>(rect.height) / 2.0f);
+  if (flag & SPRFLAG_FLIP_X) {
+    rect.left += rect.width;
+    rect.width *= -1;
+  }
+  if (flag & SPRFLAG_FLIP_Y) {
+    rect.top += rect.height;
+    rect.height *= -1;
+  }
   m_spr.setTextureRect(rect);
   m_spr_id = id;
-  m_spr.setOrigin(static_cast<float>(rect.width)/2.0f, static_cast<float>(rect.height) / 2.0f);
+}
+
+void Entity::spr8x8(uint32_t id, uint16_t w, uint16_t h)
+{
+  this->spr8x8detail(id, w, h);
 }
 
 bool Entity::check_kill_by_generated_player(std::function<void(int32_t i)> cb) const

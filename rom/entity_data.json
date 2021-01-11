@@ -3,13 +3,19 @@
         {
             "name":"EneSnake",
             "score":20,
-            "have_dot":true
+            "have_dot":true,
+            "spr_ene":274,
+            "spr_num":4,
+            "anim_wait_frame":4.0
         },
         {
             "name":"EneUrchin",
             "score":2,
             "have_dot":false,
-            "appear_sec":0
+            "appear_sec":0,
+            "spr_ene":278,
+            "spr_num":2,
+            "anim_wait_frame":12.0
         },
         {
             "name":"EneArrow",

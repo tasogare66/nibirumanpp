@@ -36,6 +36,9 @@ void EntityDataMng::setup_at_boot()
     lambda_write_dst("mass", dst.m_mass);
     lambda_write_dst("exp_resi", dst.m_exp_resi);
     lambda_write_dst("appear_sec", dst.m_appear_sec);
+    lambda_write_dst("spr_ene", dst.m_spr_ene);
+    lambda_write_dst("spr_num", dst.m_spr_num);
+    lambda_write_dst("anim_wait_frame", dst.m_anim_wait_frame);
     dst.m_valid = true;
   }
 }

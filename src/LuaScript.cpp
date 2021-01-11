@@ -179,7 +179,7 @@ namespace scr
     const char* m_co_str; // コルーチン実行関数
   };
 
-  void spawn_base(EnemyType type, EntityArgs& entity_args) {
+  Enemy* spawn(EnemyType type, EntityArgs& entity_args) {
     Enemy* ent = nullptr;
     switch (type) {
 #undef ENEMY_TYPE_DECL
@@ -198,7 +198,11 @@ namespace scr
       FW_ASSERT(0);
       break;
     }
-    if (ent) {
+    return ent;
+  }
+
+  void spawn_via_scr(EnemyType type, EntityArgs& entity_args) {
+    if (auto ent = spawn(type, entity_args)) {
       ent->attr_spawned();
     }
   }
@@ -220,7 +224,7 @@ namespace scr
       entity_args.m_dir.x = tbl["dirx"].value<float>();
       entity_args.m_dir.y = tbl["diry"].value<float>();
       entity_args.m_param0 = tbl["prm0"].value<float>();
-      spawn_base(type, entity_args);
+      spawn_via_scr(type, entity_args);
     }
     bool is_exist_boss() {
       return Boss::is_exist_boss();

@@ -108,6 +108,7 @@ end
 
 -- urchin
 function update_urchin()
+  local loop_cnt=0
   repeat
     local sign=(randi(1)==1) and 1 or -1
     local dur=30
@@ -122,9 +123,13 @@ function update_urchin()
 
     boss.set_stiffness(0.9);
     boss.set_rot_speed(27,10);
-    upd_for_second(30, function()
+    upd_for_second(20, function()
       boss.move_to(0,0,15)
-      boss.use_arms(0, {t=0.4})
+      if loop_cnt%2==0 then
+        boss.use_arms(1,{t=0.2})
+      else
+        boss.use_arms(0, {t=0.45})
+      end
     end)
     boss.set_stiffness(0.2);
     boss.set_rot_speed(0,3);
@@ -134,7 +139,8 @@ function update_urchin()
       upd_for_second(1)
       boss.add_vel_force(dir.x*(4-i),dir.y*(4-i))
     end
- 
+
+    loop_cnt=loop_cnt+1
   until false -- ずっと続ける
   return 1  -- c++へは、コルーチンが終了したら1を返す
 end

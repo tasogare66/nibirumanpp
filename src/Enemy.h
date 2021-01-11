@@ -26,6 +26,8 @@ protected:
   float m_blink = 0.0f;
   static constexpr float m_blinktm = 0.08f;
   uint32_t m_spr_ene = Entity::m_dummy_spr_id;
+  uint16_t m_spr_num = 1;
+  float m_anim_wait_frame = 4.0f;
   static constexpr uint32_t m_common_blink_spr = 267;
 };
 

@@ -163,7 +163,8 @@ public:
   void use_arms(int type, const LuaIntf::LuaRef& tbl) override;
 private:
   void upd_nodes(bool is_reset=false);
-  void arms0(float t);
+  void arms0(float t); //末端から跳ね返り
+  void arms1(float t); //中心から弾
   static constexpr int32_t m_legs_num = 10;
   static constexpr int32_t m_node_num = 19;
   static constexpr float m_node_radisu = 4.0f;

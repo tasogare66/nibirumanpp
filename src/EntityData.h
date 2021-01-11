@@ -24,6 +24,9 @@ public:
   std::optional<float> m_mass;
   std::optional<float> m_exp_resi;
   std::optional<float> m_appear_sec;
+  std::optional<uint32_t> m_spr_ene;
+  std::optional<uint16_t> m_spr_num;
+  std::optional<float> m_anim_wait_frame;
   bool is_valid() const { return m_valid; }
 };
 

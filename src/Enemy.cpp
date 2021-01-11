@@ -22,6 +22,9 @@ Enemy::Enemy(const EntityArgs& args, uint32_t spr_ene)
   } else if (m_entity_data.m_appear_sec) {
     m_appear_sec = m_entity_data.m_appear_sec.value();
   }
+  if (m_entity_data.m_spr_ene) m_spr_ene = m_entity_data.m_spr_ene.value();
+  if (m_entity_data.m_spr_num) m_spr_num = m_entity_data.m_spr_num.value();
+  if (m_entity_data.m_anim_wait_frame) m_anim_wait_frame = m_entity_data.m_anim_wait_frame.value();
 }
 
 void Enemy::init()
@@ -72,7 +75,7 @@ void Enemy::set_blink()
 
 //enemy snake
 EneSnake::EneSnake(const EntityArgs& args)
-  : Enemy(args, 274)
+  : Enemy(args)
 {
 }
 void EneSnake::appear()
@@ -88,9 +91,9 @@ void EneSnake::upd_ene(float dt)
     dir.normalize();
     auto len = 9.f * dt * GameSeq::inst().getDifV(1.f, 3.f);
     m_mov += (dir * len);
-    auto s = static_cast<uint32_t>(m_elapsed/(const_param::FRAME2SEC*4))%4;
-    uint32_t animdir = dir.x > 0 ? 0 : 1;
-    this->spr8x8(m_spr_ene + s + animdir * 4);
+    auto s = static_cast<uint32_t>(m_elapsed/(const_param::FRAME2SEC*m_anim_wait_frame))%m_spr_num;
+    SprFlag spr_flag = dir.x > 0.0 ? SPRFLAG_NON : SPRFLAG_FLIP_X;
+    this->spr8x8detail(m_spr_ene + s, 1, 1, spr_flag);
   }
 }
 

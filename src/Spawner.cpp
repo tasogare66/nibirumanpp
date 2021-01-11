@@ -31,7 +31,7 @@ void Spawner::exec(float dt)
   if (enemy_type >= 0) {
     EntityArgs args;
     args.m_pos.set(60.f,-30.f);
-    scr::spawn_base(static_cast<EnemyType>(enemy_type), args);
+    scr::spawn(static_cast<EnemyType>(enemy_type), args);
   }
   if (DwGui::inst().get_disable_spawn_scritp()) return;
 #endif
