@@ -6,6 +6,9 @@
 #include "ConstParam.h"
 #include "DwGui.h"
 
+#include <xmmintrin.h>
+#define TRAP_FP_ERROR (DEBUG & 1)
+
 #if DEBUG&0 //count number of memory allocations
 uint64_t numOfHeapAllocations = 0;
 void* operator new(size_t size) {
@@ -16,6 +19,18 @@ uint64_t GetNumOfHeapAllocations() {
   return numOfHeapAllocations;
 }
 #endif
+
+void setup_trap_fp_error()
+{
+  //_controlfp_s(NULL, _DN_FLUSH, _MCW_DN);
+  _mm_setcsr(_mm_getcsr() | _MM_FLUSH_ZERO_ON | _MM_MASK_UNDERFLOW);
+#if TRAP_FP_ERROR
+  unsigned int nc = _MCW_EM;
+  nc &= ~_EM_INVALID;
+  nc &= ~_EM_ZERODIVIDE;
+  _controlfp_s(NULL, nc, _MCW_EM);
+#endif
+}
 
 void take_screenshot(const sf::RenderWindow& window)
 {
@@ -33,6 +48,7 @@ void take_screenshot(const sf::RenderWindow& window)
 int main() {
   //メモリリーク検出
   _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+  setup_trap_fp_error();
 
   sf::RenderWindow window(sf::VideoMode(static_cast<uint32_t>(const_param::WND_WIDTH), static_cast<uint32_t>(const_param::WND_HEIGHT)), "nibiruman2080");
   window.setFramerateLimit(60);
