@@ -53,6 +53,7 @@ void ModeGame::init()
 
 void ModeGame::dest()
 {
+  GameSeq::inst().reset();
 }
 
 bool ModeGame::ctrl(float dt)
