@@ -121,6 +121,8 @@ function update_urchin()
       boss.move_to(pos[1][1],pos[2][1],180)
     end)
 
+    boss.use_arms(2,{t=0}) --spawn
+
     boss.set_stiffness(0.9);
     boss.set_rot_speed(27,10);
     upd_for_second(20, function()

@@ -281,15 +281,25 @@ end
 --
 -- 外から呼ばれる、敵生成関数
 --
+SPAWNER=nil
 function spawn_exec()
-  local spawner = Spawner.new()
-  spawner:init()
+  SPAWNER = Spawner.new()
+  SPAWNER:init()
 
   repeat
-    spawner:exec(GAME.dt)
+    SPAWNER:exec(GAME.dt)
     coroutine.yield(0)
   until false
 
   proj.log("spawn finish.")
   return 1  -- c++へは、コルーチンが終了したら1を返す
+end
+
+function spawn_for_boss_urchin(v)
+  if not SPAWNER then return end
+  if v==0 then
+    SPAWNER:runco(Spawner.circle_co, { t=EnemyType.SNAKE, radius=120,end_wait=0,num=40 })
+  else
+    proj.error(v)
+  end
 end

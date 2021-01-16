@@ -88,7 +88,7 @@ void EneSnake::upd_ene(float dt)
   if (!m_tgt) m_tgt = GameSeq::inst().get_player_for_enemy();
   if (m_tgt) {
     auto dir = m_tgt->get_pos() - this->get_pos();
-    dir.normalize();
+    dir.normalize_lax();
     auto len = 9.f * dt * GameSeq::inst().getDifV(1.f, 3.f);
     m_mov += (dir * len);
     auto s = static_cast<uint32_t>(m_elapsed/(const_param::FRAME2SEC*m_anim_wait_frame))%m_spr_num;

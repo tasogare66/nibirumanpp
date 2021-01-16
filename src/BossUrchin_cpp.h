@@ -185,6 +185,9 @@ void BossUrchin::use_arms(int type, const LuaIntf::LuaRef& tbl)
   case 1: //bullet
     this->arms1(t);
     break;
+  case 2: //spawn
+    this->arms2(t);
+    break;
   default:
     FW_ASSERT(0);
     break;
@@ -221,4 +224,8 @@ void BossUrchin::arms1(float t)
     }
     m_arms_timer = fmod(m_arms_timer, t);
   }
+}
+void BossUrchin::arms2(float t)
+{
+  scr::spawn_for_boss_urchin(0);
 }

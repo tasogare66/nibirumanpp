@@ -39,3 +39,11 @@ void Spawner::exec(float dt)
     m_script->exec(dt);
   }
 }
+
+lua_State* Spawner::get_script_state() const
+{
+  if (m_script) {
+    return m_script->state();
+  }
+  return nullptr;
+}

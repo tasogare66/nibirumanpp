@@ -17,6 +17,8 @@
 #include "Player.h"
 #include "Human.h"
 #include "Boss.h"
+#include "ModeMng.h"
+#include "ModeGame.h"
 
 #include "LuaScript.h"
 
@@ -41,6 +43,10 @@ namespace scr
       , m_co_str(in_co_str)
     {}
     virtual ~LuaScriptBase() = default;
+
+    lua_State* state() const override {
+      return m_ctx.state();
+    }
 
     // lua読み込んでセットアップ
     void load_and_setup(const std::string_view& in_scr_name)
@@ -240,8 +246,8 @@ namespace scr
     }
     virtual ~LuaEnemySpawner() = default;
   private:
-    virtual void bind() override {
-
+    virtual void bind() override
+    {
       LuaBinding(m_ctx.state()).beginModule("EnemyType")
 #undef ENEMY_TYPE_DECL
 #define ENEMY_TYPE_DECL(_id,_cls,_edid)	.addConstant(#_id, EnemyType::_id)
@@ -347,5 +353,22 @@ namespace scr
   ILuaScript* create_lua_boss_sequence(std::string_view in_co_str, Boss* boss)
   {
     return new LuaBossSequence(in_co_str, boss);
+  }
+
+  // 各bossが使うspawn
+  lua_State* get_spawner_script_state() {
+    if (auto* mg = ModeMng::inst().get_current_mode<ModeGame>()) {
+      return mg->get_spawner().get_script_state();
+    }
+    return nullptr;
+  }
+
+  void spawn_for_boss_urchin(int32_t type) {
+    if (auto* l = get_spawner_script_state()) {
+      LuaRef func(l, "spawn_for_boss_urchin");
+      func(type);
+    } else {
+      FW_ASSERT(0);
+    }
   }
 }

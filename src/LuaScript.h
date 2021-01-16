@@ -3,6 +3,7 @@ enum class EnemyType;
 struct EntityArgs;
 class Enemy;
 class Boss;
+struct lua_State;
 
 namespace scr
 {
@@ -11,6 +12,7 @@ namespace scr
     ILuaScript() = default;
     virtual ~ILuaScript() = default;
 
+    virtual lua_State* state() const = 0;
     virtual bool reset_thread(const char* in_co_func = nullptr) = 0;
     virtual void exec(float) = 0;
   };
@@ -23,4 +25,5 @@ namespace scr
   ILuaScript* create_lua_enemy_spawner();
   // boss用
   ILuaScript* create_lua_boss_sequence(std::string_view in_co_str, Boss* boss);
+  void spawn_for_boss_urchin(int32_t type);
 }
