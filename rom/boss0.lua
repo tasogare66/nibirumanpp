@@ -118,19 +118,26 @@ function update_urchin()
       local m = matrix_roty(rad)
       local v = matrix { {-r},{0},{1}, }
       local pos = m*v
+      if elp>1 and elp<25 then boss.use_arms(2,{t=0.3}) end
       boss.move_to(pos[1][1],pos[2][1],180)
     end)
 
-    boss.use_arms(2,{t=0}) --spawn
-
+    local arms_flag = false
+    local arms_type=loop_cnt%3
     boss.set_stiffness(0.9);
     boss.set_rot_speed(27,10);
-    upd_for_second(20, function()
-      boss.move_to(0,0,15)
-      if loop_cnt%2==0 then
-        boss.use_arms(1,{t=0.2})
-      else
-        boss.use_arms(0, {t=0.45})
+    upd_for_second(20, function(elp)
+      boss.move_to(0,0,30)
+      if elp<1 then return end
+      if arms_type==1 then
+        if not arms_flag then --just once
+          boss.use_arms(3,{t=0}) --radial spawn
+          arms_flag = true
+        end
+      elseif arms_type==2 then
+        boss.use_arms(0, {t=0.45}) --arrow
+      else 
+        boss.use_arms(1,{t=0.2}) --normal
       end
     end)
     boss.set_stiffness(0.2);

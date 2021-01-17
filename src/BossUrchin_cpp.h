@@ -178,54 +178,61 @@ void BossUrchin::draw(sf::RenderWindow& window)
 void BossUrchin::use_arms(int type, const LuaIntf::LuaRef& tbl)
 {
   float t = tbl["t"].value<float>();
+  if (m_arms_timer <= t) return;
+
   switch (type) {
   case 0: //bullet,arrow
-    this->arms0(t);
+    this->arms0();
     break;
   case 1: //bullet
-    this->arms1(t);
+    this->arms1();
     break;
   case 2: //spawn
-    this->arms2(t);
+    this->arms2_spawn();
+    break;
+  case 3: //spawn
+    this->arms3_spawn();
     break;
   default:
     FW_ASSERT(0);
     break;
   }
+
+  if (t>0.f) m_arms_timer = fmod(m_arms_timer, t);
 }
 
-void BossUrchin::arms0(float t)
+void BossUrchin::arms0()
 {
-  if (m_arms_timer > t) {
-    //末端nodeから
-    for (int32_t i = 0; i < m_legs_num; ++i) {
-      auto& node = m_all_nodes[i].back();
+  //末端nodeから
+  for (int32_t i = 0; i < m_legs_num; ++i) {
+    auto& node = m_all_nodes[i].back();
 
-      const auto* e = node.m_e;
-      auto dir(e->get_dir());
-      if (dir.sqr_magnitude() <= const_param::EPSILON) continue;
-      new BossArrow(EntityArgs(EntityDataId::BossArrow, e->get_pos(), dir));
-    }
-    m_arms_timer = fmod(m_arms_timer, t);
+    const auto* e = node.m_e;
+    auto dir(e->get_dir());
+    if (dir.sqr_magnitude() <= const_param::EPSILON) continue;
+    new BossArrow(EntityArgs(EntityDataId::BossArrow, e->get_pos(), dir));
   }
 }
-void BossUrchin::arms1(float t)
+void BossUrchin::arms1()
 {
-  if (m_arms_timer > t) {
-    float ofsdir = fw::PI * 2.0f / static_cast<float>(m_legs_num);
-    for (int32_t i = 0; i < m_legs_num; ++i) {
-      Vec2f d(1.0f, 0.0f);
-      d.set_rotate(ofsdir * i + ofsdir * 0.5f + m_legs_rot);
-      Vec2f p = this->get_pos() + d * (m_radius);
-      //EntityArgs args(p);
-      //scr::spawn(EnemyType::URCHIN, args);
-      //new BossArrow(EntityArgs(EntityDataId::BossArrow, e->get_pos(), dir));
-      new BossBullet(EntityArgs(p, d));
-    }
-    m_arms_timer = fmod(m_arms_timer, t);
+  float ofsdir = fw::PI * 2.0f / static_cast<float>(m_legs_num);
+  for (int32_t i = 0; i < m_legs_num; ++i) {
+    Vec2f d(1.0f, 0.0f);
+    d.set_rotate(ofsdir * i + ofsdir * 0.5f + m_legs_rot);
+    Vec2f p = this->get_estimate_pos() + d * (m_radius);
+    //EntityArgs args(p);
+    //scr::spawn(EnemyType::URCHIN, args);
+    //new BossArrow(EntityArgs(EntityDataId::BossArrow, e->get_pos(), dir));
+    new BossBullet(EntityArgs(p, d));
   }
 }
-void BossUrchin::arms2(float t)
+void BossUrchin::arms2_spawn()
+{
+  this->get_estimate_pos();
+  EntityArgs args(this->get_estimate_pos());
+  scr::spawn(EnemyType::URCHIN, args);
+}
+void BossUrchin::arms3_spawn()
 {
   scr::spawn_for_boss_urchin(0);
 }

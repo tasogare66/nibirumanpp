@@ -10,9 +10,9 @@
         },
         {
             "name":"EneUrchin",
-            "score":2,
+            "score":4,
             "have_dot":false,
-            "appear_sec":0,
+            "appear_sec":2,
             "spr_ene":278,
             "spr_num":2,
             "anim_wait_frame":12.0

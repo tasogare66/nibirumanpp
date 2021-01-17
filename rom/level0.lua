@@ -156,9 +156,16 @@ function Spawner:line_onr_co(args)
   end
 end
 function Spawner:radial_co(args)
-  local num=16
+  local num=args.num or 16 --放射状の本数
+  local sti=args.sti or 14 --startの数
+  local edi=args.edi or 18 --endの数
+  local dirt=args.edi or 0 --0の場合,-1,1,-1,1...
   for i=0,num-1 do
-    self:runco(Spawner.line_onr_co,{t=args.t,rot=360/num*i,sti=14,edi=18,rdir=-1+i%2*2})
+    local rdir=dirt
+    if rdir==0 then
+      rdir=-1+i%2*2
+    end
+    self:runco(Spawner.line_onr_co,{t=args.t,rot=360/num*i,sti=sti,edi=edi,rdir=rdir})
   end
   wait_for_second(args.end_wait or 0)
 end
@@ -298,7 +305,7 @@ end
 function spawn_for_boss_urchin(v)
   if not SPAWNER then return end
   if v==0 then
-    SPAWNER:runco(Spawner.circle_co, { t=EnemyType.SNAKE, radius=120,end_wait=0,num=40 })
+    SPAWNER:runco(Spawner.radial_co, { t=EnemyType.SPHE,num=16,sti=8,edi=18,dirt=0 })
   else
     proj.error(v)
   end
