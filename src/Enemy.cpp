@@ -65,12 +65,18 @@ void Enemy::dead()
   }
 }
 
-void Enemy::set_blink()
+bool Enemy::set_blink(float blink_tm)
 {
   if (m_blink <= 0.f) {
     m_blink = m_blinktm;
-    Sound::psfx(SfxId::EneBlink, SndChannel::SFX2);
+    return true;
   }
+  return false;
+}
+
+void Enemy::play_blink_sfx() const
+{
+  Sound::psfx(SfxId::EneBlink, SndChannel::SFX2);
 }
 
 //enemy snake

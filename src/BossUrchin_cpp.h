@@ -12,7 +12,11 @@ public:
   void draw(sf::RenderWindow& window) override final{
     if (m_appear_flag) return;
 
-    this->spr8x8(m_spr_ene);
+    if (this->is_blink()) {
+      this->spr8x8(m_common_blink_spr);
+    } else {
+      this->spr8x8(m_spr_ene);
+    }
     this->Enemy::draw(window);
     //this->draw_circle(window);
   }
@@ -21,7 +25,17 @@ private:
     this->attr_px();
   }
   void upd_ene(float dt) override{
+    this->upd_damage();
     this->upd_blink(dt);
+  }
+  void upd_damage() {
+    //parentにdamage伝搬
+    if (not this->is_blink()) {
+      auto dmg = m_health_max - m_health;
+      m_health = m_health_max; //restore hp
+      auto btm = m_parent->is_root() ? m_blinktm : 0.05f;
+      m_parent->sub_health_dmg(dmg, btm);
+    }
   }
   const int32_t m_health_max = std::numeric_limits<int32_t>::max();
 };

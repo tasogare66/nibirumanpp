@@ -88,7 +88,8 @@ public:
   virtual bool hit_wall(const Vec2f&) { return false; } //trueの場合repulse行わない
   virtual void hitcb(const Entity*, const Vec2f&, float) {}
   virtual void hitcb_w(Entity*, const Vec2f&, float) const {}
-  virtual void set_blink() {}
+  virtual bool set_blink(float blink_tm) { static_cast<float>(blink_tm); return false; }
+  virtual void play_blink_sfx() const {}
   virtual void set_sub_dmg(bool is_del, int32_t dmg) {}
   virtual void dead() {}
 
@@ -125,8 +126,8 @@ public:
   const FwFlag<HitMask>& get_colli_attr() const { return  m_colli_attr; }
   void on_hit_mask(FwFlag<HitMask> mask) { m_hit_mask.set(mask); }
 
-  void sub_health_dmg(int32_t dmg);
-  void sub_health(const Entity* t);
+  bool sub_health_dmg(int32_t dmg, float blink_tm=m_blinktm);
+  bool sub_health(const Entity* t);
   float get_exp_resi() const { return m_exp_resi; }
 
   bool check_kill_by_generated_player(std::function<void(int32_t)> cb) const;
@@ -140,10 +141,13 @@ public:
   }
 
   template<typename T>
+  T* cast_to_w();
+  template<typename T>
   const T* cast_to() const;
 
   //親子関係の設定
   static void set_hierarchy(Entity* parent, Entity* child);
+  bool is_root() const { return (!m_parent); } //m_parent==nullptrならroot
   size_t get_child_count() const { return m_children.size(); }
   Entity* get_child_w(size_t idx) {
     if (idx < m_children.size()) return m_children[idx];
@@ -212,4 +216,5 @@ protected:
   uint16_t m_hierarchy_level = 0; //rootが0,childはparent+1
   std::unique_ptr<fabrik::Effector> m_effector;
   const EntityData& m_entity_data;
+  static constexpr float m_blinktm = 0.08f;
 };

@@ -177,7 +177,9 @@ void ObjLst::blt_vs_ene(Entity* o, Entity* b)
   if (o->m_flag.test(static_cast<EntityFlag>(flg))) return; //playerは除く
   if (intersect_circle_vs_circle(o, b)) {
     o->m_hit_mask.set(b->m_colli_attr);
-    o->sub_health(b);
+    if (o->sub_health(b)) {
+      o->play_blink_sfx();
+    }
     b->del();
   }
 }

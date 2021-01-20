@@ -5,6 +5,7 @@
 #include "ObjLst.h"
 #include "Shash.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "Random.h"
 #include "GameSeq.h"
 #include "FABRIK.h"
@@ -237,20 +238,22 @@ void Entity::do_verlet(float dt, float inv_prev_dt, float decel)
 //Entity.off_hitmask = function(self, m)
 //self.hit_mask = self.hit_mask & (~m)
 
-void Entity::sub_health_dmg(int32_t dmg)
+bool Entity::sub_health_dmg(int32_t dmg, float blink_tm)
 {
-  if (m_flag.test(EntityFlag::Del) || dmg <= 0) return;
+  bool is_set_blink=false; //blink設定された
+  if (m_flag.test(EntityFlag::Del) || dmg <= 0) return is_set_blink;
   m_health -= dmg;
   if (m_health <= 0) {
     this->del();
   } else {
-    this->set_blink();
+    is_set_blink = this->set_blink(blink_tm);
   }
   this->set_sub_dmg(m_flag.test(EntityFlag::Del), dmg);
+  return is_set_blink;
 }
 
-void Entity::sub_health(const Entity* t) {
-  this->sub_health_dmg(t->m_health);
+bool Entity::sub_health(const Entity* t) {
+  return this->sub_health_dmg(t->m_health);
 }
 
 void Entity::spr8x8detail(uint32_t id, uint16_t w, uint16_t h, SprFlag flag)
@@ -324,9 +327,19 @@ Player* Entity::check_kill_by_player_random() const
 }
 
 template<>
-const Player* Entity::cast_to<Player>() const
-{
+const Player* Entity::cast_to<Player>() const {
   if (m_type == EntityType::Player) return static_cast<const Player*>(this);
+  return nullptr;
+}
+
+template<>
+Enemy* Entity::cast_to_w<Enemy>() {
+  if (m_type == EntityType::Enemy) return static_cast<Enemy*>(this);
+  return nullptr;
+}
+template<>
+const Enemy* Entity::cast_to<Enemy>() const {
+  if (m_type == EntityType::Enemy) return static_cast<const Enemy*>(this);
   return nullptr;
 }
 

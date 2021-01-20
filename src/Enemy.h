@@ -13,7 +13,8 @@ public:
 protected:
   virtual void appear() {}
   virtual void upd_ene(float dt) = 0;
-  virtual void set_blink() override;
+  virtual bool set_blink(float blink_tm) override;
+  virtual void play_blink_sfx() const override;
   void upd_blink(float dt) { if (m_blink > 0.f) { m_blink -= dt; } }
   bool is_blink() const { return (m_blink >= m_blinktm / 2.f); }
   void end_appear_state() {
@@ -24,7 +25,6 @@ protected:
   float m_appear_sec = 2.0f; //出現の時間
   float m_elapsed = 0.0f;
   float m_blink = 0.0f;
-  static constexpr float m_blinktm = 0.08f;
   uint32_t m_spr_ene = Entity::m_dummy_spr_id;
   uint16_t m_spr_num = 1;
   float m_anim_wait_frame = 4.0f;
