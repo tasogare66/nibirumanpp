@@ -17,8 +17,23 @@ inline void read_key_function(const json& src, const char* key, T& dst_member) {
 #define SAVE_DATA_READ_KEY(_key) lambda_read_key(#_key, dst.m_ ## _key)
 #define SAVE_DATA_WRITE_KEY(_key) jd[#_key] = (src.m_ ## _key)
 
-class SaveDataUti {
+class SaveDataUtil {
 public:
+  static SaveData deserialize_save_data(const json& src) {
+    auto lambda_read_key = [&src](const char* key, auto& dst_member) {
+      read_key_function(src, key, dst_member);
+    };
+    SaveData dst;
+    SAVE_DATA_READ_KEY(vol_sfx);
+    SAVE_DATA_READ_KEY(vol_music);
+    return dst;
+  }
+  static json serialize_save_data(const SaveData& src) {
+    json jd;
+    SAVE_DATA_WRITE_KEY(vol_sfx);
+    SAVE_DATA_WRITE_KEY(vol_music);
+    return jd;
+  }
 #if DEBUG
   static DebConf deserialize_deb_conf(const json& src) {
     auto lambda_read_key = [&src](const char* key, auto& dst_member) {
@@ -66,18 +81,11 @@ void SaveDataMng::read_save_data()
   const auto jd = json::parse(content.c_str());
 
   const auto& src(jd["dat"]);
-  auto lambda_read_key = [&src](const char* key, auto& dst_member) {
-    read_key_function(src, key, dst_member);
-  };
-
-  SaveData dst;
-  lambda_read_key("vol_sfx", dst.m_vol_sfx);
-  lambda_read_key("vol_music", dst.m_vol_music);
-  m_data = dst;
+  m_data = SaveDataUtil::deserialize_save_data(src);
 
 #if DEBUG
   if (src.contains("deb_conf")) {
-    m_deb_conf = SaveDataUti::deserialize_deb_conf(src["deb_conf"]);
+    m_deb_conf = SaveDataUtil::deserialize_deb_conf(src["deb_conf"]);
   }
 #endif
 }
@@ -91,13 +99,11 @@ void SaveDataMng::apply_save_data()
 
 void SaveDataMng::write_save_data(const SaveData& data, const DebConf& deb_conf)
 {
-  json jd;
+  json jd = SaveDataUtil::serialize_save_data(data);
   jd["version"] = data.m_save_data_version;
-  jd["vol_sfx"] = data.m_vol_sfx;
-  jd["vol_music"] = data.m_vol_music;
 
 #if DEBUG
-  jd["deb_conf"] = SaveDataUti::serialize_db_conf(deb_conf);
+  jd["deb_conf"] = SaveDataUtil::serialize_db_conf(deb_conf);
 #endif
 
   json container;

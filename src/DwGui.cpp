@@ -102,6 +102,8 @@ void DwGui::show_options_window()
 
     if (ImGui::Button("Save")) SaveDataMng::inst().write_save_data();
     ImGui::SameLine();
+    if (ImGui::Button("Load")) SaveDataMng::inst().read_save_data();
+    ImGui::SameLine();
     if (ImGui::Button("ResetDebConf")) SaveDataMng::inst().reset_deb_conf();
   }
 }

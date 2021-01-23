@@ -12,7 +12,7 @@ public:
   static constexpr uint32_t m_save_data_version = 0;
 private:
   friend class SaveDataMng;
-  friend class SaveDataUti;
+  friend class SaveDataUtil;
   uint32_t m_version = m_save_data_version;
   //sound
   float m_vol_sfx = 0.75f;
