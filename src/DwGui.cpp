@@ -29,6 +29,16 @@ void DwGui::show_window()
   ImGui::End();
 }
 
+bool DwGui::get_disable_spawn_scritp() const {
+  return SaveDataMng::deb_conf().m_no_spawn_script;
+}
+int DwGui::check_spawn_req() {
+  int ret = -1;
+  if (m_spawn_item_req) ret = SaveDataMng::deb_conf().m_spawn_item_no;
+  m_spawn_item_req = false;
+  return ret;
+}
+
 void DwGui::show_window_internal()
 {
   ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
@@ -37,7 +47,7 @@ void DwGui::show_window_internal()
   }
 
   // 生成スクリプトを無効に
-  ImGui::Checkbox("DisableSpawn", &m_disable_spawn_script); // スクリプトをOFF
+  ImGui::Checkbox("DisableSpawn", &SaveDataMng::deb_conf_w().m_no_spawn_script); // スクリプトをOFF
   {
     const char* items[] = {
 #undef ENEMY_TYPE_DECL
@@ -47,7 +57,7 @@ void DwGui::show_window_internal()
 
 #undef ENEMY_TYPE_DECL
     };
-    ImGui::Combo("", &m_spawn_item_current, items, IM_ARRAYSIZE(items));
+    ImGui::Combo("", &SaveDataMng::deb_conf_w().m_spawn_item_no, items, IM_ARRAYSIZE(items));
     ImGui::SameLine();
     m_spawn_item_req = ImGui::Button("Spawn");
   }
@@ -90,9 +100,9 @@ void DwGui::show_options_window()
     ImGui::Checkbox("BgGuideDisp", &SaveDataMng::deb_conf_w().m_bg_guide_disp); ImGui::SameLine();
     ImGui::Checkbox("NoBossScript", &SaveDataMng::deb_conf_w().m_no_boss_script);
 
-    if (ImGui::Button("Save")) {
-      SaveDataMng::inst().write_save_data();
-    }
+    if (ImGui::Button("Save")) SaveDataMng::inst().write_save_data();
+    ImGui::SameLine();
+    if (ImGui::Button("ResetDebConf")) SaveDataMng::inst().reset_deb_conf();
   }
 }
 #endif

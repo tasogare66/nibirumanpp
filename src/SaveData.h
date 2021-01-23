@@ -25,6 +25,8 @@ public:
 #if DEBUG
   bool m_bg_guide_disp = false; //stageのガイド表示
   bool m_no_boss_script = false; //boss停止
+  bool m_no_spawn_script = false; //敵生成停止
+  int m_spawn_item_no = 0; //生成する敵
 #endif
 };
 
@@ -38,6 +40,7 @@ public:
     this->write_save_data(m_data, m_deb_conf);
   }
   void apply_save_data();
+  void reset_deb_conf() { m_deb_conf = DebConf{}; }
 
   static std::string_view get_save_data_fname();
   const SaveData& get_data() const { return m_data; }

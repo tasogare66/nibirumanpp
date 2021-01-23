@@ -27,12 +27,16 @@ public:
     DebConf dst;
     SAVE_DATA_READ_KEY(bg_guide_disp);
     SAVE_DATA_READ_KEY(no_boss_script);
+    SAVE_DATA_READ_KEY(no_spawn_script);
+    SAVE_DATA_READ_KEY(spawn_item_no);
     return dst;
   }
   static json serialize_db_conf(const DebConf& src) {
     json jd;
     SAVE_DATA_WRITE_KEY(bg_guide_disp);
     SAVE_DATA_WRITE_KEY(no_boss_script);
+    SAVE_DATA_WRITE_KEY(no_spawn_script);
+    SAVE_DATA_WRITE_KEY(spawn_item_no);
     return jd;
   }
 #endif
