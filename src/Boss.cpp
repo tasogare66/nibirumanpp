@@ -20,6 +20,7 @@
 #include "ModeMng.h"
 #include "ModeGame.h"
 #include "EnemyType.h"
+#include "SaveData.h"
 
 #include "Boss.h"
 
@@ -137,9 +138,14 @@ void Boss::update(float dt)
 
 void Boss::upd_ene_base(float dt)
 {
-  if (m_script) {
-    m_script->exec(dt);
-  }
+  do {
+#if DEBUG
+    if (SaveDataMng::deb_conf().m_no_boss_script) break;
+#endif
+    if (m_script) {
+      m_script->exec(dt);
+    }
+  } while (false);
   m_elapsed += dt;
 }
 

@@ -4,6 +4,7 @@
 #include "Resource.h"
 #include "ConstParam.h"
 #include "GameUtil.h"
+#include "SaveData.h"
 
 #include "Background.h"
 
@@ -49,7 +50,9 @@ void Background::draw(sf::RenderWindow& window)
   //circle
   window.draw(m_stg_circle);
 #if DEBUG
-  gmutil::draw_circle(window, {0.f,0.f}, 100.f);
+  if (SaveDataMng::deb_conf().m_bg_guide_disp) {
+    gmutil::draw_circle(window, { 0.f,0.f }, 100.f);
+  }
 #endif
 }
 

@@ -85,6 +85,11 @@ void DwGui::show_options_window()
       snd.apply_music_volume();
       save_data.set_vol_music(snd.get_music_volume());
     }
+
+    //deb conf
+    ImGui::Checkbox("BgGuideDisp", &SaveDataMng::deb_conf_w().m_bg_guide_disp); ImGui::SameLine();
+    ImGui::Checkbox("NoBossScript", &SaveDataMng::deb_conf_w().m_no_boss_script);
+
     if (ImGui::Button("Save")) {
       SaveDataMng::inst().write_save_data();
     }

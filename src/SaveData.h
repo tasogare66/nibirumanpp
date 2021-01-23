@@ -12,10 +12,20 @@ public:
   static constexpr uint32_t m_save_data_version = 0;
 private:
   friend class SaveDataMng;
+  friend class SaveDataUti;
   uint32_t m_version = m_save_data_version;
   //sound
   float m_vol_sfx = 0.75f;
   float m_vol_music = 0.75f;
+};
+class DebConf {
+public:
+  DebConf() = default;
+  ~DebConf() = default;
+#if DEBUG
+  bool m_bg_guide_disp = false; //stageのガイド表示
+  bool m_no_boss_script = false; //boss停止
+#endif
 };
 
 class SaveDataMng : public Singleton<SaveDataMng> {
@@ -25,15 +35,18 @@ public:
   void setup_at_boot();
   void read_save_data();
   void write_save_data() {
-    this->write_save_data(m_data);
+    this->write_save_data(m_data, m_deb_conf);
   }
   void apply_save_data();
 
+  static std::string_view get_save_data_fname();
   const SaveData& get_data() const { return m_data; }
   SaveData& get_data_w() { return m_data; }
+  static const DebConf& deb_conf() { return SaveDataMng::inst().m_deb_conf; }
+  static DebConf& deb_conf_w() { return SaveDataMng::inst().m_deb_conf; }
 
-  static constexpr std::string_view m_save_data_fname="ram/save_data.json";
 private:
-  void write_save_data(const SaveData data);
+  static void write_save_data(const SaveData& data, const DebConf& deb_conf);
   SaveData m_data;
+  DebConf m_deb_conf; //for debug
 };
