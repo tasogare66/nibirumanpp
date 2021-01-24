@@ -15,6 +15,8 @@ public:
   void set_delay_del(float time=-1.0f);
   bool is_damaged() const { return m_boss_flag.m_damaged; }
   void set_damaged_flag(bool in_flag) { m_boss_flag.m_damaged = in_flag; }
+  //sub点滅設定(表示向け)
+  void set_sub_blink(float blink_tm);
 protected:
   void dead_dot_base(int32_t num, float radius);
   void dead_efc_base();
@@ -29,6 +31,7 @@ protected:
   union Flag {
     struct {
       bool m_damaged : 1;
+      bool m_blink : 1;
     };
     uint32_t all = 0;
   } m_boss_flag;
@@ -155,6 +158,9 @@ public:
   void update(float dt) override;
   void upd_ene(float dt) override;
   void draw(sf::RenderWindow& window) override;
+  void set_sub_dmg(bool is_del, int32_t dmg) override;
+  void dead() override;
+
   void set_stiffness(float v, float t) override { m_stiffness.request(v,t); }
   float get_stiffness() const { return m_stiffness.get(); }
   void set_rot_speed(float v, float t) override { m_rot_speed.request(v, t); }

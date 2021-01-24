@@ -67,7 +67,7 @@ void Enemy::dead()
 
 bool Enemy::set_blink(float blink_tm)
 {
-  if (m_blink <= 0.f) {
+  if (m_blink <= 0.f && blink_tm > 0.0f) {
     m_blink = m_blinktm;
     return true;
   }

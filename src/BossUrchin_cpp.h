@@ -29,14 +29,24 @@ private:
     this->upd_blink(dt);
   }
   void upd_damage() {
-    //parentにdamage伝搬
-    if (not this->is_blink()) {
-      auto dmg = m_health_max - m_health;
-      m_health = m_health_max; //restore hp
-      auto btm = m_parent->is_root() ? m_blinktm : 0.05f;
-      m_parent->sub_health_dmg(dmg, btm);
+    //parentにblink伝搬
+    if (!m_parent) return;
+    if (m_boss_flag.m_blink && !this->is_blink()) {
+      auto* parent_parts = static_cast<BossParts*>(m_parent);
+      parent_parts->set_sub_blink(m_short_blinktm);
+      m_boss_flag.m_blink = false;
     }
   }
+  bool sub_health_by_player(int32_t dmg, FwFlag<HitMask> mask, float blink_tm) override {
+    if (m_root) {
+      bool set_blink = this->set_blink(m_short_blinktm);
+      m_boss_flag.m_blink |= set_blink;
+      m_root->sub_health_by_player(dmg, mask, -1.0f); //blink設定しない
+      return set_blink; //blink設定した
+    }
+    return Entity::sub_health_by_player(dmg, mask, m_common_blinktm);
+  }
+  static constexpr float m_short_blinktm = 0.05f;
   const int32_t m_health_max = std::numeric_limits<int32_t>::max();
 };
 
@@ -187,6 +197,21 @@ void BossUrchin::draw(sf::RenderWindow& window)
     window.draw(&vertices[0], vertices.size(), sf::Lines);
   }
 #endif
+}
+
+void BossUrchin::set_sub_dmg(bool is_del, int32_t dmg)
+{
+  if (is_del) {
+    this->detach_all_or_lower();
+  }
+}
+
+void BossUrchin::dead()
+{
+  auto num = 20;
+  this->dead_dot_base(num, m_radius * 3.f);
+  this->dead_efc_base();
+  Boss::dead_base();
 }
 
 void BossUrchin::use_arms(int type, const LuaIntf::LuaRef& tbl)

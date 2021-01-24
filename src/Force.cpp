@@ -45,8 +45,8 @@ void ForceF::draw(sf::RenderWindow& window)
 void ForceF::hitcb_w(Entity* o, const Vec2f& dir, float d) const
 {
   if (d < o->get_radius() + m_inner_r) {
-    o->on_hit_mask(m_colli_attr);
-    o->sub_health_dmg(static_cast<int32_t>(m_health * o->get_exp_resi()));
+    auto dmg = static_cast<int32_t>(m_health * o->get_exp_resi());
+    o->sub_health_by_player(dmg, m_colli_attr, m_common_blinktm);
   } else {
     if (o->get_flag().test(EntityFlag::ForceAddVelEnabled)) {
       o->add_vel_force(dir / d * 2.f);
@@ -82,6 +82,6 @@ void ForceD::update(float dt)
 
 void ForceD::hitcb_w(Entity* o, const Vec2f&, float) const
 {
-  o->on_hit_mask(m_colli_attr);
-  o->sub_health_dmg(static_cast<int32_t>(m_health * o->get_exp_resi()));
+  auto dmg = static_cast<int32_t>(m_health * o->get_exp_resi());
+  o->sub_health_by_player(dmg, m_colli_attr, m_common_blinktm);
 }

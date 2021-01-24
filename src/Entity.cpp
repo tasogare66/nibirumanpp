@@ -256,6 +256,12 @@ bool Entity::sub_health(const Entity* t) {
   return this->sub_health_dmg(t->m_health);
 }
 
+bool Entity::sub_health_by_player(int32_t dmg, FwFlag<HitMask> colli_attr, float blink_tm)
+{
+  this->on_hit_mask(colli_attr);
+  return this->sub_health_dmg(dmg, blink_tm);
+}
+
 void Entity::spr8x8detail(uint32_t id, uint16_t w, uint16_t h, SprFlag flag)
 {
   auto rect = Resource::get_spr_rect(id);
@@ -375,4 +381,14 @@ void Entity::exec_or_lower(std::function<void(Entity*)> func)
   for (auto* e : m_children) {
     e->exec_or_lower(func);
   }
+}
+
+void Entity::detach_all_or_lower()
+{
+  this->exec_lower([this](Entity* e) {
+    e->m_root = nullptr;
+    e->m_parent = nullptr;
+    e->m_hierarchy_level = 0;
+    //m_childrenは消してない
+  });
 }

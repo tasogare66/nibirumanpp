@@ -128,6 +128,7 @@ public:
 
   bool sub_health_dmg(int32_t dmg, float blink_tm=m_blinktm);
   bool sub_health(const Entity* t);
+  virtual bool sub_health_by_player(int32_t dmg, FwFlag<HitMask> mask, float blink_tm);
   float get_exp_resi() const { return m_exp_resi; }
 
   bool check_kill_by_generated_player(std::function<void(int32_t)> cb) const;
@@ -160,6 +161,7 @@ public:
   fabrik::Effector* fetch_effector();
   void exec_lower(std::function<void(Entity*)> func); //dfs
   void exec_or_lower(std::function<void(Entity*)> func); //自分も実行
+  void detach_all_or_lower(); //parentの情報を切り離し
 
 protected:
   friend class ObjLst;
@@ -217,4 +219,5 @@ protected:
   std::unique_ptr<fabrik::Effector> m_effector;
   const EntityData& m_entity_data;
   static constexpr float m_blinktm = 0.08f;
+  static constexpr float m_common_blinktm = 0.08f;
 };

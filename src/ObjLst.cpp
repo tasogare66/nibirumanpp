@@ -176,8 +176,8 @@ void ObjLst::blt_vs_ene(Entity* o, Entity* b)
   constexpr auto flg = fw::underlying_cast(EntityFlag::Ally);
   if (o->m_flag.test(static_cast<EntityFlag>(flg))) return; //playerは除く
   if (intersect_circle_vs_circle(o, b)) {
-    o->m_hit_mask.set(b->m_colli_attr);
-    if (o->sub_health(b)) {
+    auto dmg = b->m_health;
+    if (o->sub_health_by_player(dmg, b->m_colli_attr, Entity::m_common_blinktm)) {
       o->play_blink_sfx();
     }
     b->del();

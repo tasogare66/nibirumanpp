@@ -77,6 +77,11 @@ void BossParts::apply_delay_del()
   }
 }
 
+void BossParts::set_sub_blink(float blink_tm)
+{
+  m_boss_flag.m_blink |= this->set_blink(blink_tm);
+}
+
 
 //root
 Boss::Boss(const EntityArgs& args, uint32_t spr_ene)
