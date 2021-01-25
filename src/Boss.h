@@ -55,6 +55,7 @@ protected:
   void update_dt(float dt) { m_dt = dt; }
   void upd_ene_base(float dt);
   void dead_base();
+  void set_health_max();
   void set_bossrf();
   void remove_bossrf();
   Vec2f calc_dir(Vec2f tgt);

@@ -20,6 +20,9 @@ public:
     this->Enemy::draw(window);
     //this->draw_circle(window);
   }
+  void detach_function() {
+    m_health = 1;
+  }
 private:
   void appear() {
     this->attr_px();
@@ -39,10 +42,10 @@ private:
   }
   bool sub_health_by_player(int32_t dmg, FwFlag<HitMask> mask, float blink_tm) override {
     if (m_root) {
-      bool set_blink = this->set_blink(m_short_blinktm);
-      m_boss_flag.m_blink |= set_blink;
+      bool is_set_blink = this->set_blink(m_short_blinktm);
+      m_boss_flag.m_blink |= is_set_blink;
       m_root->sub_health_by_player(dmg, mask, -1.0f); //blink設定しない
-      return set_blink; //blink設定した
+      return is_set_blink; //blink設定した
     }
     return Entity::sub_health_by_player(dmg, mask, m_common_blinktm);
   }
@@ -53,7 +56,7 @@ private:
 BossUrchin::BossUrchin(const EntityArgs& args)
   : Boss(args, 340)
 {
-  m_health_max = m_health;
+  this->set_health_max();
   m_flag.set(EntityFlag::IgnoreCollisionSameRoot);
   //circle
   this->set_circle_radius(m_radius);
@@ -63,7 +66,7 @@ BossUrchin::BossUrchin(const EntityArgs& args)
     Entity* parent = this;
     for(int j=0;j<m_node_num;++j){
       auto p = args.m_pos;
-      EntityArgs args(p);
+      EntityArgs args(EntityDataId::BossUrchinNode, p);
       args.m_radius = m_node_radisu;
       auto child = new UrchinNode(args);
       m_all_nodes[i][j].m_e = child;
@@ -202,14 +205,18 @@ void BossUrchin::draw(sf::RenderWindow& window)
 void BossUrchin::set_sub_dmg(bool is_del, int32_t dmg)
 {
   if (is_del) {
+    this->exec_lower([](Entity* e) {
+      auto parts = static_cast<UrchinNode*>(e);
+      parts->detach_function();
+    });
     this->detach_all_or_lower();
   }
 }
 
 void BossUrchin::dead()
 {
-  auto num = 20;
-  this->dead_dot_base(num, m_radius * 3.f);
+  auto num = 300;
+  this->dead_dot_base(num, m_radius * 4.f);
   this->dead_efc_base();
   Boss::dead_base();
 }

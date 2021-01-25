@@ -385,7 +385,7 @@ void Entity::exec_or_lower(std::function<void(Entity*)> func)
 
 void Entity::detach_all_or_lower()
 {
-  this->exec_lower([this](Entity* e) {
+  this->exec_lower([](Entity* e) {
     e->m_root = nullptr;
     e->m_parent = nullptr;
     e->m_hierarchy_level = 0;

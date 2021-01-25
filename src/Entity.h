@@ -126,7 +126,7 @@ public:
   const FwFlag<HitMask>& get_colli_attr() const { return  m_colli_attr; }
   void on_hit_mask(FwFlag<HitMask> mask) { m_hit_mask.set(mask); }
 
-  bool sub_health_dmg(int32_t dmg, float blink_tm=m_blinktm);
+  bool sub_health_dmg(int32_t dmg, float blink_tm=m_common_blinktm);
   bool sub_health(const Entity* t);
   virtual bool sub_health_by_player(int32_t dmg, FwFlag<HitMask> mask, float blink_tm);
   float get_exp_resi() const { return m_exp_resi; }
@@ -218,6 +218,5 @@ protected:
   uint16_t m_hierarchy_level = 0; //rootが0,childはparent+1
   std::unique_ptr<fabrik::Effector> m_effector;
   const EntityData& m_entity_data;
-  static constexpr float m_blinktm = 0.08f;
   static constexpr float m_common_blinktm = 0.08f;
 };

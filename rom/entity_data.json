@@ -35,7 +35,14 @@
             "have_dot":false,
             "radius":16,
             "mass":5,
-            "exp_resi":2
+            "exp_resi":0.5
+        },
+        {
+            "name":"UrchinNode",
+            "score":10,
+            "have_dot":true,
+            "exp_resi":0.5
         }
+
     ]
 }

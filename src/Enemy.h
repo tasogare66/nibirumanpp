@@ -25,6 +25,7 @@ protected:
   float m_appear_sec = 2.0f; //出現の時間
   float m_elapsed = 0.0f;
   float m_blink = 0.0f;
+  float m_blinktm=m_common_blinktm;
   uint32_t m_spr_ene = Entity::m_dummy_spr_id;
   uint16_t m_spr_num = 1;
   float m_anim_wait_frame = 4.0f;

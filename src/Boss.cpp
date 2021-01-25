@@ -100,6 +100,16 @@ void Boss::dead_base()
   Enemy::dead();
 }
 
+void Boss::set_health_max()
+{
+  m_health_max = m_health;
+#if DEBUG
+  if (SaveDataMng::deb_conf().m_boss_least_health) {
+    m_health = 5;
+  }
+#endif
+}
+
 //ModeGameに登録
 void Boss::set_bossrf()
 {

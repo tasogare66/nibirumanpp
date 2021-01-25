@@ -25,6 +25,7 @@ public:
 #if DEBUG
   bool m_bg_guide_disp = false; //stageのガイド表示
   bool m_no_boss_script = false; //boss停止
+  bool m_boss_least_health = false; //boss最小体力
   bool m_no_spawn_script = false; //敵生成停止
   int m_spawn_item_no = 0; //生成する敵
 #endif
