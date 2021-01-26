@@ -22,6 +22,7 @@ public:
   }
   void detach_function() {
     m_health = 1;
+    this->add_vel_force_mps(m_mig_vel);
   }
 private:
   void appear() {

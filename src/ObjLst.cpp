@@ -69,11 +69,12 @@ void ObjLst::upd_colliders(std::vector<T*>& lst, std::function<bool(Entity*,Vec2
 
 void ObjLst::upd_verlet(float dt)
 {
-  auto prev_inv_dt = 1.0f / m_prev_dt;
+  const auto inv_dt = 1.0f / dt;
+  const auto prev_inv_dt = 1.0f / m_prev_dt;
   float damping = 0.4f; //なし:1
   float decel = std::pow(std::abs(damping), dt);
   for (auto o: m_verlets) {
-    o->do_verlet(dt, prev_inv_dt, decel);
+    o->do_verlet(dt, inv_dt, prev_inv_dt, decel);
   }
 }
 

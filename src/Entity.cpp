@@ -185,7 +185,7 @@ void Entity::pre_pro()
   this->set_velocity(this->calc_velocity());
 }
 
-void Entity::do_verlet(float dt, float inv_prev_dt, float decel)
+void Entity::do_verlet(float dt, float inv_dt, float inv_prev_dt, float decel)
 {
   auto pos = m_pos;
   auto tmp = m_old_pos;
@@ -200,6 +200,7 @@ void Entity::do_verlet(float dt, float inv_prev_dt, float decel)
   
   tmp = pos + vel * dt;
   
+  m_mig_vel = (tmp - m_pos)*inv_dt;
   this->set_position(tmp);
   m_old_pos = pos;
   this->set_velocity(vel);

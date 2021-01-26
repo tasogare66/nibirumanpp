@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <functional>
 #include "Vec2.h"
+#include "ConstParam.h"
 #include "FwFlag.h"
 #include "EntityData.h"
 class Shash;
@@ -111,13 +112,16 @@ public:
   void add_vel_force(const Vec2f& v) {
     m_old_pos -= v;
   }
+  void add_vel_force_mps(const Vec2f& v) { //m/sec
+    this->add_vel_force(v*const_param::FRAME2SEC);
+  }
   void set_vel_force(const Vec2f& v) {
     m_old_pos = m_pos - v;
   }
   void lim_vel_force(float l);
   void repulse(const Vec2f& inml, float dist);
   void pre_pro();
-  void do_verlet(float dt, float inv_prev_dt, float decel);
+  void do_verlet(float dt, float inv_dt, float inv_prev_dt, float decel);
 
   float get_radius() const { return m_radius; }
   const Vec2f& get_aabb0() const { return m_aabb0; }
@@ -197,6 +201,7 @@ protected:
   Vec2f m_force;
   Vec2f m_mov;
   Vec2f m_mov_old;
+  Vec2f m_mig_vel; //migration velocity,m/sec
   float m_mass, m_inv_mass;
   Vec2f m_aabb0;
   Vec2f m_aabb_size;

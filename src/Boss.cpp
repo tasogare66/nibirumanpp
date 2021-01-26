@@ -220,8 +220,8 @@ BossBaby::BossBaby(const EntityArgs& args)
   this->set_radius(16);
   this->set_mass(5);
   m_score = 5000;
-  m_health_max = 500;
-  m_health = m_health_max;
+  m_health = 500;
+  this->set_health_max();
   //spr
   m_spr_body.setTexture(Resource::inst().get_spr_tex());
   //circle
@@ -399,8 +399,8 @@ BossWorm::BossWorm(const EntityArgs& args)
   this->set_radius(16);
   this->set_mass(5);
   //m_score = 5000;
-  m_health_max = 500;
-  m_health = m_health_max;
+  m_health = 500;
+  this->set_health_max();
   m_flag.set(EntityFlag::IgnoreCollisionSameRoot);
   //circle
   this->set_circle_radius(m_radius);
