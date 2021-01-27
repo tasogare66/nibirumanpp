@@ -23,12 +23,23 @@ public:
   void detach_function() {
     m_health = 1;
     this->add_vel_force_mps(m_mig_vel);
+    if (rng::rand_bool(rng::Type::GAME)) m_rot_sign = -1.0f;
+  }
+  void update_ofs_degree(float dif) {
+    m_ofs_degree += dif;
+    m_ofs_degree = std::fmod(m_ofs_degree, 180.f);
+    this->apply_angle(m_ofs_degree);
   }
 private:
   void appear() {
     this->attr_px();
   }
   void upd_ene(float dt) override{
+    if (this->is_detached()) {
+      float v = m_mig_vel.magnitude();
+      static float tmp = 10.f;
+      this->update_ofs_degree(v*tmp*m_rot_sign);
+    }
     this->upd_damage();
     this->upd_blink(dt);
   }
@@ -50,8 +61,11 @@ private:
     }
     return Entity::sub_health_by_player(dmg, mask, m_common_blinktm);
   }
+  bool is_detached() const { return (m_parent == nullptr); } //親がいないとdetached
   static constexpr float m_short_blinktm = 0.05f;
   const int32_t m_health_max = std::numeric_limits<int32_t>::max();
+  float m_ofs_degree=90.0f;
+  float m_rot_sign = 1.0f;
 };
 
 BossUrchin::BossUrchin(const EntityArgs& args)
@@ -131,7 +145,7 @@ void BossUrchin::upd_nodes(bool is_reset)
     }
     auto dir = (n.m_p - parent->get_estimate_pos()).normalize_lax();
     n.m_e->set_dir(dir);
-    n.m_e->apply_angle(90.0);
+    n.m_e->update_ofs_degree(0.0f);
   };
 
   Vec2f vP = this->get_estimate_pos();

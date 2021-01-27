@@ -60,4 +60,5 @@ namespace rng {
   float range(float min, float max, Type t) { return g_random.rangef(min, max, t); }
   int32_t rand_int(int32_t max, Type t) { return g_random.rand_int(max, t); }
   int32_t range_int(int32_t min, int32_t max, Type t) { return g_random.range_int(min, max, t); }
+  bool rand_bool(Type t) { return (rand_int(1, t) == 0); }
 }

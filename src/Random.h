@@ -11,4 +11,5 @@ namespace rng{
   float range(float min, float max, Type t = Type::COMMON);
   int32_t rand_int(int32_t max, Type t = Type::COMMON);
   int32_t range_int(int32_t min, int32_t max, Type t = Type::COMMON);
+  bool rand_bool(Type t = Type::COMMON);
 }
