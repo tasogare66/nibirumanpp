@@ -80,6 +80,12 @@ void Enemy::play_blink_sfx() const
   Sound::psfx(SfxId::EneBlink, SndChannel::SFX2);
 }
 
+void Enemy::ene_spr8x8(float elp, SprFlag spr_flag)
+{
+  auto s = static_cast<uint32_t>(elp / (const_param::FRAME2SEC * m_anim_wait_frame)) % m_spr_num;
+  this->spr8x8detail(m_spr_ene + s, 1, 1, spr_flag);
+}
+
 //enemy snake
 EneSnake::EneSnake(const EntityArgs& args)
   : Enemy(args)

@@ -41,8 +41,10 @@
             "name":"UrchinNode",
             "score":10,
             "have_dot":true,
-            "exp_resi":0.5
+            "exp_resi":0.5,
+            "spr_ene":324,
+            "spr_num":4,
+            "anim_wait_frame":6.0
         }
-
     ]
 }

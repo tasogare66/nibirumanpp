@@ -15,7 +15,7 @@ public:
     if (this->is_blink()) {
       this->spr8x8(m_common_blink_spr);
     } else {
-      this->spr8x8(m_spr_ene);
+      this->ene_spr8x8(m_anim_elp);
     }
     this->Enemy::draw(window);
     //this->draw_circle(window);
@@ -30,6 +30,7 @@ public:
     m_ofs_degree = std::fmod(m_ofs_degree, 180.f);
     this->apply_angle(m_ofs_degree);
   }
+  void set_anim_elp(float v) { m_anim_elp = v; }
 private:
   void appear() {
     this->attr_px();
@@ -39,6 +40,8 @@ private:
       float v = m_mig_vel.magnitude();
       static float tmp = 10.f;
       this->update_ofs_degree(v*tmp*m_rot_sign);
+    } else {
+      m_anim_elp += dt;
     }
     this->upd_damage();
     this->upd_blink(dt);
@@ -66,6 +69,7 @@ private:
   const int32_t m_health_max = std::numeric_limits<int32_t>::max();
   float m_ofs_degree=90.0f;
   float m_rot_sign = 1.0f;
+  float m_anim_elp = 0.0f;
 };
 
 BossUrchin::BossUrchin(const EntityArgs& args)
@@ -84,6 +88,7 @@ BossUrchin::BossUrchin(const EntityArgs& args)
       EntityArgs args(EntityDataId::BossUrchinNode, p);
       args.m_radius = m_node_radisu;
       auto child = new UrchinNode(args);
+      child->set_anim_elp(j*const_param::FRAME2SEC*4.f);
       m_all_nodes[i][j].m_e = child;
       Entity::set_hierarchy(parent, child);
       parent = child;
