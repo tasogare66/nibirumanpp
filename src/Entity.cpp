@@ -43,6 +43,7 @@ void Entity::set_entity_data(const EntityData& ed)
     if (ed.m_health) m_health = ed.m_health.value();
     if (ed.m_score) m_score = ed.m_score.value();
     if (ed.m_have_dot) m_flag.set(EntityFlag::HaveDot, ed.m_have_dot.value());
+    if (ed.m_ene_dead_sfx) m_flag.set(EntityFlag::EneDeadSfx, ed.m_ene_dead_sfx.value());
     if (ed.m_radius) this->set_radius(ed.m_radius.value());
     if (ed.m_mass) this->set_mass(ed.m_mass.value());
     if (ed.m_exp_resi) m_exp_resi = ed.m_exp_resi.value();

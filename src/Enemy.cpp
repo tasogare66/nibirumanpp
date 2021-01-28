@@ -57,6 +57,8 @@ void Enemy::dead()
   if (this->check_kill_by_generated_player(cbfunc)) {
     if (m_flag.test(EntityFlag::HaveDot)) {
       new EneDot(m_pos);
+    }
+    if (m_flag.test(EntityFlag::EneDeadSfx)) {
       Sound::psfx(SfxId::EneDead, SndChannel::SFX1);
     }
     PtclLst::add(m_pos, 15);
@@ -114,7 +116,7 @@ void EneSnake::upd_ene(float dt)
 EneGrunt::EneGrunt(const EntityArgs& args)
   : Enemy(args,288)
 {
-  m_flag.set(EntityFlag::HaveDot);
+  m_flag.set(EntityFlag::HaveDot|EntityFlag::EneDeadSfx);
   m_score = 10;
 }
 void EneGrunt::appear()
@@ -137,7 +139,7 @@ void EneGrunt::upd_ene(float dt)
 EneHulk::EneHulk(const EntityArgs& args)
   : Enemy(args,304)
 {
-  m_flag.set(EntityFlag::HaveDot);
+  m_flag.set(EntityFlag::HaveDot|EntityFlag::EneDeadSfx);
   m_score = 300;
   m_health = 30;
   m_exp_resi = 15;
@@ -255,7 +257,7 @@ void BossArrow::update(float dt)
 EneSphe::EneSphe(const EntityArgs& args)
   : Enemy(args, 308)
 {
-  m_flag.set(EntityFlag::HaveDot);
+  m_flag.set(EntityFlag::HaveDot|EntityFlag::EneDeadSfx);
   m_score = 40;
   m_health = 2;
   m_exp_resi = 2;

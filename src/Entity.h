@@ -53,10 +53,14 @@ enum class EntityFlag : uint32_t {
 
   Invincible = 1 << 9, //無敵,CollisionEnabledと併用
   HaveDot = 1 << 10,
-  Spawned = 1 << 11,
+  EneDeadSfx = 1 << 11,
+  Spawned = 1 << 12,
 
   DefaultMask = (CollisionEnabled | UpdateEnabled | ForceAddVelEnabled | Visible), //defaultの設定値
 };
+constexpr EntityFlag operator|(EntityFlag l, EntityFlag r) {
+  return static_cast<EntityFlag>(fw::underlying_cast(l) | fw::underlying_cast(r));
+}
 enum class HitMask : uint32_t {
   Enemy = 1 << 0,
   Player0 = 1 << 1,
