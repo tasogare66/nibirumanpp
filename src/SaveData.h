@@ -23,6 +23,8 @@ public:
   DebConf() = default;
   ~DebConf() = default;
 #if DEBUG
+  bool m_invincible = false; //player無敵
+  bool m_no_life_sub = false; //life減らさない
   bool m_bg_guide_disp = false; //stageのガイド表示
   bool m_no_boss_script = false; //boss停止
   bool m_boss_least_health = false; //boss最小体力

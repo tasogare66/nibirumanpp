@@ -98,6 +98,8 @@ void DwGui::show_options_window()
 
     //deb conf
     auto& deb_conf = SaveDataMng::deb_conf_w();
+    ImGui::Checkbox("Invincible", &deb_conf.m_invincible); ImGui::SameLine();
+    ImGui::Checkbox("NoLifeSub", &deb_conf.m_no_life_sub);
     ImGui::Checkbox("BgGuideDisp", &deb_conf.m_bg_guide_disp); ImGui::SameLine();
     ImGui::Checkbox("NoBossScript", &deb_conf.m_no_boss_script); ImGui::SameLine();
     ImGui::Checkbox("BossLeastHealth", &deb_conf.m_boss_least_health);

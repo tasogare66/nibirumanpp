@@ -3,6 +3,7 @@
 #include "Random.h"
 #include "ObjLst.h"
 #include "Player.h"
+#include "SaveData.h"
 
 #include "GameSeq.h"
 
@@ -110,6 +111,11 @@ int32_t GameSeq::decriment_life()
 {
   constexpr uint32_t player_index = 0;
   if (auto* seqpl = inst().get_seq_player_w(player_index)) {
+#if DEBUG
+    if (SaveDataMng::deb_conf().m_no_life_sub) {
+      return seqpl->get_life(); //life減らさない
+    }
+#endif
     return seqpl->decriment_life();
   }
   return -1;

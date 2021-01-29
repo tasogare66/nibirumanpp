@@ -8,6 +8,7 @@
 #include "PlBullet.h"
 #include "Force.h"
 #include "Sound.h"
+#include "SaveData.h"
 
 #include "Player.h"
 
@@ -215,7 +216,12 @@ bool Player::check_dead()
 {
   if (m_hit_mask.test(HitMask::Enemy)) {
     m_hit_mask.reset(HitMask::Enemy);
-    if (not this->is_dash()) {
+
+    bool is_invincible = this->is_dash();
+#if DEBUG
+    is_invincible |= SaveDataMng::deb_conf().m_invincible;
+#endif
+    if (not is_invincible) {
       Camera::inst().req_shake(1.4f);
       if (GameSeq::decriment_life() >= 0) {
         new ForceF(m_pos, this->get_product_colli_attr());
