@@ -11,13 +11,13 @@
 
 #include "Enemy.h"
 
-Enemy::Enemy(const EntityArgs& args, uint32_t spr_ene)
-  : Entity(EntityType::Enemy, args)
+Enemy::Enemy(EntityType type, const EntityArgs& args, uint32_t spr_ene)
+  : Entity(type, args)
   , m_spr_ene(spr_ene)
 {
   m_colli_attr.set(HitMask::Enemy);
 
-  if (args.m_appear_sec>=0.0f) { //args優先
+  if (args.m_appear_sec >= 0.0f) { //args優先
     m_appear_sec = args.m_appear_sec;
   } else if (m_entity_data.m_appear_sec) {
     m_appear_sec = m_entity_data.m_appear_sec.value();
@@ -26,6 +26,10 @@ Enemy::Enemy(const EntityArgs& args, uint32_t spr_ene)
   if (m_entity_data.m_spr_num) m_spr_num = m_entity_data.m_spr_num.value();
   if (m_entity_data.m_anim_wait_frame) m_anim_wait_frame = m_entity_data.m_anim_wait_frame.value();
 }
+
+Enemy::Enemy(const EntityArgs& args, uint32_t spr_ene)
+  : Enemy(EntityType::Enemy, args, spr_ene)
+{}
 
 void Enemy::init()
 {

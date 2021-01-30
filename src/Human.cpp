@@ -10,7 +10,7 @@
 #include "Human.h"
 
 Human::Human(const EntityArgs& args)
-  : Enemy(args, 404)
+  : Enemy(EntityType::Human, args, 404)
 {
   m_flag.set(EntityFlag::Ally);
   m_colli_attr.reset();

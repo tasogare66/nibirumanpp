@@ -4,6 +4,7 @@
 class Player;
 class Enemy :public Entity {
 public:
+  Enemy(EntityType type, const EntityArgs& args, uint32_t spr_ene=0);
   Enemy(const EntityArgs& args, uint32_t spr_ene=0);
   virtual ~Enemy() = default;
   virtual void init() override;
