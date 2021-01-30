@@ -57,7 +57,7 @@ void Player::update(float dt)
 
   Vec2f v = inputd.m_analog_l;
   auto len = v.magnitude();
-  if (len > 0.2f) {
+  if (len >= m_analog_threshold) {
     if (len > 1.0f) v.normalize();
     m_mov = v * (60 * dt);
   }

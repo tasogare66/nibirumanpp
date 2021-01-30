@@ -36,6 +36,13 @@ void App::update_app(float dt, sf::RenderWindow& window)
 
 bool App::update(float dt, sf::RenderWindow& window)
 {
+#if DEBUG
+  if (SaveDataMng::deb_conf().m_fix_frame_time) {
+    dt = const_param::FRAME2SEC; //固定frame
+  }
+#endif
+  dt = std::min(dt, const_param::FRAME2SEC*10.f); //10frame以上のskipはいれない
+
   auto& input{ Input::inst() };
   input.update_system();
   bool dbg_step = false;

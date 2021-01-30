@@ -71,13 +71,8 @@ int main() {
       }
     }
     auto dt = deltaClock.restart();
-#if DEBUG&0
-    auto dtsec = 1.f / 60.f;
-#else
-    auto dtsec = dt.asSeconds();
-#endif
     //update app
-    app_exec = app->update(dtsec, window);
+    app_exec = app->update(dt.asSeconds(), window);
     //imgui
     ImGui::SFML::Update(window, dt);
 #if DEBUG

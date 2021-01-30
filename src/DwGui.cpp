@@ -42,12 +42,16 @@ int DwGui::check_spawn_req() {
 void DwGui::show_window_internal()
 {
   ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+  ImGui::SameLine();
+  auto& deb_conf = SaveDataMng::deb_conf_w();
+  ImGui::Checkbox("FIX", &deb_conf.m_fix_frame_time);
+
   if (ImGui::Button("Screenshot")) {
     m_screenshot_req = true;
   }
 
   // 生成スクリプトを無効に
-  ImGui::Checkbox("DisableSpawn", &SaveDataMng::deb_conf_w().m_no_spawn_script); // スクリプトをOFF
+  ImGui::Checkbox("DisableSpawn", &deb_conf.m_no_spawn_script); // スクリプトをOFF
   {
     const char* items[] = {
 #undef ENEMY_TYPE_DECL
@@ -57,7 +61,7 @@ void DwGui::show_window_internal()
 
 #undef ENEMY_TYPE_DECL
     };
-    ImGui::Combo("", &SaveDataMng::deb_conf_w().m_spawn_item_no, items, IM_ARRAYSIZE(items));
+    ImGui::Combo("", &deb_conf.m_spawn_item_no, items, IM_ARRAYSIZE(items));
     ImGui::SameLine();
     m_spawn_item_req = ImGui::Button("Spawn");
   }

@@ -40,6 +40,7 @@ public:
       read_key_function(src, key, dst_member);
     };
     DebConf dst;
+    SAVE_DATA_READ_KEY(fix_frame_time);
     SAVE_DATA_READ_KEY(invincible);
     SAVE_DATA_READ_KEY(no_life_sub);
     SAVE_DATA_READ_KEY(bg_guide_disp);
@@ -51,6 +52,7 @@ public:
   }
   static json serialize_db_conf(const DebConf& src) {
     json jd;
+    SAVE_DATA_WRITE_KEY(fix_frame_time);
     SAVE_DATA_WRITE_KEY(invincible);
     SAVE_DATA_WRITE_KEY(no_life_sub);
     SAVE_DATA_WRITE_KEY(bg_guide_disp);

@@ -23,6 +23,7 @@ public:
   DebConf() = default;
   ~DebConf() = default;
 #if DEBUG
+  bool m_fix_frame_time = false; //frame時間を固定
   bool m_invincible = false; //player無敵
   bool m_no_life_sub = false; //life減らさない
   bool m_bg_guide_disp = false; //stageのガイド表示
