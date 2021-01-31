@@ -19,6 +19,15 @@ enum InputButton : uint32_t {
   InputButton_Cancel = 1 << 17,
 };
 
+enum class InputKey {
+  Escape,
+  Ctrl,
+  O,
+  P,
+  R,
+  Max
+};
+
 struct InputData {
   uint32_t m_mask = 0;
   uint32_t m_mask_trig = 0;
@@ -81,20 +90,18 @@ public:
   bool decided() const;
   bool canceled() const;
 #if DEBUG
-  bool dbg_pause() const { return m_pause_key.m_repeat; }
-  bool dbg_pause_cancel() const { return m_pause_cancel.m_trig; }
-  bool dbg_escape() const { return m_esc_key.m_dclick; }
-  bool dbg_reset() const { return m_reset_key.m_trig; }
+  bool dbg_pause() const { return this->key_data(InputKey::P).m_repeat; }
+  bool dbg_pause_cancel() const { return this->key_data(InputKey::O).m_trig; }
+  bool dbg_escape() const { return this->key_data(InputKey::Escape).m_dclick; }
+  bool dbg_reset() const { return this->key_data(InputKey::R).m_trig && this->key_data(InputKey::Ctrl).m_on; }
 #endif
 private:
   static uint32_t update_keyborad();
   static Vec2f update_mouse(sf::RenderWindow& window);
   static uint32_t update_joystick(uint32_t id, Vec2f& analog_l, Vec2f& analog_r);
   //system
-  InputKeyData m_pause_key;
-  InputKeyData m_pause_cancel;
-  InputKeyData m_esc_key;
-  InputKeyData m_reset_key;
+  const InputKeyData& key_data(InputKey key) const { return m_key_datas[fw::underlying_cast(key)]; }
+  std::array<InputKeyData, fw::underlying_cast(InputKey::Max)> m_key_datas;
   //current
   std::array<std::pair<InputPlayer,InputData>, const_param::PLAYER_NUM_MAX> m_input_data;
   float m_dt = 0.0f;

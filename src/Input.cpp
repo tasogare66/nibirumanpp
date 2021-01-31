@@ -131,14 +131,24 @@ void InputKeyData::update(const bool in_flag)
 }
 void Input::update_system()
 {
-  auto lambda_update_key = [](InputKeyData& kd, sf::Keyboard::Key in_key) {
-    bool flag = sf::Keyboard::isKeyPressed(in_key);
+  static const std::vector<std::vector<sf::Keyboard::Key>> keytbl = {
+    {sf::Keyboard::Escape},
+    {sf::Keyboard::RControl,sf::Keyboard::LControl},
+    {sf::Keyboard::O},
+    {sf::Keyboard::P},
+    {sf::Keyboard::R},
+  };
+  FW_ASSERT(keytbl.size()==fw::underlying_cast(InputKey::Max));
+  auto lambda_update_key = [](InputKeyData& kd, const std::vector<sf::Keyboard::Key>& in_key) {
+    bool flag = false;
+    for (const auto& k:in_key) {
+      flag |= sf::Keyboard::isKeyPressed(k);
+    }
     kd.update(flag);
   };
-  lambda_update_key(m_pause_key, sf::Keyboard::P);
-  lambda_update_key(m_pause_cancel, sf::Keyboard::O);
-  lambda_update_key(m_esc_key, sf::Keyboard::Escape);
-  lambda_update_key(m_reset_key, sf::Keyboard::R);
+  for (size_t i = 0; i < keytbl.size();++i) {
+    lambda_update_key(m_key_datas[i], keytbl[i]);
+  }
 }
 
 float Input::update(float dt, sf::RenderWindow& window)
