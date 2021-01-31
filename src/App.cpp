@@ -34,7 +34,7 @@ void App::update_app(float dt, sf::RenderWindow& window)
   modem.update_post();
 }
 
-bool App::update(float dt, sf::RenderWindow& window)
+App::Result App::update(float dt, sf::RenderWindow& window)
 {
 #if DEBUG
   if (SaveDataMng::deb_conf().m_fix_frame_time) {
@@ -61,11 +61,12 @@ bool App::update(float dt, sf::RenderWindow& window)
     this->update_app(dt, window);
   }
 
+  Result ret{};
 #if DEBUG
-  return !input.dbg_escape(); //ESCで終了
-#else
-  return true;
+  ret.m_terminate = input.dbg_escape(); //ESCで終了
+  ret.m_reset = input.dbg_reset(); //reset
 #endif
+  return ret;
 }
 
 void App::draw(sf::RenderWindow& window)

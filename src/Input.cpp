@@ -138,6 +138,7 @@ void Input::update_system()
   lambda_update_key(m_pause_key, sf::Keyboard::P);
   lambda_update_key(m_pause_cancel, sf::Keyboard::O);
   lambda_update_key(m_esc_key, sf::Keyboard::Escape);
+  lambda_update_key(m_reset_key, sf::Keyboard::R);
 }
 
 float Input::update(float dt, sf::RenderWindow& window)

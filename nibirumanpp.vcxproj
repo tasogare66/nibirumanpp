@@ -192,6 +192,7 @@
     <ClCompile Include="src\Resource.cpp" />
     <ClCompile Include="src\Reticle.cpp" />
     <ClCompile Include="src\SaveData.cpp" />
+    <ClCompile Include="src\Singleton.cpp" />
     <ClCompile Include="src\Sound.cpp" />
     <ClCompile Include="src\Shash.cpp" />
     <ClCompile Include="src\Spawner.cpp" />

@@ -84,6 +84,7 @@ public:
   bool dbg_pause() const { return m_pause_key.m_repeat; }
   bool dbg_pause_cancel() const { return m_pause_cancel.m_trig; }
   bool dbg_escape() const { return m_esc_key.m_dclick; }
+  bool dbg_reset() const { return m_reset_key.m_trig; }
 #endif
 private:
   static uint32_t update_keyborad();
@@ -93,6 +94,7 @@ private:
   InputKeyData m_pause_key;
   InputKeyData m_pause_cancel;
   InputKeyData m_esc_key;
+  InputKeyData m_reset_key;
   //current
   std::array<std::pair<InputPlayer,InputData>, const_param::PLAYER_NUM_MAX> m_input_data;
   float m_dt = 0.0f;

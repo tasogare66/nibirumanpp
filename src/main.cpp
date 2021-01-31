@@ -60,6 +60,7 @@ int main() {
   auto app(std::make_unique<App>());
 
   bool app_exec = true;
+  bool app_reset = false;
   sf::Clock deltaClock;
   while (window.isOpen() && app_exec) {
     sf::Event event;
@@ -72,7 +73,8 @@ int main() {
     }
     auto dt = deltaClock.restart();
     //update app
-    app_exec = app->update(dt.asSeconds(), window);
+    auto app_result = app->update(dt.asSeconds(), window);
+    app_exec = !app_result.m_terminate;
     //imgui
     ImGui::SFML::Update(window, dt);
 #if DEBUG
@@ -92,6 +94,13 @@ int main() {
     }
 #endif
     window.display();
+
+#if DEBUG
+    if (app_result.m_reset) { //reset
+      SingletonsAdapter::invoke_resets();
+      app = std::make_unique<App>();
+    }
+#endif
   }
 
   ImGui::SFML::Shutdown();
