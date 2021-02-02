@@ -211,6 +211,7 @@
     <ClInclude Include="src\App.h" />
     <ClInclude Include="src\Background.h" />
     <ClInclude Include="src\Boss.h" />
+    <ClInclude Include="src\BossCobra_cpp.h" />
     <ClInclude Include="src\BossUrchin_cpp.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\ConstParam.h" />

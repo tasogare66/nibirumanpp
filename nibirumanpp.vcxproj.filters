@@ -286,5 +286,8 @@
     <ClInclude Include="src\SaveData.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="src\BossCobra_cpp.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -526,4 +526,5 @@ void BossWorm::arms0(float t, bool is_arrow)
   }
 }
 
+#include "BossCobra_cpp.h"
 #include "BossUrchin_cpp.h"

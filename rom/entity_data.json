@@ -48,6 +48,14 @@
             "spr_ene":324,
             "spr_num":4,
             "anim_wait_frame":6.0
+        },
+        {
+            "name":"BossCobra",
+            "health":4000,
+            "score":8000,
+            "have_dot":false,
+            "radius":16,
+            "mass":5
         }
     ]
 }

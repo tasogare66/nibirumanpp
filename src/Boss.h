@@ -182,3 +182,14 @@ private:
   EaseParam m_stiffness{0.2f};
   EaseParam m_rot_speed{0.0f};
 };
+
+class BossCobra final : public Boss {
+public:
+  BossCobra(const EntityArgs& args);
+  virtual ~BossCobra() = default;
+  void appear() override;
+  void update(float dt) override;
+  void upd_ene(float dt) override;
+  void draw(sf::RenderWindow& window) override;
+private:
+};
