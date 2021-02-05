@@ -10,6 +10,8 @@ enum class EntityDataId : uint16_t {
   BossUrchin,
   BossUrchinNode,
   BossCobra,
+  SingleBossCobra,
+  CobraChild,
 
   Max,
   None = 0xffff

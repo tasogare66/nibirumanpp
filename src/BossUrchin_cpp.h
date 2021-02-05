@@ -32,7 +32,7 @@ public:
   }
   void set_anim_elp(float v) { m_anim_elp = v; }
 private:
-  void appear() {
+  void appear() override {
     this->attr_px();
   }
   void upd_ene(float dt) override{
@@ -84,7 +84,7 @@ BossUrchin::BossUrchin(const EntityArgs& args)
   for(int i=0;i<m_legs_num;++i){
     Entity* parent = this;
     for(int j=0;j<m_node_num;++j){
-      auto p = args.m_pos;
+      const auto& p = args.m_pos;
       EntityArgs args(EntityDataId::BossUrchinNode, p);
       args.m_radius = m_node_radisu;
       auto child = new UrchinNode(args);

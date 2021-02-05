@@ -40,7 +40,10 @@ Entity::~Entity()
 void Entity::set_entity_data(const EntityData& ed)
 {
   if (ed.is_valid()) {
-    if (ed.m_health) m_health = ed.m_health.value();
+    if (ed.m_health) {
+      m_health = ed.m_health.value();
+      if (m_health < 0) { m_health = std::numeric_limits<decltype(m_health)>::max(); } //負値だとmax入る
+    }
     if (ed.m_score) m_score = ed.m_score.value();
     if (ed.m_have_dot) m_flag.set(EntityFlag::HaveDot, ed.m_have_dot.value());
     if (ed.m_ene_dead_sfx) m_flag.set(EntityFlag::EneDeadSfx, ed.m_ene_dead_sfx.value());

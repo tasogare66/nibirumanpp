@@ -22,13 +22,14 @@ uint64_t GetNumOfHeapAllocations() {
 
 void setup_trap_fp_error()
 {
-  //_controlfp_s(NULL, _DN_FLUSH, _MCW_DN);
   _mm_setcsr(_mm_getcsr() | _MM_FLUSH_ZERO_ON | _MM_MASK_UNDERFLOW);
+
 #if TRAP_FP_ERROR
-  unsigned int nc = _MCW_EM;
-  nc &= ~_EM_INVALID;
-  nc &= ~_EM_ZERODIVIDE;
-  _controlfp_s(NULL, nc, _MCW_EM);
+  constexpr unsigned int exception_mask = _MCW_EM;
+  unsigned int new_control = exception_mask;
+  new_control &= ~_EM_INVALID;
+  new_control &= ~_EM_ZERODIVIDE;
+  _controlfp_s(nullptr, new_control, exception_mask);
 #endif
 }
 

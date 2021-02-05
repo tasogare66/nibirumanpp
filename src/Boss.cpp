@@ -343,7 +343,7 @@ public:
     //this->draw_circle(window);
   }
 private:
-  void appear() {
+  void appear() override {
     this->attr_px();
   }
   void set_damaged_time() {
