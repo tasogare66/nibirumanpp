@@ -3,7 +3,6 @@ public:
   UrchinNode(const EntityArgs& args)
     : BossParts(args,327)
   {
-    m_health = m_health_max;
     m_flag.set(EntityFlag::IgnoreCollisionSameRoot);
     //circle
     this->set_circle_radius(m_radius);
@@ -21,7 +20,7 @@ public:
     //this->draw_circle(window);
   }
   void detach_function() {
-    m_health = 1;
+    m_flag.reset(EntityFlag::NoDamage);
     this->add_vel_force_mps(m_mig_vel);
     if (rng::rand_bool(rng::Type::GAME)) m_rot_sign = -1.0f;
   }
@@ -66,7 +65,6 @@ private:
   }
   bool is_detached() const { return (m_parent == nullptr); } //親がいないとdetached
   static constexpr float m_short_blinktm = 0.05f;
-  const int32_t m_health_max = std::numeric_limits<int32_t>::max();
   float m_ofs_degree=90.0f;
   float m_rot_sign = 1.0f;
   float m_anim_elp = 0.0f;

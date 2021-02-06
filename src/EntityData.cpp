@@ -31,7 +31,9 @@ void EntityDataMng::setup_at_boot()
     dst.m_name = src["name"];
     lambda_write_dst("have_dot", dst.m_have_dot);
     lambda_write_dst("ene_dead_sfx", dst.m_ene_dead_sfx);
+    lambda_write_dst("no_damage", dst.m_no_damage);
     lambda_write_dst("health", dst.m_health);
+    FW_ASSERT(!dst.m_health || (dst.m_health && dst.m_health.value()>0));
     lambda_write_dst("score", dst.m_score);
     lambda_write_dst("radius", dst.m_radius);
     lambda_write_dst("mass", dst.m_mass);

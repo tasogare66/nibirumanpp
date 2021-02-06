@@ -42,8 +42,10 @@
         },
         {
             "name":"UrchinNode",
+            "health":1,
             "score":10,
             "have_dot":true,
+            "no_damage":true,
             "exp_resi":0.1,
             "spr_ene":324,
             "spr_num":4,
@@ -53,25 +55,23 @@
             "name":"BossCobra",
             "health":4000,
             "score":8000,
-            "have_dot":false,
-            "radius":16,
-            "mass":5
+            "have_dot":false
         },
         {
             "name":"SingleBossCobra",
-            "health":-1,
             "score":0,
             "have_dot":false,
+            "no_damage":true,
             "radius":16,
             "mass":5
         },
         {
             "name":"CobraChild",
-            "health":-1,
             "score":0,
             "have_dot":false,
+            "no_damage":true,
             "radius":8,
-            "mass":1
+            "mass":2
         }
     ]
 }

@@ -52,9 +52,10 @@ enum class EntityFlag : uint32_t {
   IgnoreCollisionSameRoot = 1 << 8, //同rootだとcollisionとらない
 
   Invincible = 1 << 9, //無敵,CollisionEnabledと併用
-  HaveDot = 1 << 10,
-  EneDeadSfx = 1 << 11,
-  Spawned = 1 << 12,
+  NoDamage = 1 << 10, //healthの引き算をしない
+  HaveDot = 1 << 11,
+  EneDeadSfx = 1 << 12,
+  Spawned = 1 << 13,
 
   DefaultMask = (CollisionEnabled | UpdateEnabled | ForceAddVelEnabled | Visible), //defaultの設定値
 };

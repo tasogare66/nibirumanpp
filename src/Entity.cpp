@@ -40,13 +40,11 @@ Entity::~Entity()
 void Entity::set_entity_data(const EntityData& ed)
 {
   if (ed.is_valid()) {
-    if (ed.m_health) {
-      m_health = ed.m_health.value();
-      if (m_health < 0) { m_health = std::numeric_limits<decltype(m_health)>::max(); } //負値だとmax入る
-    }
+    if (ed.m_health) m_health = ed.m_health.value();
     if (ed.m_score) m_score = ed.m_score.value();
     if (ed.m_have_dot) m_flag.set(EntityFlag::HaveDot, ed.m_have_dot.value());
     if (ed.m_ene_dead_sfx) m_flag.set(EntityFlag::EneDeadSfx, ed.m_ene_dead_sfx.value());
+    if (ed.m_no_damage) m_flag.set(EntityFlag::NoDamage, ed.m_no_damage.value());
     if (ed.m_radius) this->set_radius(ed.m_radius.value());
     if (ed.m_mass) this->set_mass(ed.m_mass.value());
     if (ed.m_exp_resi) m_exp_resi = ed.m_exp_resi.value();
@@ -247,7 +245,9 @@ bool Entity::sub_health_dmg(int32_t dmg, float blink_tm)
 {
   bool is_set_blink=false; //blink設定された
   if (m_flag.test(EntityFlag::Del) || dmg <= 0) return is_set_blink;
-  m_health -= dmg;
+  if (not m_flag.test(EntityFlag::NoDamage)) {
+    m_health -= dmg;
+  }
   if (m_health <= 0) {
     this->del();
   } else {

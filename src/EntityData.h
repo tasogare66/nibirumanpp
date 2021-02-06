@@ -23,6 +23,7 @@ public:
   std::string m_name;
   std::optional<bool> m_have_dot;
   std::optional<bool> m_ene_dead_sfx;
+  std::optional<bool> m_no_damage; //EntityFlag::NoDamage,healthの引き算しない
   std::optional<int32_t> m_health;
   std::optional<uint32_t> m_score;
   std::optional<float> m_radius;

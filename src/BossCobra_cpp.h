@@ -15,6 +15,9 @@ protected:
     //this->Enemy::draw(window);
     this->draw_circle(window);
   }
+  void upd_ene_common(float dt) {
+    this->upd_blink(dt);
+  }
 };
 
 class CobraChild final : public CobraParts {
@@ -30,6 +33,7 @@ private:
 };
 void CobraChild::upd_ene(float dt)
 {
+  this->upd_ene_common(dt);
 }
 void CobraChild::draw(sf::RenderWindow& window) {
   if (m_appear_flag) return;
@@ -62,6 +66,7 @@ SingleBossCobra::SingleBossCobra(const EntityArgs& args)
 }
 void SingleBossCobra::upd_ene(float dt)
 {
+  this->upd_ene_common(dt);
 }
 void SingleBossCobra::draw(sf::RenderWindow& window)
 {
@@ -88,14 +93,12 @@ BossCobra::BossCobra(const EntityArgs& args)
 
 void BossCobra::appear()
 {
-  this->attr_px();
 }
 
 void BossCobra::update(float dt)
 {
   this->update_dt(dt);
   Boss::update(dt);
-  this->upd_blink(dt);
 }
 
 void BossCobra::upd_ene(float dt)
