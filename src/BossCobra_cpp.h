@@ -3,14 +3,12 @@ public:
   CobraParts(const EntityArgs& args)
     : BossParts(args)
   {
+    m_flag.set(EntityFlag::IgnoreCollisionSameRoot);
     //circle
     this->set_circle_radius(m_radius);
   }
   virtual ~CobraParts() = default;
 protected:
-  void appear() override {
-    this->attr_px();
-  }
   void draw_common(sf::RenderWindow& window) {
     //this->Enemy::draw(window);
     this->draw_circle(window);
@@ -20,27 +18,54 @@ protected:
   }
 };
 
-class CobraChild final : public CobraParts {
+class CobraHeadParts final : public CobraParts {
 public:
-  CobraChild(const EntityArgs& args)
+  CobraHeadParts(const EntityArgs& args)
     : CobraParts(args)
   {
   }
-  virtual ~CobraChild() = default;
+  virtual ~CobraHeadParts() = default;
 private:
+  void appear() override {
+    this->attr_px();
+  }
+  void upd_ene(float dt) override {
+    this->upd_ene_common(dt);
+  }
+  void draw(sf::RenderWindow& window) override final {
+    if (m_appear_flag) return;
+
+    this->draw_common(window);
+  }
+};
+
+//ene_bullet属性,forceでvel入れない
+class CobraBodyParts final : public CobraParts {
+public:
+  CobraBodyParts(const EntityArgs& args)
+    : CobraParts(args)
+  {
+    m_flag.reset(EntityFlag::ForceAddVelEnabled);
+  }
+  virtual ~CobraBodyParts() = default;
+private:
+  void appear() override {
+    this->attr_ene_bullet();
+  }
   void upd_ene(float dt) override;
   void draw(sf::RenderWindow& window) override final;
 };
-void CobraChild::upd_ene(float dt)
+void CobraBodyParts::upd_ene(float dt)
 {
   this->upd_ene_common(dt);
 }
-void CobraChild::draw(sf::RenderWindow& window) {
+void CobraBodyParts::draw(sf::RenderWindow& window) {
   if (m_appear_flag) return;
 
   this->draw_common(window);
 }
 
+//root
 class SingleBossCobra final : public CobraParts {
 public:
   SingleBossCobra(const EntityArgs& args);
@@ -48,25 +73,38 @@ public:
 private:
   void upd_ene(float dt) override;
   void draw(sf::RenderWindow& window) override final;
+
+  fabrik::IK m_ik;
 };
 SingleBossCobra::SingleBossCobra(const EntityArgs& args)
   : CobraParts(args)
 {
-  //m_flag.set(EntityFlag::IgnoreCollisionSameRoot);
-
   //child
   Entity* parent = this;
-  for (size_t i = 1; i <= 10; ++i) {
-    auto p = args.m_pos + Vec2f(-18.f * i, 0.f);
-    auto child = new CobraChild({ EntityDataId::CobraChild, p });
+  constexpr size_t parts_num = 6;
+  for (size_t i = 1; i <= parts_num; ++i) {
+    auto p = args.m_pos + Vec2f(-(m_radius*2.f-2.f) * i, 0.f);
+
+    CobraParts* child = nullptr;
+    if (i == parts_num) child = new CobraHeadParts({ EntityDataId::CobraHeadParts, p-Vec2f(8.f,0.f) });
+    else child = new CobraBodyParts({ EntityDataId::CobraBodyParts, p });
+
     Entity::set_hierarchy(parent, child);
     parent = child;
   }
   //ik
+  m_ik.awake(this);
 }
 void SingleBossCobra::upd_ene(float dt)
 {
   this->upd_ene_common(dt);
+  //ik
+  if (m_effector) m_effector->apply_effector();
+  m_ik.update();
+
+  if (!m_appear_flag) {
+    PtclLst::add_sqr(m_pos, 1, m_radius + 6.0f);
+  }
 }
 void SingleBossCobra::draw(sf::RenderWindow& window)
 {
@@ -76,7 +114,7 @@ void SingleBossCobra::draw(sf::RenderWindow& window)
 }
 
 BossCobra::BossCobra(const EntityArgs& args)
-  : Boss(args, 340)
+  : Boss(args)
 {
   this->set_health_max();
   //circle
@@ -85,9 +123,9 @@ BossCobra::BossCobra(const EntityArgs& args)
   //child
   Entity* parent = this;
   {
-    EntityArgs args(EntityDataId::SingleBossCobra, args.m_pos+Vec2f(2.f,2.f));
+    EntityArgs args(EntityDataId::CobraBodyParts, args.m_pos+Vec2f(2.f,2.f));
     auto child = new SingleBossCobra(args);
-    Entity::set_hierarchy(parent, child);
+    //Entity::set_hierarchy(parent, child);
   }
 }
 
