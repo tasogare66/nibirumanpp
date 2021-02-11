@@ -35,6 +35,8 @@ namespace fabrik{
     int32_t get_layer() const { return m_layer; }
     bool target_enabled() const { return m_target_enabled; }
     void set_target_enabled(bool in_flag) { m_target_enabled = in_flag; }
+    const Vec2f& get_target_position() const { return m_target_position; }
+    void set_target_position(const Vec2f& v) { m_target_position = v; }
   protected:
     Chain* m_parent=nullptr;
     std::vector<Chain*> m_children;

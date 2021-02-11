@@ -193,3 +193,15 @@ public:
   void draw(sf::RenderWindow& window) override;
 private:
 };
+
+class BossCog final : public Boss {
+public:
+  BossCog(const EntityArgs& args);
+  virtual ~BossCog() = default;
+  void appear() override;
+  void update(float dt) override;
+  void upd_ene(float dt) override;
+  void draw(sf::RenderWindow& window) override;
+private:
+  //std::array<fabrik::IK, 8> m_iks;
+};

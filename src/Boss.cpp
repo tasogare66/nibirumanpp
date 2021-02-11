@@ -21,6 +21,9 @@
 #include "ModeGame.h"
 #include "EnemyType.h"
 #include "SaveData.h"
+#if DEBUG
+#include "Input.h"
+#endif
 
 #include "Boss.h"
 
@@ -526,5 +529,6 @@ void BossWorm::arms0(float t, bool is_arrow)
   }
 }
 
+#include "BossCog_cpp.h"
 #include "BossCobra_cpp.h"
 #include "BossUrchin_cpp.h"

@@ -23,7 +23,7 @@ protected:
     m_appear_flag = false;
   }
   void ene_spr8x8(float elp, SprFlag spr_flag=SPRFLAG_NON);
-  bool m_appear_flag = true;
+  bool m_appear_flag = true; //出現中の場合,true
   float m_appear_sec = 2.0f; //出現の時間
   float m_elapsed = 0.0f;
   float m_blink = 0.0f;
