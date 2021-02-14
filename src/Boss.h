@@ -194,6 +194,7 @@ public:
 private:
 };
 
+class CogRootParts;
 class BossCog final : public Boss {
 public:
   BossCog(const EntityArgs& args);
@@ -202,6 +203,17 @@ public:
   void update(float dt) override;
   void upd_ene(float dt) override;
   void draw(sf::RenderWindow& window) override;
+
+  void set_rot_speed(float v, float t) override { m_rot_speed.request(v, t); }
+  float get_rot_speed() const { return m_rot_speed.get(); } //degree
+
+  void use_arms(int type, const LuaIntf::LuaRef& tbl) override;
 private:
-  //std::array<fabrik::IK, 8> m_iks;
+  Vec2f calc_parts_position(size_t n) const;
+  void upd_nodes();
+  void arms0(); //3way
+  static constexpr size_t m_parts_num = 8;
+  std::array<CogRootParts*, m_parts_num> m_root_parts{};
+  float m_parts_rot = 0.0f;
+  EaseParam m_rot_speed{ 0.0f };
 };

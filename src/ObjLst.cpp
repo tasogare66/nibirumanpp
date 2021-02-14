@@ -52,6 +52,7 @@ void ObjLst::upd_colliders(std::vector<T*>& lst, std::function<bool(Entity*,Vec2
   constexpr auto lvradius = const_param::LvRadius;
   constexpr auto he = const_param::LvRadDr2 - 8.f;
   for (auto& obj : lst) {
+    if (obj->m_flag.test(EntityFlag::IgnoreWallCollision)) continue;
     auto diff = -obj->get_estimate_pos();
     if (std::abs(diff.x) >= he || std::abs(diff.y) >= he) {
       auto len = diff.magnitude();

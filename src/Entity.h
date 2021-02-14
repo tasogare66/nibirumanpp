@@ -50,12 +50,13 @@ enum class EntityFlag : uint32_t {
   Visible = 1 << 6,
   CollisionEnabled = 1 << 7,
   IgnoreCollisionSameRoot = 1 << 8, //同rootだとcollisionとらない
+  IgnoreWallCollision = 1 << 9, //外壁とのcollisionとらない
 
-  Invincible = 1 << 9, //無敵,CollisionEnabledと併用
-  NoDamage = 1 << 10, //healthの引き算をしない
-  HaveDot = 1 << 11,
-  EneDeadSfx = 1 << 12,
-  Spawned = 1 << 13,
+  Invincible = 1 << 10, //無敵,CollisionEnabledと併用
+  NoDamage = 1 << 11, //healthの引き算をしない
+  HaveDot = 1 << 12,
+  EneDeadSfx = 1 << 13,
+  Spawned = 1 << 14,
 
   DefaultMask = (CollisionEnabled | UpdateEnabled | ForceAddVelEnabled | Visible), //defaultの設定値
 };
@@ -158,6 +159,8 @@ public:
   //親子関係の設定
   static void set_hierarchy(Entity* parent, Entity* child);
   bool is_root() const { return (!m_parent); } //m_parent==nullptrならroot
+  const Entity* get_parent() const { return m_parent; }
+  Entity* get_parent_w() { return m_parent; }
   size_t get_child_count() const { return m_children.size(); }
   Entity* get_child_w(size_t idx) {
     if (idx < m_children.size()) return m_children[idx];

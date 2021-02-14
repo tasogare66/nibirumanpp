@@ -153,3 +153,22 @@ function update_urchin()
   until false -- ずっと続ける
   return 1  -- c++へは、コルーチンが終了したら1を返す
 end
+
+-- cog
+function update_cog()
+  repeat
+    local dur=30
+    boss.set_rot_speed(15,10);
+    upd_for_second(dur, function(elp)
+      local rad=math.rad(elp*90)
+      local r = lerp(GAME.LvRadius-70,0,elp/dur)
+      local m = matrix_roty(rad)
+      local v = matrix { {-r},{0},{1}, }
+      local pos = m*v
+      --if elp>1 and elp<25 then boss.use_arms(2,{t=0.3}) end
+      boss.move_to(pos[1][1],pos[2][1],180)
+      boss.use_arms(0, {t=0.20}) --arrow
+    end)
+  until false -- ずっと続ける
+  return 1  -- c++へは、コルーチンが終了したら1を返す
+end
