@@ -297,7 +297,7 @@ void EneSphe::upd_ene(float dt)
 //boss bullet
 BossBullet::BossBullet(const EntityArgs& args)
   : Enemy(args, 336)
-  , m_speed(50.f)
+  , m_speed(args.m_param0 <= 0.0f ? 50.f : args.m_param0)
 {
   m_flag.reset(EntityFlag::ForceAddVelEnabled);
   m_score = 1;

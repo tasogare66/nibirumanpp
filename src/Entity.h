@@ -28,13 +28,14 @@ struct EntityArgs {
   float m_param0 = 0.0f; //misc param
   EntityDataId m_edid = EntityDataId::None;
   EntityArgs() = default;
-  EntityArgs(EntityDataId edid, const Vec2f& pos, const Vec2f& dir = { 1.f, 0.f })
+  EntityArgs(EntityDataId edid, const Vec2f& pos, const Vec2f& dir = { 1.f, 0.f }, float param0 = 0.0f)
     : m_edid(edid)
     , m_pos(pos)
     , m_dir(dir)
+    , m_param0(param0)
   {}
-  EntityArgs(const Vec2f& pos, const Vec2f& dir = { 1.f, 0.f })
-    : EntityArgs(EntityDataId::None, pos, dir)
+  EntityArgs(const Vec2f& pos, const Vec2f& dir = { 1.f, 0.f }, float param0 = 0.0f)
+    : EntityArgs(EntityDataId::None, pos, dir, param0)
   {}
   Vec2f aabb0() const { return m_pos - Vec2f(m_radius,m_radius); }
 };

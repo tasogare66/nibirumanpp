@@ -12,6 +12,9 @@ enum class EntityDataId : uint16_t {
   BossCobra,
   CobraHeadParts,
   CobraBodyParts,
+  BossCog, //BossCog
+  CogRootParts,
+  CogParts,
 
   Max,
   None = 0xffff

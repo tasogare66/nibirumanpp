@@ -72,6 +72,30 @@
             "no_damage":true,
             "radius":8,
             "mass":2
+        },
+        {
+            "name":"BossCog",
+            "health":4000,
+            "score":8000,
+            "have_dot":false
+        },
+        {
+            "name":"CogRootParts",
+            "score":0,
+            "have_dot":false,
+            "no_damage":true,
+            "radius":8,
+            "mass":2,
+            "spr_ene":296
+        },
+        {
+            "name":"CogParts",
+            "score":0,
+            "have_dot":false,
+            "no_damage":true,
+            "radius":8,
+            "mass":2,
+            "spr_ene":296
         }
     ]
 }

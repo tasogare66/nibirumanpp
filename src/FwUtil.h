@@ -15,6 +15,10 @@ namespace fw {
     return rad * RAD2DEG;
   }
 
+  inline float wrap_radian(float rad) {
+    return atan2(sin(rad), cos(rad));
+  }
+
   template<typename T>
   T lerp(const T& a, const T& b, float t) {
     return a * (1 - t) + b * t;

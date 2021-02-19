@@ -167,7 +167,7 @@ function update_cog()
       local pos = m*v
       --if elp>1 and elp<25 then boss.use_arms(2,{t=0.3}) end
       boss.move_to(pos[1][1],pos[2][1],180)
-      boss.use_arms(0, {t=0.20}) --arrow
+      boss.use_arms(0, {t=0.30}) --arrow
     end)
   until false -- ずっと続ける
   return 1  -- c++へは、コルーチンが終了したら1を返す

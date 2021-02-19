@@ -210,10 +210,11 @@ public:
   void use_arms(int type, const LuaIntf::LuaRef& tbl) override;
 private:
   Vec2f calc_parts_position(size_t n) const;
-  void upd_nodes();
+  void upd_nodes(float dt);
   void arms0(); //3way
   static constexpr size_t m_parts_num = 8;
   std::array<CogRootParts*, m_parts_num> m_root_parts{};
+  float m_parts_pos_rot = 0.0f;
   float m_parts_rot = 0.0f;
   EaseParam m_rot_speed{ 0.0f };
 };

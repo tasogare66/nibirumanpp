@@ -25,6 +25,6 @@ ENEMY_TYPE_DECL(HUMAN, Human, EntityDataId::None)
 ENEMY_TYPE_DECL(BOSS_BABY, BossBaby, EntityDataId::None)
 ENEMY_TYPE_DECL(BOSS_WORM, BossWorm, EntityDataId::None)
 ENEMY_TYPE_DECL(BOSS_URCHIN, BossUrchin, EntityDataId::BossUrchin)
-ENEMY_TYPE_DECL(BOSS_COG, BossCog, EntityDataId::BossCobra)
+ENEMY_TYPE_DECL(BOSS_COG, BossCog, EntityDataId::BossCog)
 
 #endif // ENEMY_TYPE_DECL
