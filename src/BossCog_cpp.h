@@ -38,7 +38,8 @@ public:
     constexpr size_t parts_num = 6;
     for (size_t i = 1; i <= parts_num; ++i) {
       auto p = args.m_pos + Vec2f(-(m_radius * 2.f - 2.f) * i, 0.f);
-      auto* child = new CogParts({ EntityDataId::CogParts, p });
+      const auto is_top_parts = (i==parts_num);
+      auto* child = new CogParts({ is_top_parts ? EntityDataId::CogTopParts : EntityDataId::CogParts, p });
 
       Entity::set_hierarchy(parent, child);
       parent = child;
@@ -61,8 +62,11 @@ public:
     m_ik.update();
 
     this->exec_or_lower([&parts_rot_deg](Entity* e) {
-      float rotdir = e->get_hierarchy_level() % 2 == 0 ? 1.0f : -1.0f;
-      e->apply_angle(90.0f + rotdir*parts_rot_deg);
+      float rotdir = 0.0f; //top_partsは回転しない
+      if (e->has_children()) {
+        rotdir = e->get_hierarchy_level() % 2 == 0 ? 1.0f : -1.0f;
+      }
+      e->apply_angle(-90.0f + rotdir*parts_rot_deg);
     });
   }
   void set_ik_target_position(const Vec2f& p) {
@@ -89,7 +93,7 @@ BossCog::BossCog(const EntityArgs& args)
   {
     for (size_t i = 0; i < m_parts_num; ++i) {
       const auto p = this->calc_parts_position(i);
-      auto* child = new CogRootParts({EntityDataId::CogRootParts, p});
+      auto* child = new CogRootParts({EntityDataId::CogParts, p});
  
       m_root_parts[i] = child;
       Entity::set_hierarchy(this, child);

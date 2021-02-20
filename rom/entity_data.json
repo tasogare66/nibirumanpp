@@ -80,7 +80,7 @@
             "have_dot":false
         },
         {
-            "name":"CogRootParts",
+            "name":"CogParts",
             "score":0,
             "have_dot":false,
             "no_damage":true,
@@ -89,13 +89,13 @@
             "spr_ene":296
         },
         {
-            "name":"CogParts",
+            "name":"CogTopParts",
             "score":0,
             "have_dot":false,
             "no_damage":true,
             "radius":8,
             "mass":2,
-            "spr_ene":296
+            "spr_ene":298
         }
     ]
 }

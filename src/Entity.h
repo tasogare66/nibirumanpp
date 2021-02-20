@@ -163,6 +163,7 @@ public:
   const Entity* get_parent() const { return m_parent; }
   Entity* get_parent_w() { return m_parent; }
   size_t get_child_count() const { return m_children.size(); }
+  bool has_children() const { return m_children.size() > 0; }
   Entity* get_child_w(size_t idx) {
     if (idx < m_children.size()) return m_children[idx];
     FW_ASSERT(0);

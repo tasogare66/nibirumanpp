@@ -136,6 +136,7 @@ namespace scr
         .addFunction("randomi", [](int max) { return rng::rand_int(max, m_rng_type); })
         .addProperty("dt", [this]() { return m_dt; })
         .addProperty("LvRadius", []() { return const_param::LvRadius; })
+        .addFunction("get_target_num", []() { return GameSeq::inst().get_target_num(); })
         .addFunction("decide_target_index", []() { return GameSeq::inst().decide_target_index(); })
         .addFunction("get_target_position", [](int id) {
           const auto* tgt = get_player_entity(id);

@@ -155,18 +155,48 @@ function update_urchin()
 end
 
 -- cog
+cog = {}
+cog.find_tgt = function()
+  local n=GAME.get_target_num()-1
+  local tgts={};
+  for i=0,n do
+    local p = Vec2.new(get_tgt_pos(i))
+    if p:SqrMagnitude() > 10000.0 then
+      table.insert(tgts,i)
+    end
+  end
+  if (#tgts>=1) then
+    return tgts[randi_range(1,#tgts)]
+  end
+  return nil
+end
 function update_cog()
   repeat
-    local dur=30
     boss.set_rot_speed(15,10);
+    local dur=20
+    local check_interval=4
+    local interval=check_interval
+    local tgt=nil
     upd_for_second(dur, function(elp)
-      local rad=math.rad(elp*90)
-      local r = lerp(GAME.LvRadius-70,0,elp/dur)
-      local m = matrix_roty(rad)
-      local v = matrix { {-r},{0},{1}, }
-      local pos = m*v
-      --if elp>1 and elp<25 then boss.use_arms(2,{t=0.3}) end
-      boss.move_to(pos[1][1],pos[2][1],180)
+      interval=interval-elp
+      if interval < 0 then
+        --change target
+        tgt = cog.find_tgt()
+        interval=check_interval
+      end
+
+      if tgt then
+        local px,py=get_tgt_pos(tgt)
+        boss.move_to(px,py,80)
+      else
+        local rad=math.rad(elp*90)
+        local r = lerp(GAME.LvRadius-70,0,elp/dur)
+        local m = matrix_roty(rad)
+        local v = matrix { {-r},{0},{1}, }
+        local pos = m*v
+        boss.move_to(pos[1][1],pos[2][1],180)
+      end
+
       boss.use_arms(0, {t=0.30}) --arrow
     end)
   until false -- ずっと続ける

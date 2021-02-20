@@ -58,6 +58,7 @@ public:
   SeqPlayer* get_seq_player_w(uint32_t id);
   bool is_exist_seq_player(uint32_t id) const;
   const Player* get_player_for_enemy();
+  size_t get_target_num() const { return m_alive_pl_ids.size(); }
   int32_t decide_target_index() const; //spawn時のtarget(player)の指定,random
   Player* get_player_entity_w(uint32_t player_index) const;
   const Player* get_player_entity(uint32_t player_index) const;
