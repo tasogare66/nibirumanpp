@@ -63,10 +63,16 @@ public:
 
     this->exec_or_lower([&parts_rot_deg](Entity* e) {
       float rotdir = 0.0f; //top_partsは回転しない
+      float deg_ofs = 0.0f;
       if (e->has_children()) {
-        rotdir = e->get_hierarchy_level() % 2 == 0 ? 1.0f : -1.0f;
+        if (e->get_hierarchy_level() % 2 == 0) {
+          rotdir = 1.0f;
+        } else {
+          rotdir = -1.0f;
+          deg_ofs = 30.0f; //歯車合わせでずらす
+        }
       }
-      e->apply_angle(-90.0f + rotdir*parts_rot_deg);
+      e->apply_angle(-90.0f + deg_ofs + rotdir*parts_rot_deg);
     });
   }
   void set_ik_target_position(const Vec2f& p) {
@@ -182,6 +188,7 @@ void BossCog::arms0()
     auto* e = parts->get_top_parts(); //先端
     auto dir(-e->get_dir());
     if (dir.sqr_magnitude() <= const_param::EPSILON) continue;
-    new BossBullet(EntityArgs(EntityDataId::BossBullet, e->get_pos(), dir, 20.0f));
+    Vec2f p = e->get_estimate_pos() + dir * e->get_radius();
+    new BossBullet(EntityArgs(EntityDataId::BossBullet, p, dir, 20.0f));
   }
 }
