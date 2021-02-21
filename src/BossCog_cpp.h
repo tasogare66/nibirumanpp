@@ -182,6 +182,6 @@ void BossCog::arms0()
     auto* e = parts->get_top_parts(); //先端
     auto dir(-e->get_dir());
     if (dir.sqr_magnitude() <= const_param::EPSILON) continue;
-    new BossBullet(EntityArgs(e->get_pos(), dir, 20.0f));
+    new BossBullet(EntityArgs(EntityDataId::BossBullet, e->get_pos(), dir, 20.0f));
   }
 }

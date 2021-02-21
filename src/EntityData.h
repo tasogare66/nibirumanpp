@@ -1,12 +1,14 @@
 ﻿#pragma once
 #include <optional>
 #include "Singleton.h"
+enum EntityDrawPri : uint16_t;
 
 enum class EntityDataId : uint16_t {
   EneSnake,
   EneUrchin,
   EneArrow,
   BossArrow,
+  BossBullet,
   BossUrchin,
   BossUrchinNode,
   BossCobra,
@@ -36,6 +38,7 @@ public:
   std::optional<uint32_t> m_spr_ene;
   std::optional<uint16_t> m_spr_num;
   std::optional<float> m_anim_wait_frame;
+  std::optional<EntityDrawPri> m_draw_pri;
   bool is_valid() const { return m_valid; }
 };
 

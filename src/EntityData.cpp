@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <nlohmann/json.hpp>
+#include "EntityDef.h"
 
 #include "EntityData.h"
 using json = nlohmann::json;
@@ -42,6 +43,10 @@ void EntityDataMng::setup_at_boot()
     lambda_write_dst("spr_ene", dst.m_spr_ene);
     lambda_write_dst("spr_num", dst.m_spr_num);
     lambda_write_dst("anim_wait_frame", dst.m_anim_wait_frame);
+    //pri
+    if (src.contains("pri")) {
+      dst.m_draw_pri = std::make_optional(str2entit_draw_pri(src["pri"]));
+    }
     dst.m_valid = true;
   }
 }

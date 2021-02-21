@@ -292,5 +292,8 @@
     <ClInclude Include="src\BossCog_cpp.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="src\EntityDef.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -29,7 +29,12 @@
             "name":"BossArrow",
             "score":1,
             "have_dot":false,
-            "radius":2
+            "radius":2,
+            "pri":"EneBullet"
+        },
+        {
+            "name":"BossBullet",
+            "pri":"EneBullet"
         },
         {
             "name":"BossUrchin",

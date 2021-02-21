@@ -1,7 +1,9 @@
 ﻿#pragma once
 #include <functional>
+#include <array>
 #include "Vec2.h"
 #include "Singleton.h"
+#include "EntityDef.h"
 class Entity;
 class Shash;
 
@@ -30,6 +32,7 @@ private:
   template<typename T>
   void upd_colliders(std::vector<T*>&, std::function<bool(Entity*,Vec2f)> func=nullptr);
   void upd_verlet(float dt);
+  void upd_draw_list();
   friend class Entity;
   std::vector<Entity*> m_pxs;
   std::vector<Entity*> m_bullets;
@@ -38,6 +41,7 @@ private:
   std::vector<Entity*> m_forces;
   std::vector<Entity*> m_verlets;
   std::vector<Entity*> m_objs;
+  std::array<std::vector<Entity*>, EntityDrawPri_Max> m_draws;
   std::vector<Entity*> m_request;
   std::unique_ptr<Shash> m_px_sha;
   std::unique_ptr<Shash> m_enblt_sha;

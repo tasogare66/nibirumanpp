@@ -312,7 +312,7 @@ void BossBaby::arms0(float t, int32_t num, float ofs)
       auto rad = rad_step * i + ofs;
       auto c = std::cos(rad);
       auto s = std::sin(rad);
-      new BossBullet(EntityArgs(Vec2f(m_pos.x+c*radius, m_pos.y+s*radius), Vec2f(c,s)));
+      new BossBullet(EntityArgs(EntityDataId::BossBullet, Vec2f(m_pos.x+c*radius, m_pos.y+s*radius), Vec2f(c,s)));
     }
     m_arms_timer = fmod(m_arms_timer,t);
   }
@@ -506,7 +506,7 @@ void BossWorm::create_bullet(const Vec2f& pos, const Vec2f& dir, bool is_arrow)
   if (is_arrow) {
     new BossArrow(EntityArgs(EntityDataId::BossArrow, pos, dir));
   } else {
-    new BossBullet(EntityArgs(pos, dir));
+    new BossBullet(EntityArgs(EntityDataId::BossBullet, pos, dir));
   }
 }
 

@@ -48,6 +48,7 @@ void Entity::set_entity_data(const EntityData& ed)
     if (ed.m_radius) this->set_radius(ed.m_radius.value());
     if (ed.m_mass) this->set_mass(ed.m_mass.value());
     if (ed.m_exp_resi) m_exp_resi = ed.m_exp_resi.value();
+    if (ed.m_draw_pri) m_draw_pri = ed.m_draw_pri.value();
   }
 }
 

@@ -287,7 +287,7 @@ void BossUrchin::arms1()
     //EntityArgs args(p);
     //scr::spawn(EnemyType::URCHIN, args);
     //new BossArrow(EntityArgs(EntityDataId::BossArrow, e->get_pos(), dir));
-    new BossBullet(EntityArgs(p, d));
+    new BossBullet(EntityArgs(EntityDataId::BossBullet, p, d));
   }
 }
 void BossUrchin::arms2_spawn()

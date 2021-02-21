@@ -222,6 +222,7 @@
     <ClInclude Include="src\EnemyType.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\EntityData.h" />
+    <ClInclude Include="src\EntityDef.h" />
     <ClInclude Include="src\FABRIK.h" />
     <ClInclude Include="src\Force.h" />
     <ClInclude Include="src\FwUtil.h" />

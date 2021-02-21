@@ -3,6 +3,7 @@
 #include "Vec2.h"
 #include "ConstParam.h"
 #include "FwFlag.h"
+#include "EntityDef.h"
 #include "EntityData.h"
 class Shash;
 class Player;
@@ -224,6 +225,7 @@ protected:
   uint32_t m_score = 0;
   FwFlag<HitMask> m_hit_mask; //HitMask
   FwFlag<HitMask> m_colli_attr; //hit時通知するattribute
+  EntityDrawPri m_draw_pri = EntityDrawPri_Default;
   sf::Sprite m_spr;
   static constexpr uint32_t m_dummy_spr_id = 1;
   uint32_t m_spr_id = m_dummy_spr_id;

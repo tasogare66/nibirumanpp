@@ -42,6 +42,7 @@ void ObjLst::update(float dt)
   this->upd_verlet(dt);
   this->upd_del(); //2nd
   this->upd_add();
+  this->upd_draw_list();
   m_prev_dt = dt;
 }
 
@@ -277,14 +278,37 @@ void ObjLst::upd_reciprocal()
   }
 }
 
-void ObjLst::draw(sf::RenderWindow& window)
+void ObjLst::upd_draw_list()
 {
+  //clear
+  for (auto& b:m_draws) {
+    b.clear();
+  }
   //reverse order
   if (m_objs.empty()) return;
   const auto num = m_objs.size();
   auto o = &m_objs[num - 1];
+  auto* pdrw = m_draws.data();
   for (auto i = 0; i < num; ++i,--o) {
-    (*o)->draw(window);
+    size_t p = (*o)->m_draw_pri;
+    FW_ASSERT(p < EntityDrawPri_Max);
+    pdrw[p].emplace_back(*o);
+  }
+}
+
+void ObjLst::draw(sf::RenderWindow& window)
+{
+  auto lambda_per_lst = [&window](std::vector<Entity*>& lst) {
+    if (lst.empty()) return;
+    const auto num = lst.size();
+    auto o = &lst[0];
+    for (auto i = 0; i < num; ++i, ++o) {
+      (*o)->draw(window);
+    }
+  };
+
+  for (int p = EntityDrawPri_Max-1; p >= EntityDrawPri_Start; --p) {
+    lambda_per_lst(m_draws[p]);
   }
 }
 
