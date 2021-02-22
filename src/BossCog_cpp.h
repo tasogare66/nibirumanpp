@@ -27,8 +27,9 @@ protected:
 //root
 class CogRootParts : public CogParts {
 public:
-  CogRootParts(const EntityArgs& args)
+  CogRootParts(const EntityArgs& args, float in_central_rad)
     : CogParts(args)
+    , m_parts_central_rad(in_central_rad)
   {
     m_flag.reset(EntityFlag::ForceAddVelEnabled);
     m_flag.set(EntityFlag::IgnoreWallCollision);
@@ -80,12 +81,28 @@ public:
   }
   const CogParts* get_top_parts() const { return m_top_parts; }
   CogParts* get_top_parts_s() { return m_top_parts; }
+
+  static Vec2f calc_central_rad_parts_posiiotn(float rad) {
+    Vec2f vec{ const_param::LvRadius - 3 * 0.75f, 0.f };
+    vec.set_rotate(rad);
+    return vec;
+  }
+  void  upd_position(float dt, float rot_rad) {
+    m_parts_central_rad.update(dt);
+    float rad = m_parts_central_rad.get() + rot_rad;
+    auto p = this->calc_central_rad_parts_posiiotn(rad);
+    this->set_calc_mov(p);
+  }
+  void request_parts_celtral_rad(float v, float dur) {
+    m_parts_central_rad.request(v, dur);
+  }
 protected:
   void appear() override {
     this->attr_ene_bullet(); //FIXME:どうする 
   }
   fabrik::IK m_ik;
   CogParts* m_top_parts; //先っぽ
+  EaseParam m_parts_central_rad;
 };
 
 BossCog::BossCog(const EntityArgs& args)
@@ -98,8 +115,9 @@ BossCog::BossCog(const EntityArgs& args)
   //child
   {
     for (size_t i = 0; i < m_parts_num; ++i) {
-      const auto p = this->calc_parts_position(i);
-      auto* child = new CogRootParts({EntityDataId::CogParts, p});
+      const auto rad = this->calc_parts_central_rad(i);
+      const auto p = CogRootParts::calc_central_rad_parts_posiiotn(rad+ m_parts_pos_rot);
+      auto* child = new CogRootParts({EntityDataId::CogParts, p}, rad);
  
       m_root_parts[i] = child;
       Entity::set_hierarchy(this, child);
@@ -131,8 +149,7 @@ void BossCog::upd_ene(float dt)
   m_parts_pos_rot += fw::deg2rad(this->get_rot_speed())*dt;
   m_parts_pos_rot = fw::wrap_radian(m_parts_pos_rot);
   for (size_t i = 0; i < m_parts_num; ++i) {
-    auto p = this->calc_parts_position(i);
-    m_root_parts[i]->set_calc_mov(p);
+    m_root_parts[i]->upd_position(dt, m_parts_pos_rot);
   }
 
   //ik target
@@ -158,11 +175,9 @@ void BossCog::draw(sf::RenderWindow& window)
   this->draw_circle(window);
 }
 
-Vec2f BossCog::calc_parts_position(size_t n) const {
+float BossCog::calc_parts_central_rad(size_t n) const {
   constexpr float prad = 2.0f * fw::PI / m_parts_num;
-  Vec2f vec{ const_param::LvRadius - m_radius * 0.75f, 0.f };
-  vec.set_rotate(prad * n + m_parts_pos_rot);
-  return vec;
+  return prad * n;
 }
 
 void BossCog::use_arms(int type, const LuaIntf::LuaRef& tbl)
@@ -190,5 +205,52 @@ void BossCog::arms0()
     if (dir.sqr_magnitude() <= const_param::EPSILON) continue;
     Vec2f p = e->get_estimate_pos() + dir * e->get_radius();
     new BossBullet(EntityArgs(EntityDataId::BossBullet, p, dir, 20.0f));
+  }
+}
+
+void BossCog::set_formation(int type, const LuaIntf::LuaRef& tbl)
+{
+  float dur = tbl["dur"].value<float>();
+
+  switch (type) {
+  case 0:
+    this->formation0(dur);
+    break;
+  case 1:
+    this->formation1(dur);
+    break;
+  case 2:
+    this->formation2(dur);
+    break;
+  default:
+    FW_ASSERT(0);
+    break;
+  }
+}
+void BossCog::formation0(float dur)
+{
+  for (size_t i = 0; i < m_root_parts.size(); ++i) {
+    const auto rad = this->calc_parts_central_rad(i);
+    m_root_parts[i]->request_parts_celtral_rad(rad, dur);
+  }
+}
+//one place
+void BossCog::formation1(float dur)
+{
+  for (size_t i = 0; i < m_root_parts.size(); ++i) {
+    const auto rad = fw::deg2rad(180.0f + 6.0f * i);
+    m_root_parts[i]->request_parts_celtral_rad(rad, dur);
+  }
+}
+//two places
+void BossCog::formation2(float dur)
+{
+  for (size_t i = 0; i < m_root_parts.size()/2; ++i) {
+    const auto rad = fw::deg2rad(90.0f + 6.0f * i);
+    m_root_parts[i]->request_parts_celtral_rad(rad, dur);
+  }
+  for (size_t i = m_root_parts.size()/2; i < m_root_parts.size(); ++i) {
+    const auto rad = fw::deg2rad(180.0f + 6.0f * i);
+    m_root_parts[i]->request_parts_celtral_rad(rad, dur);
   }
 }

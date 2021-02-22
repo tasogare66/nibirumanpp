@@ -177,6 +177,9 @@ function update_cog()
     local check_interval=4
     local interval=check_interval
     local tgt=nil
+
+    local formation_tbl={dur=4}
+    boss.set_formation(0,formation_tbl)
     upd_for_second(dur, function(elp)
       interval=interval-elp
       if interval < 0 then
@@ -199,6 +202,18 @@ function update_cog()
 
       boss.use_arms(0, {t=0.30}) --arrow
     end)
+
+    boss.set_rot_speed(40,4);
+    boss.set_formation(1,formation_tbl)
+    upd_for_second(15, function(elp)
+
+    end)
+
+    boss.set_formation(2,formation_tbl)
+    upd_for_second(15, function(elp)
+
+    end)
+
   until false -- ずっと続ける
   return 1  -- c++へは、コルーチンが終了したら1を返す
 end

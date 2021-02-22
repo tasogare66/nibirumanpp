@@ -47,6 +47,7 @@ public:
   virtual void use_arms(int type, const LuaIntf::LuaRef& tbl) {}
   virtual void set_stiffness(float,float) {}
   virtual void set_rot_speed(float, float) {}
+  virtual void set_formation(int type, const LuaIntf::LuaRef& tbl) {}
 
   virtual void draw_info1(sf::RenderWindow&) const;
   virtual void draw_info2(sf::RenderWindow&, sf::Text& text) const;
@@ -133,6 +134,10 @@ public:
     m_duration = 0.0f;
     m_elp = 0.0f;
   }
+  void reset(float v) {
+    m_current = v;
+    this->reset();
+  }
   float get() const { return m_current; }
 protected:
   static float ease_in_out_sin(float x){
@@ -208,10 +213,14 @@ public:
   float get_rot_speed() const { return m_rot_speed.get(); } //degree
 
   void use_arms(int type, const LuaIntf::LuaRef& tbl) override;
+  void set_formation(int type, const LuaIntf::LuaRef& tbl) override;
 private:
-  Vec2f calc_parts_position(size_t n) const;
+  float calc_parts_central_rad(size_t n) const;
   void upd_nodes(float dt);
-  void arms0(); //3way
+  void arms0(); //bullet
+  void formation0(float dur);
+  void formation1(float dur);
+  void formation2(float dur);
   static constexpr size_t m_parts_num = 8;
   std::array<CogRootParts*, m_parts_num> m_root_parts{};
   float m_parts_pos_rot = 0.0f;
