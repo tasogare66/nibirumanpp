@@ -200,18 +200,25 @@ function update_cog()
         boss.move_to(pos[1][1],pos[2][1],180)
       end
 
-      boss.use_arms(0, {t=0.30}) --arrow
+      boss.use_arms(0, {t=0.30})
     end)
 
-    boss.set_rot_speed(40,4);
+    boss.set_rot_speed(60,4);
     boss.set_formation(1,formation_tbl)
-    upd_for_second(15, function(elp)
-
+    upd_for_second(dur, function(elp)
+      boss.use_arms(0, {t=0.30})
     end)
 
+    boss.set_rot_speed(110,4);
     boss.set_formation(2,formation_tbl)
-    upd_for_second(15, function(elp)
+    upd_for_second(dur, function(elp)
+      boss.use_arms(0, {t=0.25})
+    end)
 
+    boss.set_rot_speed(60,4);
+    boss.set_formation(0,formation_tbl)
+    upd_for_second(5, function(elp)
+      boss.use_arms(0, {t=0.30}) --arrow
     end)
 
   until false -- ずっと続ける

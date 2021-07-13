@@ -77,7 +77,10 @@ public:
     });
   }
   void set_ik_target_position(const Vec2f& p) {
-    m_ik.get_root_chain()->set_target_position(p);
+    Vec2f lpos = this->get_estimate_pos();
+    Vec2f vec = p - lpos;
+    vec.set_rotate(fw::deg2rad(m_ik_target_ofs_deg.get()));
+    m_ik.get_root_chain()->set_target_position(lpos+vec);
   }
   const CogParts* get_top_parts() const { return m_top_parts; }
   CogParts* get_top_parts_s() { return m_top_parts; }
@@ -89,12 +92,16 @@ public:
   }
   void  upd_position(float dt, float rot_rad) {
     m_parts_central_rad.update(dt);
+    m_ik_target_ofs_deg.update(dt);
     float rad = m_parts_central_rad.get() + rot_rad;
     auto p = this->calc_central_rad_parts_posiiotn(rad);
     this->set_calc_mov(p);
   }
-  void request_parts_celtral_rad(float v, float dur) {
+  void request_parts_central_rad(float v, float dur) {
     m_parts_central_rad.request(v, dur);
+  }
+  void request_target_ofs_deg(float deg) {
+    m_ik_target_ofs_deg.request(deg, 3.0f);
   }
 protected:
   void appear() override {
@@ -103,6 +110,7 @@ protected:
   fabrik::IK m_ik;
   CogParts* m_top_parts; //先っぽ
   EaseParam m_parts_central_rad;
+  EaseParam m_ik_target_ofs_deg{0.0f};
 };
 
 BossCog::BossCog(const EntityArgs& args)
@@ -189,6 +197,9 @@ void BossCog::use_arms(int type, const LuaIntf::LuaRef& tbl)
   case 0:
     this->arms0();
     break;
+  case 1:
+    this->arms1();
+    break;
   default:
     FW_ASSERT(0);
     break;
@@ -205,6 +216,17 @@ void BossCog::arms0()
     if (dir.sqr_magnitude() <= const_param::EPSILON) continue;
     Vec2f p = e->get_estimate_pos() + dir * e->get_radius();
     new BossBullet(EntityArgs(EntityDataId::BossBullet, p, dir, 20.0f));
+  }
+}
+
+void BossCog::arms1()
+{
+  for (auto* parts : m_root_parts) {
+    auto* e = parts->get_top_parts(); //先端
+    auto dir(-e->get_dir());
+    if (dir.sqr_magnitude() <= const_param::EPSILON) continue;
+    Vec2f p = e->get_estimate_pos() + dir * e->get_radius();
+    new BossArrow(EntityArgs(EntityDataId::BossArrow, p, dir, 20.0f));
   }
 }
 
@@ -231,7 +253,9 @@ void BossCog::formation0(float dur)
 {
   for (size_t i = 0; i < m_root_parts.size(); ++i) {
     const auto rad = this->calc_parts_central_rad(i);
-    m_root_parts[i]->request_parts_celtral_rad(rad, dur);
+    auto& parts{ m_root_parts[i] };
+    parts->request_parts_central_rad(rad, dur);
+    parts->request_target_ofs_deg(0.0f);
   }
 }
 //one place
@@ -239,7 +263,9 @@ void BossCog::formation1(float dur)
 {
   for (size_t i = 0; i < m_root_parts.size(); ++i) {
     const auto rad = fw::deg2rad(180.0f + 6.0f * i);
-    m_root_parts[i]->request_parts_celtral_rad(rad, dur);
+    m_root_parts[i]->request_parts_central_rad(rad, dur);
+    float mul = 0.5f + i - m_root_parts.size()/2.0f;
+    m_root_parts[i]->request_target_ofs_deg(-5.0f*mul);
   }
 }
 //two places
@@ -247,10 +273,14 @@ void BossCog::formation2(float dur)
 {
   for (size_t i = 0; i < m_root_parts.size()/2; ++i) {
     const auto rad = fw::deg2rad(90.0f + 6.0f * i);
-    m_root_parts[i]->request_parts_celtral_rad(rad, dur);
+    m_root_parts[i]->request_parts_central_rad(rad, dur);
+    float mul = 0.5f + i - m_root_parts.size() / 4.0f;
+    m_root_parts[i]->request_target_ofs_deg(-5.0f * mul);
   }
   for (size_t i = m_root_parts.size()/2; i < m_root_parts.size(); ++i) {
-    const auto rad = fw::deg2rad(180.0f + 6.0f * i);
-    m_root_parts[i]->request_parts_celtral_rad(rad, dur);
+    const auto rad = fw::deg2rad(270.0f + 6.0f * i);
+    m_root_parts[i]->request_parts_central_rad(rad, dur);
+    float mul = 0.5f + i - m_root_parts.size() / 2 - m_root_parts.size() / 4.0f;
+    m_root_parts[i]->request_target_ofs_deg(-5.0f * mul);
   }
 }

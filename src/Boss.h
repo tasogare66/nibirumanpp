@@ -218,6 +218,7 @@ private:
   float calc_parts_central_rad(size_t n) const;
   void upd_nodes(float dt);
   void arms0(); //bullet
+  void arms1(); //bullet
   void formation0(float dur);
   void formation1(float dur);
   void formation2(float dur);
